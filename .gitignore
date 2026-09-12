@@ -1,0 +1,17 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Environment / secrets
+.env
+.env.local
+*.key
+
+# IntelliJ / JetBrains
+.idea/
+
+# macOS
+.DS_Store
