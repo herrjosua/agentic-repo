@@ -1,6 +1,0 @@
-clinician_id,cohort,after_hours_minutes_pre,after_hours_minutes_post
-C001,ambient-scribe-user,42,38
-C002,ambient-scribe-user,55,49
-C003,ambient-scribe-user,31,29
-C004,control,40,41
-C005,control,47,45
