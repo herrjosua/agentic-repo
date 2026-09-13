@@ -14,18 +14,31 @@ Two fetch paths, per the plan (§4):
     Not implemented here — this script currently only supports the REST path. See the "MCP swap"
     note at the bottom of this file for what that migration should touch.
 
+Figma for Government (GovCloud) support: the REST API base URL differs from commercial Figma
+(`api.figma-gov.com` vs `api.figma.com`). Set FIGMA_API_BASE_URL in the environment or .env to
+override it — see the "Requires" section below. Everything else about the REST path (auth,
+endpoints, response shapes) is the same between commercial and GovCloud, since GovCloud gets
+full Enterprise-tier API access. This script does not talk to the Figma MCP server at all
+currently (see above), so no GovCloud-specific MCP handling is needed here — check with your
+security team before using Figma for Government's MCP server through any other client, since
+Figma's own documentation notes it isn't yet inside their FedRAMP authorization boundary.
+
 IMPORTANT — known Figma API limitation: the Variables REST API
-(/v1/files/:key/variables/local) requires a Figma Enterprise organization plan. If your plan
-doesn't include it, --skip-variables lets you still sync components, or you can maintain
-tokens.tokens.json by hand and use this script only to regenerate design.md from it
+(/v1/files/:key/variables/local) requires a Full seat in an Enterprise org. Free, Professional,
+and Organization plans don't get it either — paying for a non-Enterprise plan doesn't change
+this. Figma for Government does include it, since it's built on the Enterprise feature set. If
+your plan doesn't include it, --skip-variables lets you still sync components, or you can
+maintain tokens.tokens.json by hand and use this script only to regenerate design.md from it
 (--regenerate-design-only).
 
 Requires:
     pip install requests python-dotenv
-    FIGMA_TOKEN      Personal access token (Figma > Account Settings > Personal Access Tokens)
-    FIGMA_FILE_KEY   The file key from the Figma file URL (figma.com/design/<FILE_KEY>/...)
+    FIGMA_TOKEN          Personal access token (Figma > Account Settings > Personal Access Tokens)
+    FIGMA_FILE_KEY       The file key from the Figma file URL (figma.com/design/<FILE_KEY>/...)
+    FIGMA_API_BASE_URL   Optional. Overrides the REST API host. Defaults to https://api.figma.com
+                         (commercial). Set to https://api.figma-gov.com for Figma for Government.
 
-    Both variables can be set in the shell environment, or in a .env file in the current
+    All variables can be set in the shell environment, or in a .env file in the current
     working directory (FIGMA_TOKEN=..., one per line, no quotes, no `export`). A .env file is
     loaded automatically via python-dotenv if present — see NOTE below if that package isn't
     installed. Never commit a .env file; add it to .gitignore.
@@ -63,7 +76,11 @@ TOKENS_FILE = DT_ROOT / "tokens.tokens.json"
 DESIGN_MD_FILE = DT_ROOT / "design.md"
 COMPONENTS_DIR = DT_ROOT / "components"
 
-FIGMA_API_BASE = "https://api.figma.com/v1"
+# Defaults to commercial Figma; override with FIGMA_API_BASE_URL for Figma for Government
+# (https://api.figma-gov.com) or any other alternate host. Read once at import time, same as
+# FIGMA_TOKEN/FIGMA_FILE_KEY below — load_dotenv() above has already run by this point, so a
+# value set in .env is picked up here too, not just from the shell environment.
+FIGMA_API_BASE = os.environ.get("FIGMA_API_BASE_URL", "https://api.figma.com").rstrip("/") + "/v1"
 
 
 # --------------------------------------------------------------------------
@@ -85,7 +102,8 @@ def _get_credentials():
 
 def fetch_figma_variables(token, file_key):
     """GET /v1/files/:key/variables/local.
-    Requires a Figma Enterprise plan — will 403 otherwise. Returns raw Figma API JSON."""
+    Requires a Full seat in an Enterprise org (or Figma for Government, which includes the same
+    tier of API access) — will 403 otherwise. Returns raw Figma API JSON."""
     import requests  # imported here so --regenerate-design-only never requires the dependency
     resp = requests.get(
         f"{FIGMA_API_BASE}/files/{file_key}/variables/local",
@@ -94,9 +112,13 @@ def fetch_figma_variables(token, file_key):
     )
     if resp.status_code == 403:
         sys.exit(
-            "Figma returned 403 fetching variables. The Variables REST API requires a Figma "
-            "Enterprise org plan. Use --skip-variables to sync components only, or maintain "
-            "tokens.tokens.json by hand and run --regenerate-design-only to refresh design.md."
+            "Figma returned 403 fetching variables. The Variables REST API requires a Full seat "
+            "in an Enterprise org (Figma for Government includes this; Free/Professional/"
+            "Organization do not, regardless of paid status). Use --skip-variables to sync "
+            "components only, or maintain tokens.tokens.json by hand and run "
+            "--regenerate-design-only to refresh design.md.\n"
+            f"If you're on Figma for Government, also confirm FIGMA_API_BASE_URL is set to "
+            f"https://api.figma-gov.com — currently resolving requests against {FIGMA_API_BASE}."
         )
     resp.raise_for_status()
     return resp.json()
@@ -390,7 +412,9 @@ def main():
 # generate_design_md, sync_component_file) shouldn't need to change — they operate on plain
 # dicts, not on the REST response shape specifically, though the exact key names coming back
 # from MCP tools should be checked against what figma_variables_to_dtcg/figma_nodes_to_components
-# expect. Also add Code Connect component mapping at that point, per the roadmap.
+# expect. Also add Code Connect component mapping at that point, per the roadmap. Note that a
+# GovCloud MCP swap specifically should not be attempted until Figma for Government's MCP server
+# is confirmed inside your org's FedRAMP authorization boundary — see the module docstring.
 # --------------------------------------------------------------------------
 
 
