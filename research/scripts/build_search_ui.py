@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 build_search_ui.py — generate research/search.html: a self-contained, offline-capable
-search-and-filter interface over research/raw/, research/findings/, and
-design-tokens/components/.
+search-and-filter interface over research/raw/, research/findings/,
+design-tokens/components/, and analytics/summaries/.
 
 Why this exists: AGENTS.md already makes the repo queryable via any agent (Claude Code,
 etc.) doing structured search over findings/ first, falling back to raw/. This script is
@@ -41,6 +41,8 @@ REPO_ROOT = RESEARCH_ROOT.parent           # agentic-repo/
 RAW_ROOT = RESEARCH_ROOT / "raw"
 FINDINGS_ROOT = RESEARCH_ROOT / "findings"
 COMPONENTS_ROOT = REPO_ROOT / "design-tokens" / "components"
+ANALYTICS_ROOT = REPO_ROOT / "analytics"
+ANALYTICS_SUMMARIES_ROOT = ANALYTICS_ROOT / "summaries"
 OUTPUT_FILE = RESEARCH_ROOT / "search.html"
 
 TYPE_LABELS = {
@@ -50,6 +52,7 @@ TYPE_LABELS = {
     "contextual-inquiry": "Contextual inquiry",
     "accessibility-audit": "Accessibility audit",
     "analytics": "Analytics",
+    "analytics-summary": "Analytics summary",
     "synthesis": "Synthesis",
 }
 
@@ -138,6 +141,31 @@ def build_component_records():
     return records
 
 
+def build_analytics_records():
+    records = []
+    if not ANALYTICS_SUMMARIES_ROOT.exists():
+        return records
+    for path in sorted(glob.glob(str(ANALYTICS_SUMMARIES_ROOT / "*.md"))):
+        post = frontmatter.load(path)
+        meta = post.metadata
+        body_html = render_markdown(post.content)
+        rel_path = f"../analytics/summaries/{Path(path).name}"
+        records.append(dict(
+            id=f"analytics:{Path(path).stem}",
+            kind="analytics",
+            title=meta.get("title", Path(path).stem),
+            date=_str(meta.get("date", "")),
+            type=meta.get("type", "analytics-summary"),
+            status=meta.get("status", ""),
+            tags=meta.get("tags", []),
+            related_components=[],
+            severity={},
+            path=rel_path,
+            html=body_html,
+        ))
+    return records
+
+
 def build_search_text(record):
     """Flat lowercase text blob used for the client-side substring search."""
     parts = [
@@ -171,6 +199,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     --kind-raw: #1F52B3;
     --kind-finding: #146B64;
     --kind-component: #9A5E0D;
+    --kind-analytics: #6B4FA0;
     --sev-critical: #C33A2E;
     --sev-high: #C77B12;
     --sev-medium: #2B6CE0;
@@ -327,19 +356,19 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 (function () {
   const records = JSON.parse(document.getElementById('research-data').textContent);
   const TYPE_LABELS = __TYPE_LABELS_JSON__;
-  const KIND_LABELS = { raw: 'Sessions', finding: 'Findings', component: 'Components' };
-  const KIND_COLORS = { raw: 'var(--kind-raw)', finding: 'var(--kind-finding)', component: 'var(--kind-component)' };
+  const KIND_LABELS = { raw: 'Sessions', finding: 'Findings', component: 'Components', analytics: 'Analytics' };
+  const KIND_COLORS = { raw: 'var(--kind-raw)', finding: 'var(--kind-finding)', component: 'var(--kind-component)', analytics: 'var(--kind-analytics)' };
   const SEV_COLORS = { critical: 'var(--sev-critical)', high: 'var(--sev-high)', medium: 'var(--sev-medium)', low: 'var(--sev-low)' };
 
   const state = {
     query: '',
-    kinds: new Set(['raw', 'finding', 'component']),
+    kinds: new Set(['raw', 'finding', 'component', 'analytics']),
     types: new Set(),
     tags: new Set(),
     openId: null,
   };
 
-  const allKinds = ['raw', 'finding', 'component'];
+  const allKinds = ['raw', 'finding', 'component', 'analytics'];
   const allTypes = [...new Set(records.map(r => r.type).filter(Boolean))].sort();
   const allTags = [...new Set(records.flatMap(r => r.tags))].sort();
   state.types = new Set(allTypes);
@@ -502,7 +531,12 @@ def main():
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
 
-    records = build_raw_records() + build_findings_records() + build_component_records()
+    records = (
+            build_raw_records()
+            + build_findings_records()
+            + build_component_records()
+            + build_analytics_records()
+    )
     for r in records:
         r["searchText"] = build_search_text(r)
 
@@ -525,7 +559,8 @@ def main():
     print(f"✅ Wrote {OUTPUT_FILE} ({len(records)} records: "
           f"{sum(1 for r in records if r['kind']=='raw')} sessions, "
           f"{sum(1 for r in records if r['kind']=='finding')} findings, "
-          f"{sum(1 for r in records if r['kind']=='component')} components)")
+          f"{sum(1 for r in records if r['kind']=='component')} components, "
+          f"{sum(1 for r in records if r['kind']=='analytics')} analytics summaries)")
 
 
 if __name__ == "__main__":

@@ -14,6 +14,11 @@ A finding links out to a summary via related_analytics rather than analytics bei
 on a finding itself, since analytics is a data source, not a research method. If analytics/
 doesn't exist yet in a given checkout, everything analytics-related here is a no-op.
 
+Also validates related_components (in raw/ and findings/) against real files in
+design-tokens/components/, so a typo'd or removed component slug shows up here instead of
+silently rendering as a dead reference in research/_index.md. No-op if design-tokens/components/
+doesn't exist yet in a given checkout.
+
 Per the plan's key decisions: these files are generated, not hand-maintained. Each should be
 small enough to fit entirely in an agent's context, so most "have we looked at X" queries can be
 answered from the relevant index plus one or two findings/summaries files, without a full-repo
@@ -48,6 +53,8 @@ INDEX_FILE = RESEARCH_ROOT / "_index.md"
 ANALYTICS_ROOT = REPO_ROOT / "analytics"
 ANALYTICS_SUMMARIES_ROOT = ANALYTICS_ROOT / "summaries"
 ANALYTICS_INDEX_FILE = ANALYTICS_ROOT / "_index.md"
+
+COMPONENTS_ROOT = REPO_ROOT / "design-tokens" / "components"
 
 EXCLUDE_FROM_FINDINGS = {"tags.md"}
 
@@ -89,14 +96,23 @@ def load_analytics_summaries():
     return summaries
 
 
+def load_components():
+    """Return the set of component stems (filename without .md) under design-tokens/components/.
+    Returns an empty set if design-tokens/components/ doesn't exist yet in this checkout —
+    component-reference validation is then skipped entirely (see validate_component_links)."""
+    if not COMPONENTS_ROOT.exists():
+        return set()
+    return {Path(p).stem for p in glob.glob(str(COMPONENTS_ROOT / "*.md"))}
+
+
 def validate_tags(glossary):
     """Check every tag used in raw/, findings/, and analytics/summaries/ frontmatter against the
     glossary. Returns a list of (file, tag) problems."""
     problems = []
     all_files = (
-        glob.glob(str(RAW_ROOT / "*" / "*.md"))
-        + [str(p) for p in FINDINGS_ROOT.glob("*.md") if p.name not in EXCLUDE_FROM_FINDINGS]
-        + glob.glob(str(ANALYTICS_SUMMARIES_ROOT / "*.md"))
+            glob.glob(str(RAW_ROOT / "*" / "*.md"))
+            + [str(p) for p in FINDINGS_ROOT.glob("*.md") if p.name not in EXCLUDE_FROM_FINDINGS]
+            + glob.glob(str(ANALYTICS_SUMMARIES_ROOT / "*.md"))
     )
     for p in all_files:
         post = frontmatter.load(p)
@@ -213,6 +229,26 @@ def validate_analytics_links(findings, summaries):
     return problems
 
 
+def validate_component_links(findings, sessions, components):
+    """Check related_components (in raw/ sessions and findings/) resolves to a real file in
+    design-tokens/components/. No-op (returns no problems) if design-tokens/components/ doesn't
+    exist yet in this checkout — same optional-folder pattern as analytics."""
+    problems = []
+    if not COMPONENTS_ROOT.exists():
+        return problems
+    for topic, data in findings.items():
+        for c in data["meta"].get("related_components", []) or []:
+            stem = Path(c).stem
+            if stem not in components:
+                problems.append(f"{data['path']}: related_components references missing design-tokens/components/{stem}.md")
+    for s in sessions:
+        for c in s["meta"].get("related_components", []) or []:
+            stem = Path(c).stem
+            if stem not in components:
+                problems.append(f"{s['path']}: related_components references missing design-tokens/components/{stem}.md")
+    return problems
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--check", action="store_true", help="Exit 1 if either index is stale or tags/links are invalid; don't write")
@@ -222,11 +258,13 @@ def main():
     findings = load_findings()
     sessions = load_raw_sessions()
     summaries = load_analytics_summaries()
+    components = load_components()
     analytics_exists = ANALYTICS_ROOT.exists()
 
     tag_problems = validate_tags(glossary)
     link_problems = validate_index_links(findings, sessions)
     analytics_link_problems = validate_analytics_links(findings, summaries)
+    component_link_problems = validate_component_links(findings, sessions, components)
 
     new_research_content = build_index_content(findings, sessions)
     old_research_content = INDEX_FILE.read_text(encoding="utf-8") if INDEX_FILE.exists() else None
@@ -251,6 +289,12 @@ def main():
     if analytics_link_problems:
         print("⚠️  Cross-reference issues (analytics):", file=sys.stderr)
         for msg in analytics_link_problems:
+            print(f"   {msg}", file=sys.stderr)
+        exit_code = 1
+
+    if component_link_problems:
+        print("⚠️  Cross-reference issues (components):", file=sys.stderr)
+        for msg in component_link_problems:
             print(f"   {msg}", file=sys.stderr)
         exit_code = 1
 
