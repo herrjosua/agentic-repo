@@ -204,13 +204,6 @@
       const checked = state.kinds.has(k) ? 'checked' : '';
       return `<label class="filter-row"><input type="checkbox" data-kind="${k}" ${checked}>${KIND_LABELS[k]}<span class="count">${count}</span></label>`;
     }).join('');
-    el.querySelectorAll('input[data-kind]').forEach(input => {
-      input.addEventListener('change', () => {
-        const k = input.getAttribute('data-kind');
-        if (input.checked) state.kinds.add(k); else state.kinds.delete(k);
-        render();
-      });
-    });
   }
 
   function renderTypeFilters() {
@@ -220,13 +213,6 @@
       const checked = state.types.has(t) ? 'checked' : '';
       return `<label class="filter-row"><input type="checkbox" data-type="${t}" ${checked}>${TYPE_LABELS[t] || t}<span class="count">${count}</span></label>`;
     }).join('');
-    el.querySelectorAll('input[data-type]').forEach(input => {
-      input.addEventListener('change', () => {
-        const t = input.getAttribute('data-type');
-        if (input.checked) state.types.add(t); else state.types.delete(t);
-        render();
-      });
-    });
   }
 
   function renderTagFilters() {
@@ -235,13 +221,6 @@
       const active = state.tags.has(tag) ? 'active' : '';
       return `<button type="button" class="tag-chip ${active}" data-tag="${tag}">${tag}</button>`;
     }).join('');
-    el.querySelectorAll('.tag-chip').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const tag = btn.getAttribute('data-tag');
-        if (state.tags.has(tag)) state.tags.delete(tag); else state.tags.add(tag);
-        render();
-      });
-    });
   }
 
   function matches(record) {
@@ -298,20 +277,7 @@
         </li>`;
     }).join('');
 
-    list.querySelectorAll('.result-row').forEach(row => {
-      row.addEventListener('click', (e) => {
-        if (e.target.closest('a')) return; // let source-file links navigate normally
-        const id = row.getAttribute('data-id');
-        state.openId = state.openId === id ? null : id;
-        render();
-        if (state.openId) {
-          const el = document.getElementById(`detail-${cssEscape(state.openId)}`);
-          if (el && typeof el.scrollIntoView === 'function') {
-            el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-          }
-        }
-      });
-    });
+    // no per-row listener binding here — handled once via delegation on #results-list (see setup below)
   }
 
   function cssEscape(s) { return s.replace(/[^a-zA-Z0-9_-]/g, '_'); }
@@ -336,6 +302,53 @@
     state.openId = null;
     document.getElementById('search-input').value = '';
     render();
+  });
+
+  // Delegated listeners — bound ONCE, on the stable container elements, not on the
+  // checkboxes/chips/rows themselves. Those get replaced wholesale on every render() via
+  // innerHTML, so binding listeners directly to them requires re-binding after every render,
+  // which is fragile (easy to end up with stale or duplicate listeners as re-renders stack up).
+  // The containers below (#kind-filters, #type-filters, #tag-filters, #results-list) are never
+  // replaced themselves — only their children are — so one listener here keeps working no
+  // matter how many times the contents inside get re-rendered.
+
+  document.getElementById('kind-filters').addEventListener('change', (e) => {
+    const input = e.target.closest('input[data-kind]');
+    if (!input) return;
+    const k = input.getAttribute('data-kind');
+    if (input.checked) state.kinds.add(k); else state.kinds.delete(k);
+    render();
+  });
+
+  document.getElementById('type-filters').addEventListener('change', (e) => {
+    const input = e.target.closest('input[data-type]');
+    if (!input) return;
+    const t = input.getAttribute('data-type');
+    if (input.checked) state.types.add(t); else state.types.delete(t);
+    render();
+  });
+
+  document.getElementById('tag-filters').addEventListener('click', (e) => {
+    const btn = e.target.closest('.tag-chip');
+    if (!btn) return;
+    const tag = btn.getAttribute('data-tag');
+    if (state.tags.has(tag)) state.tags.delete(tag); else state.tags.add(tag);
+    render();
+  });
+
+  document.getElementById('results-list').addEventListener('click', (e) => {
+    if (e.target.closest('a')) return; // let source-file links navigate normally
+    const row = e.target.closest('.result-row');
+    if (!row) return;
+    const id = row.getAttribute('data-id');
+    state.openId = state.openId === id ? null : id;
+    render();
+    if (state.openId) {
+      const el = document.getElementById(`detail-${cssEscape(state.openId)}`);
+      if (el && typeof el.scrollIntoView === 'function') {
+        el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    }
   });
 
   render();

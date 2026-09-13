@@ -1,0 +1,5 @@
+step,step_name,users_entered,users_completed,drop_off_rate
+1,welcome,10000,9400,0.060
+2,permissions,9400,6800,0.277
+3,carousel,6800,6500,0.044
+4,account_linking,6500,6350,0.023
