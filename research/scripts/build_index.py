@@ -19,6 +19,13 @@ design-tokens/components/, so a typo'd or removed component slug shows up here i
 silently rendering as a dead reference in research/_index.md. No-op if design-tokens/components/
 doesn't exist yet in a given checkout.
 
+feature-002: also regenerates an `_index.md` inside each of the 20 top-level deliverable folders
+(research-plans/, facilitation-guides/, ..., style-guide/ — see DELIVERABLE_FOLDERS) from that
+folder's own *.md frontmatter, validates every deliverable's related_findings against
+research/findings/, validates the type-specific cross-link fields (related_guide, related_plan,
+persona_ref, flow_ref, related_wireframes, related_style_guide, based_on) against their target
+folder(s), and folds every deliverable file's tags into the repo-wide tag glossary check.
+
 Per the plan's key decisions: these files are generated, not hand-maintained. Each should be
 small enough to fit entirely in an agent's context, so most "have we looked at X" queries can be
 answered from the relevant index plus one or two findings/summaries files, without a full-repo
@@ -27,8 +34,9 @@ search.
 Requires: pip install python-frontmatter
 
 Usage:
-    python build_index.py            # regenerate research/_index.md and analytics/_index.md
-    python build_index.py --check    # exit 1 if either index is out of date or any tag/link is
+    python build_index.py            # regenerate research/_index.md, analytics/_index.md, and
+                                      # every deliverable folder's _index.md
+    python build_index.py --check    # exit 1 if any index is out of date or any tag/link is
                                       # invalid, without writing anything (for CI / pre-commit)
 """
 import argparse
@@ -57,6 +65,31 @@ ANALYTICS_INDEX_FILE = ANALYTICS_ROOT / "_index.md"
 COMPONENTS_ROOT = REPO_ROOT / "design-tokens" / "components"
 
 EXCLUDE_FROM_FINDINGS = {"tags.md"}
+
+# feature-002: the 20 top-level deliverable folders, each holding real (source_type: native) or
+# stub (frontmatter + short description) files per the feature-002 spec. Indexed and validated
+# the same way as research/findings/ and analytics/summaries/ — see AGENTS.md.
+DELIVERABLE_FOLDERS = [
+    "research-plans", "facilitation-guides", "topline-summaries", "research-readouts",
+    "heuristic-evaluations", "accessibility-screenings", "service-topology", "personas",
+    "mental-models", "mindsets", "journey-maps", "thumbnails", "wireframes", "user-flows",
+    "wireflows", "storyboards", "mockups", "prototypes", "design-system", "style-guide",
+]
+
+# Cross-link frontmatter fields (beyond related_findings, validated separately via
+# validate_deliverable_findings_links) that point at a file in another deliverable or research
+# folder, and which folder(s) to resolve them against. A field's value may be a single string or
+# a list of strings; each is matched by filename stem, same convention as related_findings.
+DELIVERABLE_CROSS_LINK_TARGETS = {
+    "related_guide": ["facilitation-guides"],
+    "related_plan": ["research-plans"],
+    "related_analytics": ["analytics/summaries"],
+    "persona_ref": ["personas"],
+    "flow_ref": ["user-flows", "wireflows"],
+    "related_wireframes": ["wireframes"],
+    "related_style_guide": ["style-guide"],
+    "based_on": ["research-plans", "research/findings"],
+}
 
 
 def load_tag_glossary():
@@ -105,15 +138,36 @@ def load_components():
     return {Path(p).stem for p in glob.glob(str(COMPONENTS_ROOT / "*.md"))}
 
 
+def load_deliverables():
+    """Return {folder: {stem: {meta, path}}} for every *.md (excluding _index.md) in each of the
+    20 feature-002 top-level folders. A folder missing from this checkout contributes {} for
+    itself — same optional-folder pattern as analytics/ and design-tokens/components/."""
+    deliverables = {}
+    for folder in DELIVERABLE_FOLDERS:
+        root = REPO_ROOT / folder
+        items = {}
+        if root.exists():
+            for p in sorted(glob.glob(str(root / "*.md"))):
+                if Path(p).name == "_index.md":
+                    continue
+                post = frontmatter.load(p)
+                items[Path(p).stem] = dict(meta=post.metadata, path=Path(p))
+        deliverables[folder] = items
+    return deliverables
+
+
 def validate_tags(glossary):
-    """Check every tag used in raw/, findings/, and analytics/summaries/ frontmatter against the
-    glossary. Returns a list of (file, tag) problems."""
+    """Check every tag used in raw/, findings/, analytics/summaries/, and the feature-002
+    deliverable folders' frontmatter against the glossary. Returns a list of (file, tag)
+    problems."""
     problems = []
     all_files = (
             glob.glob(str(RAW_ROOT / "*" / "*.md"))
             + [str(p) for p in FINDINGS_ROOT.glob("*.md") if p.name not in EXCLUDE_FROM_FINDINGS]
             + glob.glob(str(ANALYTICS_SUMMARIES_ROOT / "*.md"))
     )
+    for folder in DELIVERABLE_FOLDERS:
+        all_files += [str(p) for p in (REPO_ROOT / folder).glob("*.md") if p.name != "_index.md"] if (REPO_ROOT / folder).exists() else []
     for p in all_files:
         post = frontmatter.load(p)
         for t in post.metadata.get("tags", []):
@@ -249,6 +303,73 @@ def validate_component_links(findings, sessions, components):
     return problems
 
 
+def build_deliverable_index_content(folder, items):
+    rows = []
+    for stem, data in items.items():
+        meta = data["meta"]
+        rows.append(dict(
+            title=meta.get("title") or stem,
+            file=f"{stem}.md",
+            status=meta.get("status", "—"),
+            tags=", ".join(sorted(meta.get("tags", []))) or "—",
+            source_type=meta.get("source_type", "—"),
+            updated=meta.get("date", ""),
+            related_findings=", ".join(f"../research/findings/{Path(f).name}" for f in meta.get("related_findings", [])) or "—",
+        ))
+
+    rows.sort(key=lambda r: r["updated"])
+
+    label = folder.replace("-", " ").title()
+    lines = [
+        f"# {label} Index\n",
+        f"Maintained by `research/scripts/build_index.py`. Flat table of files in `{folder}/` — "
+        "title, status, tags, source type, last updated, and any linked research findings.\n",
+        "| Title | Status | Tags | Source Type | Last Updated | Related Findings |",
+        "|---|---|---|---|---|---|",
+    ]
+    for r in rows:
+        lines.append(f"| [{r['title']}]({r['file']}) | {r['status']} | {r['tags']} | {r['source_type']} | {r['updated']} | {r['related_findings']} |")
+    return "\n".join(lines) + "\n"
+
+
+def validate_deliverable_findings_links(deliverables, findings):
+    """Check related_findings in every deliverable folder resolves to a real findings/*.md."""
+    problems = []
+    for folder, items in deliverables.items():
+        for stem, data in items.items():
+            for rel in data["meta"].get("related_findings", []) or []:
+                topic = Path(rel).stem
+                if topic not in findings:
+                    problems.append(f"{data['path']}: related_findings points at missing findings/{topic}.md")
+    return problems
+
+
+def validate_deliverable_cross_links(deliverables, findings, summaries):
+    """Check the feature-002 type-specific cross-link fields (related_guide, related_plan,
+    related_analytics, persona_ref, flow_ref, related_wireframes, related_style_guide, based_on)
+    each resolve to a real file in their target folder(s)."""
+    problems = []
+    stem_sets = {folder: set(items.keys()) for folder, items in deliverables.items()}
+    stem_sets["research/findings"] = set(findings.keys())
+    stem_sets["analytics/summaries"] = set(summaries.keys())
+
+    for folder, items in deliverables.items():
+        for stem, data in items.items():
+            meta = data["meta"]
+            for field, targets in DELIVERABLE_CROSS_LINK_TARGETS.items():
+                if field not in meta:
+                    continue
+                val = meta[field]
+                vals = val if isinstance(val, list) else ([val] if val else [])
+                for v in vals:
+                    if not v:
+                        continue
+                    ref_stem = Path(v).stem
+                    if not any(ref_stem in stem_sets.get(t, set()) for t in targets):
+                        problems.append(f"{data['path']}: {field} references missing {v!r} (expected in {'/'.join(targets)}/)")
+    return problems
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--check", action="store_true", help="Exit 1 if either index is stale or tags/links are invalid; don't write")
@@ -259,18 +380,31 @@ def main():
     sessions = load_raw_sessions()
     summaries = load_analytics_summaries()
     components = load_components()
+    deliverables = load_deliverables()
     analytics_exists = ANALYTICS_ROOT.exists()
 
     tag_problems = validate_tags(glossary)
     link_problems = validate_index_links(findings, sessions)
     analytics_link_problems = validate_analytics_links(findings, summaries)
     component_link_problems = validate_component_links(findings, sessions, components)
+    deliverable_findings_problems = validate_deliverable_findings_links(deliverables, findings)
+    deliverable_cross_link_problems = validate_deliverable_cross_links(deliverables, findings, summaries)
 
     new_research_content = build_index_content(findings, sessions)
     old_research_content = INDEX_FILE.read_text(encoding="utf-8") if INDEX_FILE.exists() else None
 
     new_analytics_content = build_analytics_index_content(summaries) if analytics_exists else None
     old_analytics_content = ANALYTICS_INDEX_FILE.read_text(encoding="utf-8") if ANALYTICS_INDEX_FILE.exists() else None
+
+    new_deliverable_contents = {}
+    old_deliverable_contents = {}
+    for folder in DELIVERABLE_FOLDERS:
+        folder_root = REPO_ROOT / folder
+        if not folder_root.exists():
+            continue
+        index_path = folder_root / "_index.md"
+        new_deliverable_contents[folder] = build_deliverable_index_content(folder, deliverables[folder])
+        old_deliverable_contents[folder] = index_path.read_text(encoding="utf-8") if index_path.exists() else None
 
     exit_code = 0
 
@@ -298,6 +432,18 @@ def main():
             print(f"   {msg}", file=sys.stderr)
         exit_code = 1
 
+    if deliverable_findings_problems:
+        print("⚠️  Cross-reference issues (deliverables → research/findings):", file=sys.stderr)
+        for msg in deliverable_findings_problems:
+            print(f"   {msg}", file=sys.stderr)
+        exit_code = 1
+
+    if deliverable_cross_link_problems:
+        print("⚠️  Cross-reference issues (deliverables):", file=sys.stderr)
+        for msg in deliverable_cross_link_problems:
+            print(f"   {msg}", file=sys.stderr)
+        exit_code = 1
+
     if args.check:
         if new_research_content != old_research_content:
             print("❌ research/_index.md is out of date. Run without --check to regenerate.", file=sys.stderr)
@@ -305,6 +451,10 @@ def main():
         if analytics_exists and new_analytics_content != old_analytics_content:
             print("❌ analytics/_index.md is out of date. Run without --check to regenerate.", file=sys.stderr)
             exit_code = 1
+        for folder in new_deliverable_contents:
+            if new_deliverable_contents[folder] != old_deliverable_contents[folder]:
+                print(f"❌ {folder}/_index.md is out of date. Run without --check to regenerate.", file=sys.stderr)
+                exit_code = 1
         sys.exit(exit_code)
 
     if new_research_content != old_research_content:
@@ -321,6 +471,14 @@ def main():
             print(f"✅ {ANALYTICS_INDEX_FILE} already up to date ({len(summaries)} summaries)")
     else:
         print("ℹ️  analytics/ doesn't exist in this checkout — skipping analytics/_index.md")
+
+    for folder, new_content in new_deliverable_contents.items():
+        index_path = REPO_ROOT / folder / "_index.md"
+        if new_content != old_deliverable_contents[folder]:
+            index_path.write_text(new_content, encoding="utf-8")
+            print(f"✅ Wrote {index_path} ({len(deliverables[folder])} files)")
+        else:
+            print(f"✅ {index_path} already up to date ({len(deliverables[folder])} files)")
 
     sys.exit(exit_code)
 
