@@ -44,8 +44,10 @@ rephrase would catch.
 No agent, no server, no build step at query time — just open the file in a browser.
 
 - **Search box** — matches against title, tags, and full body text (substring match, not fuzzy).
-- **Kind filter** (sidebar) — Sessions / Findings / Components.
-- **Type filter** — usability-test, interview, survey, etc.
+- **Kind filter** (sidebar) — Sessions / Findings / Components / Analytics / Deliverables. The
+  last bucket covers all 20 feature-002 folders (personas, wireframes, research-plans, ...).
+- **Type filter** — usability-test, interview, survey, etc. for Sessions/Findings; for
+  Deliverables, the specific folder (Persona, Wireframe, Research plan, ...).
 - **Tag filter** — click chips to narrow; multiple active tags are AND'd together, not OR'd.
 - Click any result row to expand its full content inline, including a link to the underlying
   source file.

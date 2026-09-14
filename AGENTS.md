@@ -52,6 +52,43 @@ Run `research/scripts/build_index.py` to refresh `research/_index.md` and `analy
 Run `research/scripts/new_research_session.py --title ... --type ... --topic-slug ... --tags ...`
 to scaffold a new `raw/YYYY-MM-DD-topic-slug/` folder instead of creating one by hand.
 
+## Creating a feature-002 deliverable file
+`new_research_session.py` also creates single files in the 20 top-level deliverable folders —
+`--type` doubles as the switch: pass one of the folder names below instead of a raw-session
+research type and the script writes `<folder>/<slug>.md` instead of a `raw/` session:
+
+```
+research-plans, facilitation-guides, topline-summaries, research-readouts,
+heuristic-evaluations, accessibility-screenings, service-topology, personas,
+mental-models, mindsets, journey-maps, thumbnails, wireframes, user-flows,
+wireflows, storyboards, mockups, prototypes, design-system, style-guide
+```
+
+```
+research/scripts/new_research_session.py --type personas --title "Frontline Nurse — Ambient Scribe" \
+    --slug frontline-nurse-ambient-scribe --tags nursing,ambient-scribe \
+    --related-findings clinician-experience-documentation-burden.md
+```
+
+- `--slug` is required — it's the filename (kebab-case, no `.md`).
+- Base frontmatter (`title`/`date`/`status`/`tags`/`related_findings`/`source_type`) always comes
+  from CLI flags, never prompted.
+- By default the script interactively prompts for that folder's type-specific extra fields (see
+  `docs/deliverable-types.md`), in the order documented there and in the Decision Log. Press
+  Enter to leave any field blank.
+- **`--no-prompt`** skips all interactive prompting and leaves every extra field at its schema
+  default instead — **a cold/scripted agent session should always pass this**, since it cannot
+  answer interactive prompts.
+- `--type prototypes` additionally requires **`--proto-type clickthrough|coded`**, which sets that
+  file's `type` field and the `source_type` default (`figma-link` for clickthrough, `github-link`
+  for coded) — see `docs/deliverable-types.md` for why `prototypes/` is stub-only.
+- Never overwrites an existing file — pass `--force` to overwrite. This check runs before any
+  interactive prompting.
+- Same tag-glossary warn-don't-block validation as raw sessions, and the same
+  `--check-tags-only` support.
+- Doesn't auto-run `build_index.py` — run it yourself afterward to refresh the folder's
+  `_index.md` (and to catch a dangling cross-link field, e.g. `persona_ref`, `related_plan`).
+
 ## Git discipline
 Every synthesis is its own commit; say what raw evidence triggered the change. Never rewrite
 `raw/` or `analytics/raw/` file history.

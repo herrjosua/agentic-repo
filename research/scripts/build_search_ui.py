@@ -2,7 +2,10 @@
 """
 build_search_ui.py — generate research/search.html: a self-contained, offline-capable
 search-and-filter interface over research/raw/, research/findings/,
-design-tokens/components/, and analytics/summaries/.
+design-tokens/components/, analytics/summaries/, and (feature-002) the 20 top-level
+deliverable folders (research-plans/, personas/, wireframes/, ..., style-guide/ — see
+DELIVERABLE_FOLDERS, imported from build_index.py so the two scripts can't drift apart on
+which folders count as "the repo").
 
 Why this exists: AGENTS.md already makes the repo queryable via any agent (Claude Code,
 etc.) doing structured search over findings/ first, falling back to raw/. This script is
@@ -34,6 +37,7 @@ except ImportError:
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from md_render import render_markdown  # noqa: E402  (local helper, see md_render.py)
+from build_index import DELIVERABLE_FOLDERS  # noqa: E402  (shared source of truth for the 20 folders)
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 RESEARCH_ROOT = SCRIPT_DIR.parent          # research/
@@ -54,6 +58,28 @@ TYPE_LABELS = {
     "analytics": "Analytics",
     "analytics-summary": "Analytics summary",
     "synthesis": "Synthesis",
+    # feature-002 deliverable folders double as their record's `type` value (see
+    # build_deliverable_records) so they're filterable the same way research-method types are.
+    "research-plans": "Research plan",
+    "facilitation-guides": "Facilitation guide",
+    "topline-summaries": "Topline summary",
+    "research-readouts": "Research readout",
+    "heuristic-evaluations": "Heuristic evaluation",
+    "accessibility-screenings": "Accessibility screening",
+    "service-topology": "Service topology",
+    "personas": "Persona",
+    "mental-models": "Mental model",
+    "mindsets": "Mindset",
+    "journey-maps": "Journey map",
+    "thumbnails": "Thumbnail",
+    "wireframes": "Wireframe",
+    "user-flows": "User flow",
+    "wireflows": "Wireflow",
+    "storyboards": "Storyboard",
+    "mockups": "Mockup",
+    "prototypes": "Prototype",
+    "design-system": "Design system",
+    "style-guide": "Style guide",
 }
 
 
@@ -166,6 +192,40 @@ def build_analytics_records():
     return records
 
 
+def build_deliverable_records():
+    """feature-002: one record per *.md (excluding _index.md) in each of the 20 top-level
+    deliverable folders. `kind` is the single shared bucket 'deliverable' (so the sidebar's
+    coarse Kind filter stays a short list); `type` is set to the folder name so the existing
+    Type filter — already a flat, mixed vocabulary across the other kinds — doubles as the
+    per-folder filter, no new UI concept needed."""
+    records = []
+    for folder in DELIVERABLE_FOLDERS:
+        folder_root = REPO_ROOT / folder
+        if not folder_root.exists():
+            continue
+        for path in sorted(glob.glob(str(folder_root / "*.md"))):
+            if Path(path).name == "_index.md":
+                continue
+            post = frontmatter.load(path)
+            meta = post.metadata
+            body_html = render_markdown(post.content)
+            rel_path = f"../{folder}/{Path(path).name}"
+            records.append(dict(
+                id=f"deliverable:{folder}/{Path(path).stem}",
+                kind="deliverable",
+                title=meta.get("title") or Path(path).stem,
+                date=_str(meta.get("date", "")),
+                type=folder,
+                status=meta.get("status", ""),
+                tags=meta.get("tags", []) or [],
+                related_components=[],
+                severity={},
+                path=rel_path,
+                html=body_html,
+            ))
+    return records
+
+
 def build_search_text(record):
     """Flat lowercase text blob used for the client-side substring search."""
     parts = [
@@ -200,6 +260,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     --kind-finding: #146B64;
     --kind-component: #9A5E0D;
     --kind-analytics: #6B4FA0;
+    --kind-deliverable: #2F7D4F;
     --sev-critical: #C33A2E;
     --sev-high: #C77B12;
     --sev-medium: #2B6CE0;
@@ -356,19 +417,19 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 (function () {
   const records = JSON.parse(document.getElementById('research-data').textContent);
   const TYPE_LABELS = __TYPE_LABELS_JSON__;
-  const KIND_LABELS = { raw: 'Sessions', finding: 'Findings', component: 'Components', analytics: 'Analytics' };
-  const KIND_COLORS = { raw: 'var(--kind-raw)', finding: 'var(--kind-finding)', component: 'var(--kind-component)', analytics: 'var(--kind-analytics)' };
+  const KIND_LABELS = { raw: 'Sessions', finding: 'Findings', component: 'Components', analytics: 'Analytics', deliverable: 'Deliverables' };
+  const KIND_COLORS = { raw: 'var(--kind-raw)', finding: 'var(--kind-finding)', component: 'var(--kind-component)', analytics: 'var(--kind-analytics)', deliverable: 'var(--kind-deliverable)' };
   const SEV_COLORS = { critical: 'var(--sev-critical)', high: 'var(--sev-high)', medium: 'var(--sev-medium)', low: 'var(--sev-low)' };
 
   const state = {
     query: '',
-    kinds: new Set(['raw', 'finding', 'component', 'analytics']),
+    kinds: new Set(['raw', 'finding', 'component', 'analytics', 'deliverable']),
     types: new Set(),
     tags: new Set(),
     openId: null,
   };
 
-  const allKinds = ['raw', 'finding', 'component', 'analytics'];
+  const allKinds = ['raw', 'finding', 'component', 'analytics', 'deliverable'];
   const allTypes = [...new Set(records.map(r => r.type).filter(Boolean))].sort();
   const allTags = [...new Set(records.flatMap(r => r.tags))].sort();
   state.types = new Set(allTypes);
@@ -536,6 +597,7 @@ def main():
             + build_findings_records()
             + build_component_records()
             + build_analytics_records()
+            + build_deliverable_records()
     )
     for r in records:
         r["searchText"] = build_search_text(r)
@@ -560,7 +622,8 @@ def main():
           f"{sum(1 for r in records if r['kind']=='raw')} sessions, "
           f"{sum(1 for r in records if r['kind']=='finding')} findings, "
           f"{sum(1 for r in records if r['kind']=='component')} components, "
-          f"{sum(1 for r in records if r['kind']=='analytics')} analytics summaries)")
+          f"{sum(1 for r in records if r['kind']=='analytics')} analytics summaries, "
+          f"{sum(1 for r in records if r['kind']=='deliverable')} deliverables)")
 
 
 if __name__ == "__main__":
