@@ -61,10 +61,14 @@ def load_all_records():
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--kind", choices=sorted(VALID_KINDS), default=None,
-                         help="Only include records of this kind. Omit to include all kinds.")
+                        help="Only include records of this kind. Omit to include all kinds.")
     parser.add_argument("--id", default=None,
-                         help="Print only the single record whose id matches exactly. "
-                              "Exits 1 with an error on stderr if no record matches.")
+                    help="Print only the single record whose id matches exactly. "
+                         "Exits 1 with an error on stderr if no record matches.")
+    parser.add_argument("--summary", action="store_true",
+                    help="Strip the html and searchText fields from each record, for a "
+                         "lightweight list payload. Has no effect combined with --id, "
+                         "since a single fully-fetched record is small regardless.")
     args = parser.parse_args()
 
     records = load_all_records()
@@ -79,6 +83,12 @@ def main():
             sys.exit(1)
         print(json.dumps(match, ensure_ascii=False))
         return
+
+    if args.summary:
+        records = [
+            {k: v for k, v in r.items() if k not in ("html", "searchText")}
+            for r in records
+        ]
 
     print(json.dumps(records, ensure_ascii=False))
 
