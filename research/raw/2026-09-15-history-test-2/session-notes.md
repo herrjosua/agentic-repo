@@ -1,11 +1,13 @@
 ---
 title: History test 2
-date: 2026-09-15
+date: 2026-09-15T00:00:00.000Z
 type: interview
-status: raw
+status: first-edit
 tags: []
 related_components: []
 related_findings: []
+last_edited_by: Josh Bock
+last_edited_at: '2026-09-15T18:19:43.328Z'
 ---
 
 # History test 2
