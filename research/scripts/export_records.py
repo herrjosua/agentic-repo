@@ -22,8 +22,12 @@ Usage:
     python export_records.py --kind raw        # filter to one kind: raw | finding | component |
                                                 # analytics | deliverable
     python export_records.py --id raw:2026-01-19-onboarding-usability-test
-                                                # print a single record by its id field, or
-                                                # nothing (exit 1) if no record matches
+                                                # print a single record by its id field (with its
+                                                # full raw markdown content included, for editing),
+                                                # or nothing (exit 1) if no record matches
+    python export_records.py --kind raw --summary
+                                                # list mode: strip html/searchText for a lightweight
+                                                # payload; has no effect combined with --id
 """
 import argparse
 import json
@@ -33,6 +37,8 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR))
 
+import frontmatter
+
 from build_search_ui import (  # noqa: E402
     build_raw_records,
     build_findings_records,
@@ -40,6 +46,7 @@ from build_search_ui import (  # noqa: E402
     build_analytics_records,
     build_deliverable_records,
     build_search_text,
+    RESEARCH_ROOT,
 )
 
 VALID_KINDS = {"raw", "finding", "component", "analytics", "deliverable"}
@@ -61,14 +68,15 @@ def load_all_records():
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--kind", choices=sorted(VALID_KINDS), default=None,
-                        help="Only include records of this kind. Omit to include all kinds.")
+                         help="Only include records of this kind. Omit to include all kinds.")
     parser.add_argument("--id", default=None,
-                    help="Print only the single record whose id matches exactly. "
-                         "Exits 1 with an error on stderr if no record matches.")
+                         help="Print only the single record whose id matches exactly, including "
+                              "its full raw markdown content (rawContent field). "
+                              "Exits 1 with an error on stderr if no record matches.")
     parser.add_argument("--summary", action="store_true",
-                    help="Strip the html and searchText fields from each record, for a "
-                         "lightweight list payload. Has no effect combined with --id, "
-                         "since a single fully-fetched record is small regardless.")
+                         help="Strip the html and searchText fields from each record, for a "
+                              "lightweight list payload. Has no effect combined with --id, "
+                              "since a single fully-fetched record is small regardless.")
     args = parser.parse_args()
 
     records = load_all_records()
@@ -81,6 +89,9 @@ def main():
         if match is None:
             print(f"❌ No record found with id {args.id!r}", file=sys.stderr)
             sys.exit(1)
+        file_path = (RESEARCH_ROOT / match["path"]).resolve()
+        post = frontmatter.load(file_path)
+        match["rawContent"] = post.content
         print(json.dumps(match, ensure_ascii=False))
         return
 
