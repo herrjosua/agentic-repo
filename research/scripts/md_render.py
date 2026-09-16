@@ -72,21 +72,66 @@ def render_markdown(md: str) -> str:
             html_parts.append(f"<table><thead><tr>{thead}</tr></thead><tbody>{tbody}</tbody></table>")
             continue
 
-        # Unordered list
+        # Unordered list — a line with no "-"/"*" marker, sitting right after a list item with
+        # no blank line in between, is a "lazy continuation" of that item's text (standard
+        # Markdown behavior — e.g. a sentence hand-wrapped at ~80 chars in the source file).
+        # The loop below absorbs those continuation lines onto the previous item instead of
+        # letting them fall through to paragraph handling and become a disconnected <p>.
         if re.match(r"^[-*]\s+", stripped):
             items = []
-            while i < n and re.match(r"^[-*]\s+", lines[i].strip()):
-                items.append(re.sub(r"^[-*]\s+", "", lines[i].strip()))
-                i += 1
+            while i < n:
+                line_stripped = lines[i].strip()
+                bullet_match = re.match(r"^[-*]\s+(.*)$", line_stripped)
+                if bullet_match:
+                    # A real new bullet — start a new list item.
+                    items.append(bullet_match.group(1))
+                    i += 1
+                elif (line_stripped and items
+                        and not re.match(r"^(#{1,4})\s+", line_stripped)
+                        and not line_stripped.startswith(">")
+                        and not re.match(r"^\d+\.\s+", line_stripped)
+                        and not is_table_row(line_stripped)):
+                    # A plain continuation line — join it onto the last item collected so far,
+                    # rather than starting a new item or a new paragraph. Only do this when we
+                    # already have at least one item (`items` is non-empty) and this line isn't
+                    # secretly the start of a different block type (heading/quote/ordered
+                    # list/table), which should still end the list normally.
+                    items[-1] = items[-1] + " " + line_stripped
+                    i += 1
+                else:
+                    # Blank line, a new block type, or end of input — the list is done.
+                    break
             html_parts.append("<ul>" + "".join(f"<li>{inline(it)}</li>" for it in items) + "</ul>")
             continue
 
-        # Ordered list
+        # Ordered list — same lazy-continuation handling as the unordered list above: a line
+        # with no "N." marker, sitting right after a numbered item with no blank line in
+        # between, is a continuation of that item's text, not a new paragraph. This is exactly
+        # the same bug class that affected unordered lists (see comment above) — e.g. a
+        # two-line recommendation in the source file was rendering as one real recommendation
+        # followed by a second, disconnected-looking paragraph.
         if re.match(r"^\d+\.\s+", stripped):
             items = []
-            while i < n and re.match(r"^\d+\.\s+", lines[i].strip()):
-                items.append(re.sub(r"^\d+\.\s+", "", lines[i].strip()))
-                i += 1
+            while i < n:
+                line_stripped = lines[i].strip()
+                number_match = re.match(r"^\d+\.\s+(.*)$", line_stripped)
+                if number_match:
+                    # A real new numbered item — start a new list item.
+                    items.append(number_match.group(1))
+                    i += 1
+                elif (line_stripped and items
+                        and not re.match(r"^(#{1,4})\s+", line_stripped)
+                        and not line_stripped.startswith(">")
+                        and not re.match(r"^[-*]\s+", line_stripped)
+                        and not is_table_row(line_stripped)):
+                    # A plain continuation line — join it onto the last item collected so far.
+                    # Same guard conditions as the unordered list: only continue if we already
+                    # have an item, and this line isn't secretly a different block type.
+                    items[-1] = items[-1] + " " + line_stripped
+                    i += 1
+                else:
+                    # Blank line, a new block type, or end of input — the list is done.
+                    break
             html_parts.append("<ol>" + "".join(f"<li>{inline(it)}</li>" for it in items) + "</ol>")
             continue
 
@@ -107,7 +152,8 @@ def render_markdown(md: str) -> str:
 
 if __name__ == "__main__":
     sample = """## Key Findings
-- **[CRITICAL]** *(phi-handling)* Something bad happened.
+- **[CRITICAL]** *(phi-handling)* Something bad happened across
+multiple sessions and needs review.
 - **[HIGH]** *(accuracy)* Something else.
 
 ## Representative Quotes
@@ -115,7 +161,8 @@ if __name__ == "__main__":
 > — Physician, Internal Medicine, P09
 
 ## Recommendations
-1. Do the first thing.
+1. Do the first thing, but it turns out this recommendation
+runs long enough to wrap onto a second line in the source file.
 2. Do the second thing, with `inline code` and a [link](https://example.com).
 
 | Topic | Tags |
