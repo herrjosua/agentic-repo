@@ -43,6 +43,7 @@ import argparse
 import glob
 import re
 import sys
+import datetime
 from pathlib import Path
 
 try:
@@ -189,7 +190,27 @@ def build_index_content(findings, sessions):
     rows = []
     for topic, data in findings.items():
         meta = data["meta"]
-        backing_sessions = sorted(backing[topic], key=lambda s: s["meta"].get("date", ""))
+
+        def normalize_date(value):
+            """Coerce a frontmatter date value to a plain datetime.date for sorting.
+            Frontmatter dates are usually loaded as datetime.date, but gray-matter
+            (used by the CRUD UI's PUT endpoint) can write a full ISO timestamp
+            string or datetime.datetime instead — normalize everything to date so
+            sorting never compares incompatible types again."""
+            if isinstance(value, datetime.datetime):
+                return value.date()
+            if isinstance(value, datetime.date):
+                return value
+            if isinstance(value, str) and value:
+                try:
+                    return datetime.datetime.fromisoformat(value.replace("Z", "+00:00")).date()
+                except ValueError:
+                    return datetime.date.min
+            return datetime.date.min
+
+        backing_sessions = sorted(backing[topic], key=lambda s: normalize_date(s["meta"].get("date", "")))
+
+
         rows.append(dict(
             topic=meta.get("title", topic),
             file=f"findings/{topic}.md",

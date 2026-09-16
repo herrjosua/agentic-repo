@@ -1,6 +1,6 @@
 ---
 title: AI Strategy Kickoff — Executive Alignment Interview
-date: 2025-01-14T00:00:00.000Z
+date: '2025-01-14'
 type: interview
 status: raw
 tags:
@@ -13,7 +13,7 @@ related_components: []
 related_findings:
   - ../../findings/governance-and-phi.md
 last_edited_by: Josh Bock
-last_edited_at: '2026-09-16T16:45:19.680Z'
+last_edited_at: '2026-09-16T17:43:46.576Z'
 ---
 ## AI Strategy Kickoff — Executive Alignment Interview
 
