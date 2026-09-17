@@ -10,6 +10,10 @@ evidence kept separate from — but cross-linked with — the qualitative findin
   `analytics/_index.md` for synthesized quant evidence, or `design-tokens/design.md` for the
   current token/component reference.
 - **Project background & build plan:** `docs/`
+- **Web UI:** a separate app, [Research Repo CRUD UI](../Research%20Repo%20CRUD%20UI), provides
+  multi-user login, a full create/read/update/delete interface, and git-based edit attribution on
+  top of this repo's content. It reads and writes this repo's markdown files (via its own Python
+  scripts, unchanged) but is not stored inside it, to avoid risking this repo's working content.
 
 > This repository's content (research sessions, findings, design tokens, analytics) is **entirely
 > fictional sample data** for a hypothetical healthcare organization ("Meridian Health Network")
