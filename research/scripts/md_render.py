@@ -1,6 +1,35 @@
 import re
 import html as html_lib
 
+# Security fix (2026-09-18): the markdown-link transform below splices the URL
+# straight into href="..." after inline() has already run html.escape on the
+# surrounding text. Two problems compounded:
+#   1. escape() was called with quote=False, so a literal " in the URL was
+#      never entity-encoded — an attacker-controlled URL like
+#      `x" onmouseover="location='http://evil.test'"` broke out of the href
+#      attribute and injected a brand-new event-handler attribute onto the
+#      <a> tag (DOM-based XSS, no click required, just a hover).
+#   2. the URL's scheme was never checked, so `javascript:alert(1)` rendered
+#      as a live, clickable href that executes on click.
+# Fixed by (a) switching to quote=True so a literal " is entity-encoded before
+# it can ever reach the href splice, and (b) allowlisting the URL scheme in
+# _render_link below — anything that isn't http(s)/mailto/relative is left as
+# inert escaped text instead of becoming a clickable anchor. Verified against
+# both payloads directly (see backend/tests/security.test.js in the sibling
+# "Research Repo CRUD UI" project, VECTOR 5, for the end-to-end regression
+# test through PUT /records/:id -> this renderer -> the html field).
+_SAFE_LINK_SCHEME_RE = re.compile(r"^(https?://|mailto:|/|#|\.\.?/)", re.IGNORECASE)
+
+
+def _render_link(match):
+    label, url = match.group(1), match.group(2)
+    if not _SAFE_LINK_SCHEME_RE.match(url):
+        # Not a scheme we trust (e.g. javascript:, data:, vbscript:) — render
+        # the original bracket/paren text as inert, already-escaped text
+        # rather than a clickable anchor.
+        return match.group(0)
+    return f'<a href="{url}">{label}</a>'
+
 
 def render_markdown(md: str) -> str:
     """Convert the specific Markdown subset used in this repo to HTML.
@@ -15,11 +44,11 @@ def render_markdown(md: str) -> str:
     n = len(lines)
 
     def inline(text):
-        text = html_lib.escape(text, quote=False)
+        text = html_lib.escape(text, quote=True)
         text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
         text = re.sub(r"(?<!\*)\*([^*\n]+?)\*(?!\*)", r"<em>\1</em>", text)
         text = re.sub(r"`([^`]+?)`", r"<code>\1</code>", text)
-        text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', text)
+        text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", _render_link, text)
         return text
 
     def is_table_row(line):
