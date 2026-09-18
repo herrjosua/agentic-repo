@@ -28,6 +28,7 @@ import glob
 import json
 import re
 import sys
+from datetime import datetime
 from pathlib import Path
 
 try:
@@ -87,6 +88,27 @@ def _str(value):
     return str(value) if value is not None else ""
 
 
+def _edit_fields(meta):
+    """last_edited_by / last_edited_at, as written into a record's frontmatter by the CRUD UI's
+    PUT /api/records/:id. Only present once a record has been edited that way, so both default
+    to None (not omitted) — every record keeps the same JSON shape either way.
+
+    last_edited_at is normalized to a string in the same '...T..:..:..sssZ' form PUT writes.
+    gray-matter quotes it on write, so it normally arrives here as a str already; but if
+    someone hand-edits the file and drops the quotes, PyYAML parses it into a datetime, which
+    json.dumps can't serialize and would fail the whole export — not just that one record."""
+    by = meta.get("last_edited_by")
+    at = meta.get("last_edited_at")
+    if isinstance(at, datetime):
+        at = at.isoformat(timespec="milliseconds")
+        if at.endswith("+00:00"):
+            at = at[:-6] + "Z"
+    return dict(
+        last_edited_by=None if by is None else str(by),
+        last_edited_at=None if at is None else str(at),
+    )
+
+
 def build_raw_records():
     records = []
     for session_path in sorted(glob.glob(str(RAW_ROOT / "*" / "session-notes.md"))):
@@ -111,6 +133,7 @@ def build_raw_records():
             tags=meta.get("tags", []),
             related_components=meta.get("related_components", []),
             severity=meta.get("severity_summary", {}),
+            **_edit_fields(meta),
             path=rel_path,
             html=body_html,
         ))
@@ -136,6 +159,7 @@ def build_findings_records():
             tags=meta.get("tags", []),
             related_components=meta.get("related_components", []),
             severity={},
+            **_edit_fields(meta),
             path=rel_path,
             html=body_html,
         ))
@@ -161,6 +185,7 @@ def build_component_records():
             tags=[],
             related_components=[],
             severity={},
+            **_edit_fields(meta),
             path=rel_path,
             html=body_html,
         ))
@@ -186,6 +211,7 @@ def build_analytics_records():
             tags=meta.get("tags", []),
             related_components=[],
             severity={},
+            **_edit_fields(meta),
             path=rel_path,
             html=body_html,
         ))
@@ -220,6 +246,7 @@ def build_deliverable_records():
                 tags=meta.get("tags", []) or [],
                 related_components=[],
                 severity={},
+                **_edit_fields(meta),
                 path=rel_path,
                 html=body_html,
             ))
