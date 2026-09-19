@@ -2,6 +2,7 @@
 title: "New Admin Onboarding — Journey Map"
 date: 2026-02-14
 status: final
+designer: Sam Okafor
 tags: ["onboarding", "journey-map"]
 related_findings: ["onboarding"]
 source_type: native

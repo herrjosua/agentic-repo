@@ -23,7 +23,7 @@ Re-test the ambient scribe after v0.1 fixes (medication dosage accuracy, inline 
 
 ## Method
 - **Method:** Moderated usability test, simulated patient encounters, 45 min/session — follow-up with 3 returning + 2 new participants
-- **Researcher:** M. Okafor
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

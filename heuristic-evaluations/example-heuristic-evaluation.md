@@ -6,7 +6,7 @@ tags: ["onboarding", "heuristic-evaluation"]
 related_findings: ["onboarding"]
 source_type: native
 method: "heuristic-evaluation"
-evaluator: "Josh"
+evaluator: "Jordan Lee"
 scope: "6-step onboarding wizard (signup through first workspace created)"
 severity_scale: "Nielsen 0-4"
 ---

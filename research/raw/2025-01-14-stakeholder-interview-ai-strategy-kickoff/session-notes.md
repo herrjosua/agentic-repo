@@ -19,12 +19,12 @@ last_edited_at: '2026-09-16T17:43:46.576Z'
 
 ## Objective
 
-Understand executive priorities, risk tolerance, and success criteria for the Compass AI modernization program before any tools are scoped. I'm editing an session.
+Understand executive priorities, risk tolerance, and success criteria for the Compass AI modernization program before any tools are scoped.
 
 ## Method
 
 * **Method:** 1:1 stakeholder interview (60 min, recorded w/ consent, transcript scrubbed)
-* **Researcher:** J. Alvarez
+* **Researcher:** Priya Patel
 * **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

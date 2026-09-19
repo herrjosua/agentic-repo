@@ -3,6 +3,7 @@ title: Patient Scheduling Chatbot
 date: 2025-06-17
 type: synthesis
 status: synthesized
+researcher: Priya Patel
 tags:
   - chatbot
   - patient-experience

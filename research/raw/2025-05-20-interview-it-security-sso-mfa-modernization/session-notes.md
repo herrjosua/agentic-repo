@@ -23,7 +23,7 @@ Understand planned SSO/MFA changes and their anticipated impact on clinical work
 
 ## Method
 - **Method:** 1:1 interview, 40 min
-- **Researcher:** M. Okafor
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

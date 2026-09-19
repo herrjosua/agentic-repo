@@ -22,7 +22,7 @@ First formative usability test of the ambient AI scribe concept, focused on accu
 
 ## Method
 - **Method:** Moderated usability test, simulated patient encounters, 45 min/session
-- **Researcher:** M. Okafor
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

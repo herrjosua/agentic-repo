@@ -22,7 +22,7 @@ related_findings:
 - Chief Information Officer
 - VP Clinical Informatics
 
-**Researcher:** J. Alvarez
+**Researcher:** Priya Patel
 
 - **Logistics:** Conducted in exec conference room; both stakeholders present simultaneously (joint interview, not ideal but scheduling-constrained).
 

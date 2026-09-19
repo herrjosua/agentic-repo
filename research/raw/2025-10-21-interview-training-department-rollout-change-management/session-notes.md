@@ -19,7 +19,7 @@ Understand what a realistic training/rollout plan looks like for the first Compa
 
 ## Method
 - **Method:** 1:1 interview, 40 min
-- **Researcher:** M. Okafor
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

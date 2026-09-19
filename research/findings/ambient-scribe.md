@@ -3,6 +3,7 @@ title: Ambient AI Scribe
 date: 2026-01-13
 type: synthesis
 status: synthesized
+researcher: Priya Patel
 tags:
   - ambient-scribe
   - documentation
@@ -17,6 +18,7 @@ related_components:
 related_findings:
   - governance-and-phi.md
   - clinician-experience-documentation-burden.md
+  - ambient-scribe-post-ga-refinements.md
 ---
 
 # Ambient AI Scribe
@@ -52,3 +54,4 @@ substance-use encounters — see [scope-boundaries-and-workflow-fit.md](scope-bo
 ## Related Findings
 - [AI Governance, PHI & Compliance](governance-and-phi.md)
 - [Clinician Experience & Documentation Burden](clinician-experience-documentation-burden.md)
+- [Ambient Scribe — Post-GA Refinements](ambient-scribe-post-ga-refinements.md)

@@ -21,7 +21,7 @@ Take an org-wide temperature check on AI readiness/sentiment heading into 2026, 
 
 ## Method
 - **Method:** Org-wide anonymous pulse survey, 10 questions
-- **Researcher:** M. Okafor
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

@@ -31,11 +31,38 @@ title: ...
 date: YYYY-MM-DD
 type: usability-test | interview | survey | contextual-inquiry | accessibility-audit | analytics | synthesis
 status: raw | synthesized | superseded
+researcher: ...          # findings/ and analytics/summaries/ only — see Attribution fields below
 tags: [...]
 related_components: [...]
 related_findings: [...]
 related_analytics: [...]
 ```
+
+## Attribution fields
+Four fields carry who-did-what across the repo. None are required to be filled in for a file to
+be valid, and each has a different scope — don't add one to a file type it isn't listed for below.
+
+- **`researcher`** — frontmatter field on `findings/*.md` (except `tags.md`) and
+  `analytics/summaries/*.md`. **Not** a frontmatter field in `raw/` — a raw session's researcher
+  is instead a `**Researcher:**` line in the body of `session-notes.md`/`participants.md`, under
+  the Method section, populated via `new_research_session.py --researcher`. This split is
+  historical, not a typo: the body-text convention in `raw/` predates this field's formalization
+  in `findings/`/`analytics/summaries/`, and both stay as-is rather than being reconciled into one
+  mechanism.
+- **`designer`** — frontmatter field on deliverable files (the 20 `feature-002` folders listed
+  under "Creating a feature-002 deliverable file" above), naming who produced that deliverable.
+  Not present in `design-tokens/` — those files are generated/read-only (see above) and carry no
+  attribution field.
+- **`evaluator`** — pre-existing, `heuristic-evaluations/`-specific field (see
+  `docs/deliverable-types.md`) naming who ran that evaluation. Now doing double duty as an
+  attribution field: a heuristic evaluation is inherently a review/assessment activity, so it's
+  populated with a reviewer's name rather than a `designer`'s, even though it lives in a
+  deliverable folder.
+- **`reviewed_by`** — sparse, deliberately not retrofitted onto the existing corpus. Used only
+  where a second person's review/edit pass on a specific piece of content is real and worth
+  recording — currently just the `ambient-scribe-post-ga-refinements.md` finding and its
+  `ambient-scribe-session-lock-recovery.md` deliverable. Don't add it repo-wide as a default
+  field; add it only when a genuine review pass happened on that specific file.
 
 ## Retrieval strategy
 Search `findings/` first (grep/glob + frontmatter tags), including each finding's

@@ -22,7 +22,7 @@ Re-test the prior authorization tool after the outdated-diagnosis-code fix and a
 
 ## Method
 - **Method:** Moderated usability test, 4 case scenarios (2 straightforward, 2 complex), 60 min/session
-- **Researcher:** J. Alvarez
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

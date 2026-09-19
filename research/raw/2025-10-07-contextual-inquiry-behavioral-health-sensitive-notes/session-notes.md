@@ -21,7 +21,7 @@ Understand how behavioral health documentation is currently handled given its ex
 
 ## Method
 - **Method:** In-person shadowing + informal interview, 1 session, 2 hours
-- **Researcher:** J. Alvarez
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

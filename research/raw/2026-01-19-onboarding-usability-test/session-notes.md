@@ -9,6 +9,8 @@ related_findings: [onboarding]
 related_analytics: []
 ---
 
+**Researcher:** Priya Patel
+
 ## Session 1 — Jan 19
 Participant paused ~15s at step 3 ("Connect calendar"), said "wait, do I
 have to do this?" before proceeding. Completed step without connecting a

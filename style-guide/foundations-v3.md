@@ -2,6 +2,7 @@
 title: "Style Guide — Foundations v3"
 date: 2026-02-28
 status: final
+designer: Sam Okafor
 tags: ["style-guide"]
 related_findings: []
 source_type: native

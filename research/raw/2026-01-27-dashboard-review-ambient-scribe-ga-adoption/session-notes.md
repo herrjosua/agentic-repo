@@ -25,7 +25,7 @@ behavior at scale, not just in the moderated session.
 ## Method
 - **Method:** Manual dashboard review (no moderated session, no participants) — internal analytics
   dashboard covering the first 4 weeks of GA-candidate rollout
-- **Researcher:** J. Bock
+- **Researcher:** Priya Patel
 - **Full participant roster:** none — this is an analytics review, not a research session; see
   `participants.md` in this folder for why
 

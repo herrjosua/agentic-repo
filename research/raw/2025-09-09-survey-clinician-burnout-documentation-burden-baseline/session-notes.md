@@ -21,7 +21,7 @@ Establish a pre-AI-rollout baseline of self-reported burnout and documentation b
 
 ## Method
 - **Method:** Anonymous org-wide survey, 15 questions (validated burnout subscale + custom documentation items)
-- **Researcher:** M. Okafor
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

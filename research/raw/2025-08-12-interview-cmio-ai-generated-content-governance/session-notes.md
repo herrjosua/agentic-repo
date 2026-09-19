@@ -20,7 +20,7 @@ Understand the CMIO's position on how AI-generated content (scribe drafts, codin
 
 ## Method
 - **Method:** 1:1 interview, 45 min
-- **Researcher:** M. Okafor
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

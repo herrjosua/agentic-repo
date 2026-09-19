@@ -22,7 +22,7 @@ Observe real-time intake workflow under peak load to assess where, if anywhere, 
 
 ## Method
 - **Method:** In-person shadowing during peak hours (4-7pm), 2 sessions
-- **Researcher:** M. Okafor
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

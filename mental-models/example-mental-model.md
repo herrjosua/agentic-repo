@@ -2,6 +2,7 @@
 title: "Workspace Setup — Mental Model"
 date: 2026-02-13
 status: in-review
+designer: Sam Okafor
 tags: ["onboarding", "mental-model"]
 related_findings: ["onboarding"]
 source_type: native

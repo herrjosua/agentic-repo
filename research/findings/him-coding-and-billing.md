@@ -3,6 +3,7 @@ title: "HIM: Coding, Billing & Release of Information"
 date: 2025-07-29
 type: synthesis
 status: synthesized
+researcher: Priya Patel
 tags:
   - billing
   - coding

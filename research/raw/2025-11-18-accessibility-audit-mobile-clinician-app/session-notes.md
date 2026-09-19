@@ -22,7 +22,7 @@ Assess mobile clinician app accessibility for low vision and motor impairment sp
 
 ## Method
 - **Method:** Manual audit + 2 participant walkthroughs (low vision, limited fine motor control), iOS + Android
-- **Researcher:** J. Alvarez
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

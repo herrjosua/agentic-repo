@@ -22,7 +22,7 @@ Test the scheduling-only chatbot prototype's usability and confirm the 'talk to 
 
 ## Method
 - **Method:** Moderated remote usability test, task-based, 30 min/session
-- **Researcher:** M. Okafor
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

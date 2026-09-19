@@ -21,7 +21,7 @@ Test an AI tool that suggests ICD-10/CPT codes based on chart documentation, to 
 
 ## Method
 - **Method:** Moderated usability test, 5 chart scenarios, 60 min/session
-- **Researcher:** J. Alvarez
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

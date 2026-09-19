@@ -22,7 +22,7 @@ Assess the accessibility of the legacy ExtJS-based admin console that Compass AI
 
 ## Method
 - **Method:** Manual WCAG 2.1 AA audit + screen reader walkthrough (NVDA, JAWS)
-- **Researcher:** J. Alvarez
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

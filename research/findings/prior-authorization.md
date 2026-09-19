@@ -3,6 +3,7 @@ title: AI-Assisted Prior Authorization
 date: 2025-11-04
 type: synthesis
 status: synthesized
+researcher: Priya Patel
 tags:
   - longitudinal
   - prior-auth

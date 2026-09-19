@@ -2,6 +2,7 @@
 title: "Onboarding Flow — Q1 Readout"
 date: 2026-02-03
 status: final
+designer: Sam Okafor
 tags: ["onboarding", "readout", "q1"]
 related_findings: ["onboarding"]
 source_type: native

@@ -21,7 +21,7 @@ Gauge baseline sentiment and specific concerns among nursing staff ahead of any 
 
 ## Method
 - **Method:** Online survey, distributed via internal staff portal, 12 questions (Likert + 2 open-ended)
-- **Researcher:** J. Alvarez
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

@@ -21,7 +21,7 @@ Close out the year with the same executive group (plus two additions) from the J
 
 ## Method
 - **Method:** Group interview/retro, 90 min, 4 executives
-- **Researcher:** J. Alvarez
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

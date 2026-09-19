@@ -2,6 +2,7 @@
 title: "Onboarding Study — Session 1–3 Topline"
 date: 2026-01-21
 status: final
+designer: Sam Okafor
 tags: ["onboarding", "usability"]
 related_findings: []
 source_type: native

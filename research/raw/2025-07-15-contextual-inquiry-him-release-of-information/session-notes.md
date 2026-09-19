@@ -22,7 +22,7 @@ Understand the current release-of-information (ROI) workflow to evaluate whether
 
 ## Method
 - **Method:** In-person shadowing, 2 sessions x 2 hours
-- **Researcher:** M. Okafor
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

@@ -3,6 +3,7 @@ title: Rollout & Change Management
 date: 2025-12-02
 type: synthesis
 status: synthesized
+researcher: Priya Patel
 tags:
   - change-management
   - organizational-readiness

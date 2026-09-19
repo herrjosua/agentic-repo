@@ -3,6 +3,7 @@ title: AI Governance, PHI & Compliance
 date: 2025-12-16
 type: synthesis
 status: synthesized
+researcher: Priya Patel
 tags:
   - ai-generated-content
   - ai-strategy
@@ -23,6 +24,7 @@ related_components: []
 related_findings:
   - ambient-scribe.md
   - scope-boundaries-and-workflow-fit.md
+  - ambient-scribe-post-ga-refinements.md
 ---
 
 # AI Governance, PHI & Compliance
@@ -66,3 +68,4 @@ document: the 2026 headline metrics, and the AI-content attestation model.
 ## Related Findings
 - [Ambient AI Scribe](ambient-scribe.md)
 - [Scope Boundaries & Workflow Fit](scope-boundaries-and-workflow-fit.md)
+- [Ambient Scribe — Post-GA Refinements](ambient-scribe-post-ga-refinements.md)

@@ -3,6 +3,7 @@ title: Care Coordination & Alert Triage
 date: 2025-08-26
 type: synthesis
 status: synthesized
+researcher: Priya Patel
 tags:
   - alert-fatigue
   - alert-triage

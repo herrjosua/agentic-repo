@@ -21,7 +21,7 @@ Understand concrete de-identification, retention, and auditability requirements 
 
 ## Method
 - **Method:** 1:1 interview, 50 min
-- **Researcher:** M. Okafor
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

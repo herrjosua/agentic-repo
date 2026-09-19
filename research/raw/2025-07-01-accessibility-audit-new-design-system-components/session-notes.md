@@ -22,7 +22,7 @@ Audit the new component library (buttons, form fields, modals, data tables) inte
 
 ## Method
 - **Method:** Manual WCAG 2.1 AA audit + automated scan (axe), component-by-component
-- **Researcher:** J. Alvarez
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

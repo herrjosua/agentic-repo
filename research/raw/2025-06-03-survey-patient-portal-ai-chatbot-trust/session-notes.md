@@ -22,7 +22,7 @@ Gauge patient comfort with an AI chatbot handling appointment scheduling and bas
 
 ## Method
 - **Method:** Online survey via patient portal, 9 questions, incentivized ($10 gift card)
-- **Researcher:** J. Alvarez
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

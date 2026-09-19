@@ -2,6 +2,7 @@
 title: "Onboarding Flow — v2"
 date: 2026-02-20
 status: in-review
+designer: Sam Okafor
 tags: ["onboarding", "user-flow"]
 related_findings: []
 source_type: native

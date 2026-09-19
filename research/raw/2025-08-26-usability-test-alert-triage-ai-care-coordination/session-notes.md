@@ -21,7 +21,7 @@ Test whether an AI-prioritized alert queue (ranking care coordination alerts by 
 
 ## Method
 - **Method:** Moderated usability test, simulated alert queue, 45 min/session
-- **Researcher:** J. Alvarez
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

@@ -2,6 +2,7 @@
 title: "Onboarding Usability Study — Q1"
 date: 2026-01-12
 status: final
+designer: Sam Okafor
 tags: ["onboarding", "usability", "q1"]
 related_findings: ["onboarding"]
 source_type: native

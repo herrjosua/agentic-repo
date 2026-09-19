@@ -21,7 +21,7 @@ Test whether an AI-drafted prior authorization request (pulling from chart data 
 
 ## Method
 - **Method:** Moderated usability test, 4 realistic case scenarios, 60 min/session
-- **Researcher:** J. Alvarez
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

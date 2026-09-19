@@ -3,6 +3,7 @@ title: Scope Boundaries & Workflow Fit
 date: 2025-10-07
 type: synthesis
 status: synthesized
+researcher: Priya Patel
 tags:
   - 42-cfr-part-2
   - authentication

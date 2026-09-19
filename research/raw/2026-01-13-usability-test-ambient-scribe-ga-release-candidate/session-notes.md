@@ -23,7 +23,7 @@ Final validation pass on the ambient scribe before GA release, testing the v0.3 
 
 ## Method
 - **Method:** Moderated usability test, simulated + 2 real (consented) low-acuity encounters, 45 min/session
-- **Researcher:** M. Okafor
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

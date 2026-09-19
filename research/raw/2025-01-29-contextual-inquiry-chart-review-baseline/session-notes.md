@@ -21,7 +21,7 @@ Establish a baseline of how care coordinators currently review patient charts ac
 
 ## Method
 - **Method:** In-person shadowing, 3 sessions x ~90 min
-- **Researcher:** M. Okafor
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

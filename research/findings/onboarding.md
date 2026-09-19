@@ -3,6 +3,7 @@ title: Onboarding flow — setup step confusion
 date: 2026-02-03
 type: synthesis
 status: synthesized
+researcher: Priya Patel
 tags: [onboarding]
 related_components: []
 related_findings: []

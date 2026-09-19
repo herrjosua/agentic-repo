@@ -3,6 +3,7 @@ title: Onboarding funnel — drop-off analysis
 date: 2026-01-28
 type: synthesis
 status: synthesized
+researcher: Jordan Lee
 tags: [onboarding, funnel]
 related_findings: [onboarding]
 ---

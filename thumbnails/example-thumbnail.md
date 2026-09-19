@@ -2,6 +2,7 @@
 title: "Workspace Setup Screen — Thumbnail Explorations"
 date: 2026-02-17
 status: draft
+designer: Sam Okafor
 tags: ["onboarding", "thumbnails"]
 related_findings: []
 source_type: native

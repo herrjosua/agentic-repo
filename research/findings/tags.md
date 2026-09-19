@@ -59,6 +59,7 @@ Canonical list of tags used across `raw/` and `findings/` frontmatter. `build_in
 - **`legal-record`** — The legal medical record and what becomes part of it.
 - **`longitudinal`** — Repeated measurement of the same subject over time.
 - **`low-vision`** — Low vision accessibility needs specifically.
+- **`medication-safety`** — Medication-name accuracy and error-prevention in clinical documentation, distinct from general transcription accuracy.
 - **`mental-model`** — How users conceptually think about a system, independent of the UI (feature-002 `mental-models/` deliverable).
 - **`mfa`** — Multi-factor authentication.
 - **`mindset`** — Attitudinal/motivational segmentation, distinct from identity-based persona segmentation (feature-002 `mindsets/` deliverable).

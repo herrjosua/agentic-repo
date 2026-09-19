@@ -2,6 +2,7 @@
 title: "Onboarding Flow — Step 3 Wireflow"
 date: 2026-02-21
 status: draft
+designer: Sam Okafor
 tags: ["onboarding", "wireflow"]
 related_findings: []
 source_type: native

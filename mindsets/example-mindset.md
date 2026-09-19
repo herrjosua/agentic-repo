@@ -2,6 +2,7 @@
 title: "Time-Pressed First-Time Admin"
 date: 2026-02-13
 status: final
+designer: Sam Okafor
 tags: ["onboarding", "mindset"]
 related_findings: []
 source_type: native

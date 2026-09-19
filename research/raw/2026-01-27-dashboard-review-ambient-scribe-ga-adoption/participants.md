@@ -21,4 +21,4 @@ de-identified usage data from the internal analytics dashboard, not a moderated 
 session. This file exists only to keep the folder shape consistent with every other `raw/` session
 for indexing purposes.
 
-**Researcher:** J. Bock
+**Researcher:** Priya Patel

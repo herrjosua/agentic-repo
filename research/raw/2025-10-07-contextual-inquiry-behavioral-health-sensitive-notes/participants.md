@@ -21,6 +21,6 @@ related_findings:
 - Behavioral Health Clinician
 - Behavioral Health Unit Charge Nurse
 
-**Researcher:** J. Alvarez
+**Researcher:** Priya Patel
 
 **Recruitment note:** Participants recruited via internal unit/department contacts or the patient portal panel, consistent with prior sessions on this topic where applicable. No real patient or staff identities are represented; participant IDs (e.g. P01) are session-scoped fictional labels.

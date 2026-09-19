@@ -3,6 +3,7 @@ title: Accessibility (Cross-Cutting)
 date: 2025-11-18
 type: synthesis
 status: synthesized
+researcher: Priya Patel
 tags:
   - accessibility
   - components

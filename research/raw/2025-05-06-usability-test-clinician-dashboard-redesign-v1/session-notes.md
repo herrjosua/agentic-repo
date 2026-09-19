@@ -22,7 +22,7 @@ Test a redesigned clinician home dashboard that surfaces AI-flagged items (abnor
 
 ## Method
 - **Method:** Moderated usability test, task-based, 50 min/session
-- **Researcher:** J. Alvarez
+- **Researcher:** Priya Patel
 - **Full participant roster:** see `participants.md` in this folder
 
 ## Key Findings

@@ -2,6 +2,7 @@
 title: "Dana's Monday Morning Setup"
 date: 2026-02-24
 status: draft
+designer: Sam Okafor
 tags: ["onboarding", "storyboard"]
 related_findings: []
 source_type: native

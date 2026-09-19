@@ -3,6 +3,7 @@ title: Clinician Experience & Documentation Burden
 date: 2025-09-09
 type: synthesis
 status: synthesized
+researcher: Priya Patel
 tags:
   - baseline
   - burnout
