@@ -62,7 +62,9 @@ be valid, and each has a different scope — don't add one to a file type it isn
   `docs/deliverable-types.md`) naming who ran that evaluation. Now doing double duty as an
   attribution field: a heuristic evaluation is inherently a review/assessment activity, so it's
   populated with a reviewer's name rather than a `designer`'s, even though it lives in a
-  deliverable folder.
+  deliverable folder. Written via `new_research_session.py --evaluator` in deliverable mode — the
+  inverse scope of `--designer`: it applies *only* to `--type heuristic-evaluations` and is a
+  no-op (with a warning) for every other deliverable folder.
 - **`reviewed_by`** — sparse, deliberately not retrofitted onto the existing corpus. Used only
   where a second person's review/edit pass on a specific piece of content is real and worth
   recording — currently just the `ambient-scribe-post-ga-refinements.md` finding and its
@@ -92,7 +94,9 @@ fields above) — the pre-existing `**Researcher:**` body-text line is still wri
 research type and the script writes `<folder>/<slug>.md` instead of a `raw/` session. Pass
 `--designer "Name"` to populate the `designer` frontmatter field (ignored for
 `heuristic-evaluations`, which uses its own `evaluator` field instead — see Attribution fields
-above):
+above). Pass `--evaluator "Name"` for the inverse case: it populates the `evaluator` frontmatter
+field for `--type heuristic-evaluations` only, and is ignored (with a warning) for every other
+folder:
 
 ```
 research-plans, facilitation-guides, topline-summaries, research-readouts,

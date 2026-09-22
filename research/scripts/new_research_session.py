@@ -42,10 +42,15 @@ type and the script switches into deliverable mode, writing a single file to
         --tags nursing,ambient-scribe \\
         --related-findings clinician-experience-documentation-burden.md \\
         [--date 2026-09-12] [--status draft] [--source-type native] [--force] \\
-        [--designer "Sam Okafor"]
+        [--designer "Sam Okafor"] [--evaluator "Jordan Lee"]
 
 --designer writes the designer frontmatter field and applies to all deliverable folders except
 --type heuristic-evaluations, which uses its own evaluator field for attribution instead.
+
+--evaluator writes the evaluator frontmatter field and applies ONLY to --type
+heuristic-evaluations — the inverse of --designer's scope. Passing --evaluator for any other
+deliverable folder is a no-op with a warning printed, the same way --designer is a no-op with a
+warning for heuristic-evaluations.
 
 By default (no --no-prompt), deliverable mode interactively prompts for that folder's
 type-specific extra frontmatter fields (e.g. personas prompts for segment, based_on), in the
@@ -423,6 +428,20 @@ def create_deliverable(folder, args, glossary):
             file=sys.stderr,
         )
 
+    # --evaluator is the inverse of --designer above: it's the heuristic-evaluations/-only
+    # attribution flag (see AGENTS.md's Attribution fields section). `evaluator` lives in
+    # DELIVERABLE_SCHEMAS as a per-folder extra field (already filled from the schema default or
+    # an interactive prompt above), not a base fm_fields entry like designer — so it's applied by
+    # overriding extra_fields here rather than by passing it into deliverable_template().
+    if folder == "heuristic-evaluations" and args.evaluator:
+        extra_fields["evaluator"] = yaml_str(args.evaluator)
+    elif folder != "heuristic-evaluations" and args.evaluator:
+        print(
+            "⚠️  --evaluator is ignored outside heuristic-evaluations/ — that field only applies "
+            "to heuristic evaluations; use --designer for other deliverable folders instead.",
+            file=sys.stderr,
+        )
+
     folder_path.mkdir(parents=True, exist_ok=True)
     file_path.write_text(
         deliverable_template(folder, args.title, args.date, args.status, tags, related_findings,
@@ -462,6 +481,7 @@ def main():
     parser.add_argument("--force", action="store_true", help="Deliverable mode: overwrite an existing deliverable file")
     parser.add_argument("--description", default="", help="Deliverable mode: one or two sentence description for the body")
     parser.add_argument("--designer", default="", help="Deliverable mode: designer name, written to the designer frontmatter field. Ignored for --type heuristic-evaluations, which uses its own evaluator field instead.")
+    parser.add_argument("--evaluator", default="", help="Deliverable mode: evaluator name, written to the evaluator frontmatter field. Applies ONLY to --type heuristic-evaluations; ignored (with a warning) for every other deliverable folder.")
     args = parser.parse_args()
 
     glossary = load_tag_glossary()
