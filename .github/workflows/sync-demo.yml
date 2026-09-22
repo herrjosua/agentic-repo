@@ -1,0 +1,58 @@
+name: Sync demo repo
+
+# Mirrors research/ and design-tokens/ from this (real) repo into the isolated
+# research-repo-demo repo that the public CRUD UI demo runs against. Never syncs
+# docs/, .github/, README.md, AGENTS.md, or anything else — see AGENTS.md
+# "Demo repo sync" for why.
+#
+# Runs every 6 hours: this only needs to run after real content actually changes,
+# not constantly, and the demo server's own reset script (research/scripts/reset_demo.sh)
+# is what runs hourly against whatever demo-baseline currently points at. Also runnable
+# on demand via workflow_dispatch.
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+env:
+  DEMO_REPO: herrjosua/research-repo-demo
+  DEMO_TAG: demo-baseline
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout real repo
+        uses: actions/checkout@v4
+
+      - name: Clone demo repo
+        run: |
+          git clone "https://x-access-token:${DEMO_REPO_PAT}@github.com/${DEMO_REPO}.git" demo-repo
+          cd demo-repo
+          git checkout -B main
+        env:
+          DEMO_REPO_PAT: ${{ secrets.DEMO_REPO_PAT }}
+
+      - name: Sync research/ and design-tokens/ into demo repo
+        run: |
+          rm -rf demo-repo/research demo-repo/design-tokens
+          cp -r research demo-repo/research
+          cp -r design-tokens demo-repo/design-tokens
+
+      - name: Commit and push to demo repo
+        working-directory: demo-repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No content changes to sync."
+          else
+            git commit -m "Sync research/ and design-tokens/ from agentic-repo@${GITHUB_SHA}"
+            git push origin main
+          fi
+          git tag -f "${DEMO_TAG}"
+          git push origin "${DEMO_TAG}" --force

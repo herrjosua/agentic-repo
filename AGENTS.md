@@ -130,6 +130,22 @@ research/scripts/new_research_session.py --type personas --title "Frontline Nurs
 - Doesn't auto-run `build_index.py` — run it yourself afterward to refresh the folder's
   `_index.md` (and to catch a dangling cross-link field, e.g. `persona_ref`, `related_plan`).
 
+## Demo repo sync
+The public CRUD UI demo never runs against this (real) repo — it runs against a separate,
+isolated, private repo, `research-repo-demo`, kept in sync by
+`.github/workflows/sync-demo.yml`. That workflow runs on a schedule (every 6 hours) and on
+`workflow_dispatch`, copies **only** `research/` and `design-tokens/` (which brings
+`research/scripts/` along with it — no separate script sync needed) into the demo repo, commits,
+pushes to its `main`, and force-moves a fixed tag, `demo-baseline`, onto that commit. It
+authenticates to the demo repo with the `DEMO_REPO_PAT` repo secret, a fine-grained PAT scoped
+only to `research-repo-demo` with Contents: Read and write — nothing else in this repo (docs/,
+.github/, README.md, AGENTS.md) is synced.
+
+On the demo server (once it exists), `research/scripts/reset_demo.sh` resets that checkout to
+`demo-baseline` (`git fetch` + `git reset --hard`) and reruns `build_index.py`, so the demo can't
+accumulate visitor edits between resets. It isn't scheduled anywhere yet — see
+`docs/demo-deploy.md` for what's still unwired before it can be.
+
 ## Git discipline
 Every synthesis is its own commit; say what raw evidence triggered the change. Never rewrite
 `raw/` or `analytics/raw/` file history.
