@@ -109,6 +109,22 @@ def _edit_fields(meta):
     )
 
 
+def _attribution_fields(meta):
+    """researcher / designer / evaluator / reviewed_by, as documented in AGENTS.md's Attribution
+    fields section. Each is a frontmatter field on some subset of record kinds (researcher on
+    findings/analytics, designer on most deliverables, evaluator on heuristic-evaluations,
+    reviewed_by wherever a real review pass happened) — never all four on one record — but every
+    record gets all four keys, null where that field doesn't apply or wasn't filled in, so the
+    JSON shape stays stable across kinds. Raw sessions created before this field existed have no
+    researcher frontmatter (it was body-text only), so they report null here."""
+    return dict(
+        researcher=None if meta.get("researcher") is None else str(meta.get("researcher")),
+        designer=None if meta.get("designer") is None else str(meta.get("designer")),
+        evaluator=None if meta.get("evaluator") is None else str(meta.get("evaluator")),
+        reviewed_by=None if meta.get("reviewed_by") is None else str(meta.get("reviewed_by")),
+    )
+
+
 def build_raw_records():
     records = []
     for session_path in sorted(glob.glob(str(RAW_ROOT / "*" / "session-notes.md"))):
@@ -134,6 +150,7 @@ def build_raw_records():
             related_components=meta.get("related_components", []),
             severity=meta.get("severity_summary", {}),
             **_edit_fields(meta),
+            **_attribution_fields(meta),
             path=rel_path,
             html=body_html,
         ))
@@ -160,6 +177,7 @@ def build_findings_records():
             related_components=meta.get("related_components", []),
             severity={},
             **_edit_fields(meta),
+            **_attribution_fields(meta),
             path=rel_path,
             html=body_html,
         ))
@@ -186,6 +204,7 @@ def build_component_records():
             related_components=[],
             severity={},
             **_edit_fields(meta),
+            **_attribution_fields(meta),
             path=rel_path,
             html=body_html,
         ))
@@ -212,6 +231,7 @@ def build_analytics_records():
             related_components=[],
             severity={},
             **_edit_fields(meta),
+            **_attribution_fields(meta),
             path=rel_path,
             html=body_html,
         ))
@@ -247,6 +267,7 @@ def build_deliverable_records():
                 related_components=[],
                 severity={},
                 **_edit_fields(meta),
+            **_attribution_fields(meta),
                 path=rel_path,
                 html=body_html,
             ))

@@ -26,6 +26,11 @@ Usage (raw research session):
         [--researcher "J. Alvarez"] \\
         [--related-components onboarding-carousel,cta-primary]
 
+--researcher writes a real researcher frontmatter field (as well as the existing
+**Researcher:** line in the Method section / participants.md body, kept as a redundant
+display convenience). This only applies going forward — existing raw sessions created before
+this flag wrote frontmatter are not backfilled; see AGENTS.md's Attribution fields section.
+
 Usage (feature-002 deliverable, e.g. a persona or mockup file) — `--type` doubles as the
 deliverable-folder switch: pass one of the 20 folder names instead of a raw-session research
 type and the script switches into deliverable mode, writing a single file to
@@ -36,7 +41,11 @@ type and the script switches into deliverable mode, writing a single file to
         --slug frontline-nurse-ambient-scribe \\
         --tags nursing,ambient-scribe \\
         --related-findings clinician-experience-documentation-burden.md \\
-        [--date 2026-09-12] [--status draft] [--source-type native] [--force]
+        [--date 2026-09-12] [--status draft] [--source-type native] [--force] \\
+        [--designer "Sam Okafor"]
+
+--designer writes the designer frontmatter field and applies to all deliverable folders except
+--type heuristic-evaluations, which uses its own evaluator field for attribution instead.
 
 By default (no --no-prompt), deliverable mode interactively prompts for that folder's
 type-specific extra frontmatter fields (e.g. personas prompts for segment, based_on), in the
@@ -225,6 +234,7 @@ def session_notes_template(title, date, rtype, tags, related_components, related
         "date": date,
         "type": rtype,
         "status": "raw",
+        "researcher": yaml_str(researcher) if researcher else "",
         "tags": tags,
         "related_components": related_components,
         "related_findings": related_findings,
@@ -265,6 +275,7 @@ def participants_template(title, date, rtype, tags, related_findings, researcher
         "date": date,
         "type": rtype,
         "status": "raw",
+        "researcher": yaml_str(researcher) if researcher else "",
         "tags": tags,
         "related_components": [],
         "related_findings": related_findings,
@@ -286,15 +297,19 @@ in session-notes.md instead of names.
     return fm_block(fm_fields) + "\n\n" + body
 
 
-def deliverable_template(folder, title, date, status, tags, related_findings, source_type, extra_fields, description):
+def deliverable_template(folder, title, date, status, tags, related_findings, source_type, designer, extra_fields, description):
     fm_fields = {
         "title": yaml_str(title),
         "date": date,
         "status": status,
-        "tags": tags,
-        "related_findings": related_findings,
-        "source_type": source_type,
     }
+    # heuristic-evaluations/ uses its own evaluator field for attribution instead (see AGENTS.md
+    # Attribution fields) — designer is never written there, even if --designer is passed.
+    if folder != "heuristic-evaluations":
+        fm_fields["designer"] = yaml_str(designer) if designer else ""
+    fm_fields["tags"] = tags
+    fm_fields["related_findings"] = related_findings
+    fm_fields["source_type"] = source_type
     fm_fields.update(extra_fields)
 
     is_stub = folder in STUB_ONLY_FOLDERS or source_type != "native"
@@ -400,10 +415,18 @@ def create_deliverable(folder, args, glossary):
         print(f"Extra fields for {folder}/ (Enter to leave any of these blank):")
         extra_fields.update({k: prompt_for_value(folder, k, default) for k, default in schema})
 
+    if folder == "heuristic-evaluations" and args.designer:
+        print(
+            "⚠️  --designer is ignored for heuristic-evaluations/ — that folder uses the "
+            "evaluator field for attribution instead (set it via the interactive prompt or "
+            "--no-prompt default).",
+            file=sys.stderr,
+        )
+
     folder_path.mkdir(parents=True, exist_ok=True)
     file_path.write_text(
         deliverable_template(folder, args.title, args.date, args.status, tags, related_findings,
-                              source_type, extra_fields, args.description),
+                              source_type, args.designer, extra_fields, args.description),
         encoding="utf-8",
     )
     print(f"✅ Created {file_path}")
@@ -438,6 +461,7 @@ def main():
     parser.add_argument("--no-prompt", action="store_true", help="Deliverable mode: skip interactive prompting for type-specific extra fields; leave them at their schema defaults. Use for scripted/non-interactive runs (e.g. a cold agent session).")
     parser.add_argument("--force", action="store_true", help="Deliverable mode: overwrite an existing deliverable file")
     parser.add_argument("--description", default="", help="Deliverable mode: one or two sentence description for the body")
+    parser.add_argument("--designer", default="", help="Deliverable mode: designer name, written to the designer frontmatter field. Ignored for --type heuristic-evaluations, which uses its own evaluator field instead.")
     args = parser.parse_args()
 
     glossary = load_tag_glossary()
