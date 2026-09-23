@@ -373,16 +373,6 @@ def test_raw_topic_slug_traversal_is_rejected(run_script, fake_repo):
     assert result.returncode != 0
 
 
-# --- Bug 3: participants.md title is not valid YAML (found in Phase 3, not fixed) --------------
-# participants_template builds title as f"Participants — {yaml_str(title)}", embedding an
-# already-quoted string inside an unquoted plain scalar. A title containing ": " makes
-# participants.md unparseable (which fails every export_records.py / build_index.py run on the
-# whole repo), and a title containing " #" is silently truncated at the "#".
-
-BUG3 = pytest.mark.xfail(strict=True, reason="Bug 3: participants.md title YAML breaks on ': ' / ' #'")
-
-
-@BUG3
 @pytest.mark.parametrize("title", ["Onboarding: flow test", "Onboarding #2"])
 def test_participants_title_round_trips(run_script, fake_repo, title):
     assert new_raw(run_script, title=title).returncode == 0
@@ -390,7 +380,6 @@ def test_participants_title_round_trips(run_script, fake_repo, title):
     assert meta["title"] == f"Participants — {title}"
 
 
-@BUG3
 def test_session_with_colon_title_does_not_break_export(run_script, fake_repo):
     assert new_raw(run_script, title="Onboarding: flow test").returncode == 0
     result = run_script("export_records.py", "--summary")
