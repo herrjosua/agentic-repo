@@ -84,6 +84,10 @@ REPO_ROOT = RESEARCH_ROOT.parent
 RAW_ROOT = RESEARCH_ROOT / "raw"
 TAGS_FILE = RESEARCH_ROOT / "findings" / "tags.md"
 
+# Same rule as the CRUD UI backend's SAFE_SLUG_RE (records.js). Applied to --slug and
+# --topic-slug before anything is created, so neither can escape its target folder.
+SAFE_SLUG_RE = re.compile(r"^[a-z0-9-]+$")
+
 # feature-002: the 20 top-level deliverable folders and their type-specific frontmatter fields
 # (beyond the shared base block), in the order given in docs/deliverable-types.md and the
 # Decision Log. Values are the schema defaults used verbatim in --no-prompt mode; interactive
@@ -483,6 +487,14 @@ def main():
     parser.add_argument("--designer", default="", help="Deliverable mode: designer name, written to the designer frontmatter field. Ignored for --type heuristic-evaluations, which uses its own evaluator field instead.")
     parser.add_argument("--evaluator", default="", help="Deliverable mode: evaluator name, written to the evaluator frontmatter field. Applies ONLY to --type heuristic-evaluations; ignored (with a warning) for every other deliverable folder.")
     args = parser.parse_args()
+
+    # fullmatch, not match: Python's $ also matches before a trailing newline, JavaScript's doesn't.
+    # An empty value is left to the existing required-argument checks below.
+    for flag, value in [("--slug", args.slug), ("--topic-slug", args.topic_slug)]:
+        if value and not SAFE_SLUG_RE.fullmatch(value):
+            print(f"❌ {flag} must be lowercase letters, digits, and hyphens only (^[a-z0-9-]+$), got {value!r}",
+                  file=sys.stderr)
+            sys.exit(1)
 
     glossary = load_tag_glossary()
 
