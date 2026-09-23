@@ -177,6 +177,14 @@ def validate_tags(glossary):
     return problems
 
 
+def date_sort_key(value):
+    """Sort key for a raw frontmatter date: PyYAML gives datetime.date for unquoted dates but str
+    for quoted ones (and ""/None when missing), which can't be compared directly."""
+    if isinstance(value, datetime.date):  # also covers datetime.datetime
+        return value.isoformat()
+    return "" if value is None else str(value)
+
+
 def build_index_content(findings, sessions):
     # map findings topic file -> list of backing raw session folders
     backing = {topic: [] for topic in findings}
@@ -221,7 +229,7 @@ def build_index_content(findings, sessions):
             raw=", ".join(f"raw/{s['folder']}/" for s in backing_sessions) or "—",
         ))
 
-    rows.sort(key=lambda r: r["updated"])
+    rows.sort(key=lambda r: date_sort_key(r["updated"]))
 
     lines = [
         "# Research Index\n",
@@ -250,7 +258,7 @@ def build_analytics_index_content(summaries):
             updated=meta.get("date", ""),
         ))
 
-    rows.sort(key=lambda r: r["updated"])
+    rows.sort(key=lambda r: date_sort_key(r["updated"]))
 
     lines = [
         "# Analytics Index\n",
@@ -338,7 +346,7 @@ def build_deliverable_index_content(folder, items):
             related_findings=", ".join(f"../research/findings/{Path(f).name}" for f in meta.get("related_findings", [])) or "—",
         ))
 
-    rows.sort(key=lambda r: r["updated"])
+    rows.sort(key=lambda r: date_sort_key(r["updated"]))
 
     label = folder.replace("-", " ").title()
     lines = [
