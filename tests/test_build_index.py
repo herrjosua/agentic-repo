@@ -264,18 +264,6 @@ def test_mixed_date_types_in_backing_raw_sessions(run_script, fake_repo):
         rf"raw/2026-02-02-no-date/, raw/{RAW_SESSION}/, raw/2026-02-01-string-date/", text)
 
 
-# Bug 2 (reported in Phase 1, deliberately not fixed): normalize_date only covers the per-finding
-# backing-session sort. The final row sorts — rows.sort(key=lambda r: r["updated"]) in
-# build_index_content, build_analytics_index_content, and build_deliverable_index_content —
-# still compare raw frontmatter values, so a quoted ISO string (as the CRUD UI's PUT writes)
-# or a missing date next to a YAML date crashes with
-#   TypeError: '<' not supported between instances of 'str' and 'datetime.date'
-BUG2 = pytest.mark.xfail(
-    strict=True,
-    reason="Bug 2: build_index.py row sort compares str and datetime.date (mixed date types)",
-)
-
-
 def _finding_with_string_date(root):
     write_file(root, "research/findings/checkout.md",
                '---\ntitle: Checkout\ndate: "2026-02-01T09:30:00.000Z"\ntags: []\n---\n')
@@ -284,6 +272,17 @@ def _finding_with_string_date(root):
 
 def _finding_without_date(root):
     write_file(root, "research/findings/checkout.md", "---\ntitle: Checkout\ntags: []\n---\n")
+    add_raw_session(root, "2026-02-01-checkout", "date: 2026-02-01", "checkout.md")
+
+
+def _finding_with_empty_date(root):
+    write_file(root, "research/findings/checkout.md", "---\ntitle: Checkout\ndate:\ntags: []\n---\n")
+    add_raw_session(root, "2026-02-01-checkout", "date: 2026-02-01", "checkout.md")
+
+
+def _finding_with_unquoted_timestamp(root):
+    write_file(root, "research/findings/checkout.md",
+               "---\ntitle: Checkout\ndate: 2026-02-01T09:30:00Z\ntags: []\n---\n")
     add_raw_session(root, "2026-02-01-checkout", "date: 2026-02-01", "checkout.md")
 
 
@@ -298,10 +297,11 @@ def _deliverable_with_string_date(root):
                'tags: []\nrelated_findings: []\nsource_type: native\n---\n')
 
 
-@BUG2
 @pytest.mark.parametrize("mutate", [
     _finding_with_string_date,
     _finding_without_date,
+    _finding_with_empty_date,
+    _finding_with_unquoted_timestamp,
     _analytics_with_string_date,
     _deliverable_with_string_date,
 ])
