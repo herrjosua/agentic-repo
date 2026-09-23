@@ -1,7 +1,7 @@
 """
 new_research_session.py — the CRUD UI backend shells out to this to create raw sessions and
-feature-002 deliverables. Slug validation lives only in the Node backend (SAFE_SLUG_RE in
-records.js); the script itself has none — see the Bug 1 xfails below.
+feature-002 deliverables. The script validates --slug and --topic-slug with the same
+^[a-z0-9-]+$ rule as the Node backend's SAFE_SLUG_RE (records.js) — see slug validation below.
 """
 import datetime
 
@@ -352,25 +352,56 @@ def test_check_tags_returns_unknown(capsys):
     assert "b" in capsys.readouterr().err
 
 
-# --- Bug 1: no slug validation in the script (reported in Phase 1, deliberately not fixed) ----
-# The Node backend rejects these via SAFE_SLUG_RE before ever calling the script, but the
-# script itself happily writes outside its target folder. Payloads stay inside tmp_path.
+# --- slug validation -------------------------------------------------------------------------
+# Same ^[a-z0-9-]+$ rule as the backend's SAFE_SLUG_RE. Payloads stay inside tmp_path.
 
-BUG1 = pytest.mark.xfail(strict=True, reason="Bug 1: new_research_session.py has no slug validation (path traversal)")
-
-
-@BUG1
 def test_deliverable_slug_traversal_is_rejected(run_script, fake_repo, tmp_path):
     result = new_deliverable(run_script, "personas", slug="../../escaped")
     assert not (tmp_path / "escaped.md").exists()
     assert result.returncode != 0
 
 
-@BUG1
 def test_raw_topic_slug_traversal_is_rejected(run_script, fake_repo):
     result = new_raw(run_script, slug="x/../../../escaped-raw")
     assert not (fake_repo / "escaped-raw").exists()
     assert result.returncode != 0
+
+
+def all_paths(root):
+    """Files *and* directories, so a stray empty folder (e.g. raw/<date>-x/) counts as created."""
+    return {str(p.relative_to(root)) for p in root.rglob("*")}
+
+
+BAD_SLUGS = pytest.mark.parametrize("slug", [
+    "Onboarding",
+    "login_interview",
+    "ABSOLUTE",  # placeholder: replaced with an absolute path inside tmp_path
+    "a/b",
+    "..",
+    "abc\n",
+], ids=["uppercase", "underscore", "absolute", "slash", "dotdot", "trailing-newline"])
+
+
+def _resolve(slug, tmp_path):
+    return str(tmp_path / "abs-escape") if slug == "ABSOLUTE" else slug
+
+
+@BAD_SLUGS
+def test_deliverable_bad_slug_is_rejected(run_script, fake_repo, tmp_path, slug):
+    before = all_paths(tmp_path)
+    result = new_deliverable(run_script, "personas", slug=_resolve(slug, tmp_path))
+    assert result.returncode == 1
+    assert "--slug" in result.stderr
+    assert all_paths(tmp_path) == before
+
+
+@BAD_SLUGS
+def test_raw_bad_topic_slug_is_rejected(run_script, fake_repo, tmp_path, slug):
+    before = all_paths(tmp_path)
+    result = new_raw(run_script, slug=_resolve(slug, tmp_path))
+    assert result.returncode == 1
+    assert "--topic-slug" in result.stderr
+    assert all_paths(tmp_path) == before
 
 
 @pytest.mark.parametrize("title", ["Onboarding: flow test", "Onboarding #2"])
