@@ -276,7 +276,7 @@ TODO: one paragraph — why this session happened, what question it was meant to
 
 def participants_template(title, date, rtype, tags, related_findings, researcher, count, roles):
     fm_fields = {
-        "title": f"Participants — {yaml_str(title)}",
+        "title": yaml_str(f"Participants — {title}"),
         "date": date,
         "type": rtype,
         "status": "raw",
