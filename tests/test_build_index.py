@@ -325,3 +325,30 @@ def test_deliverable_folders_match_new_research_session_schemas():
     import new_research_session
 
     assert sorted(build_index.DELIVERABLE_FOLDERS) == sorted(new_research_session.DELIVERABLE_SCHEMAS)
+
+
+# --- one bad record doesn't break the rest (v0.5.22) ---------------------------------------------
+
+@pytest.mark.parametrize("frontmatter_text, reason", [
+    ("title: [unclosed", "unparseable frontmatter"),
+    ("title: Broken\ntags: [onboarding]\nrelated_components: 5", "related_components must be a list of strings"),
+])
+def test_bad_record_is_skipped_and_write_mode_exits_0(run_script, fake_repo, frontmatter_text, reason):
+    write_file(fake_repo, "research/findings/broken.md", f"---\n{frontmatter_text}\n---\n\nBody.\n")
+    result = build(run_script)
+    assert result.returncode == 0, result.stderr
+    warnings = result.stderr.strip().splitlines()
+    assert len(warnings) == 1
+    assert "research/findings/broken.md" in warnings[0] and reason in warnings[0]
+    index = (fake_repo / "research/_index.md").read_text(encoding="utf-8")
+    assert "findings/onboarding.md" in index
+    assert "broken" not in index
+
+
+def test_check_exits_1_when_a_record_is_skipped(run_script, fake_repo):
+    assert build(run_script).returncode == 0  # generate clean indexes first
+    write_file(fake_repo, "research/findings/broken.md", "---\ntitle: A\ntitle: B\n---\n\nBody.\n")
+    result = build(run_script, "--check")
+    assert result.returncode == 1
+    assert "Skipping research/findings/broken.md" in result.stderr
+    assert "duplicate key 'title'" in result.stderr
