@@ -1,8 +1,10 @@
 name: Sync demo repo
 
-# Mirrors research/ and design-tokens/ from this (real) repo into the isolated
-# research-repo-demo repo that the public CRUD UI demo runs against. Never syncs
-# docs/, .github/, README.md, AGENTS.md, or anything else — see AGENTS.md
+# Mirrors research/, design-tokens/, analytics/, the 20 top-level deliverable folders (read from
+# DELIVERABLE_SCHEMAS in new_research_session.py, not hand-typed here), and requirements.txt from
+# this (real) repo into the isolated research-repo-demo repo that the public CRUD UI demo runs
+# against. Never syncs docs/, .github/, tests/, README.md, AGENTS.md, CLAUDE.md, or dev-only
+# config (requirements-dev.txt, pytest.ini, ruff.toml, mypy.ini, *.iml) — see AGENTS.md
 # "Demo repo sync" for why.
 #
 # Runs every 6 hours: this only needs to run after real content actually changes,
@@ -26,7 +28,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout real repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
       - name: Clone demo repo
         run: |
@@ -36,11 +46,35 @@ jobs:
         env:
           DEMO_REPO_PAT: ${{ secrets.DEMO_REPO_PAT }}
 
-      - name: Sync research/ and design-tokens/ into demo repo
+      - name: Sync content into demo repo
         run: |
-          rm -rf demo-repo/research demo-repo/design-tokens
-          cp -r research demo-repo/research
-          cp -r design-tokens demo-repo/design-tokens
+          # DELIVERABLE_SCHEMAS's keys are the 20 top-level deliverable folders (see AGENTS.md
+          # "Creating a feature-002 deliverable file"). Importing the module runs no code beyond
+          # module-level (its CLI is behind `if __name__ == "__main__"`), and it only needs
+          # stdlib, but requirements.txt is already installed above since a later step needs it.
+          mapfile -t deliverable_folders < <(python3 -c "
+          import sys
+          sys.path.insert(0, 'research/scripts')
+          from new_research_session import DELIVERABLE_SCHEMAS
+          print('\n'.join(sorted(DELIVERABLE_SCHEMAS)))
+          ")
+
+          if [ "${#deliverable_folders[@]}" -ne 20 ]; then
+            echo "::error::Expected exactly 20 deliverable folders in DELIVERABLE_SCHEMAS, got ${#deliverable_folders[@]}: ${deliverable_folders[*]}"
+            exit 1
+          fi
+
+          sync_paths=(research design-tokens analytics requirements.txt "${deliverable_folders[@]}")
+
+          for p in "${sync_paths[@]}"; do
+            target="demo-repo/${p}"
+            rm -rf "${target:?}"
+            cp -r "${p}" "${target}"
+          done
+
+      - name: "Guard: validate synced content before publishing"
+        working-directory: demo-repo
+        run: python research/scripts/build_index.py --check
 
       - name: Commit and push to demo repo
         working-directory: demo-repo
@@ -51,7 +85,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No content changes to sync."
           else
-            git commit -m "Sync research/ and design-tokens/ from agentic-repo@${GITHUB_SHA}"
+            git commit -m "Sync research/, design-tokens/, analytics/, and deliverables from agentic-repo@${GITHUB_SHA}"
             git push origin main
           fi
           git tag -f "${DEMO_TAG}"
