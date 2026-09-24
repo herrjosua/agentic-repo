@@ -7,6 +7,7 @@ import datetime
 
 import frontmatter
 import pytest
+import yaml
 
 import new_research_session as nrs
 
@@ -120,10 +121,10 @@ def test_raw_session_missing_required_arg_exits_2(run_script, fake_repo, missing
     assert snapshot(fake_repo) == before
 
 
-def test_raw_session_bad_date_exits_2(run_script, fake_repo):
+def test_raw_session_bad_date_exits_1(run_script, fake_repo):
     result = run_script("new_research_session.py", "--title", "T", "--type", "interview",
                         "--topic-slug", "s", "--date", "03/01/2026")
-    assert result.returncode == 2
+    assert result.returncode == 1
     assert "YYYY-MM-DD" in result.stderr
 
 
@@ -332,7 +333,7 @@ def test_check_tags_only(run_script, fake_repo, tags, code):
 
 def test_fm_block():
     assert nrs.fm_block({"a": "x", "b": [], "c": ["1", "2"], "d": {"s": "", "e": "z"}}) == (
-        "---\na: x\nb: []\nc:\n  - 1\n  - 2\nd:\n  s: \n  e: z\n---"
+        '---\na: x\nb: []\nc:\n  - "1"\n  - "2"\nd:\n  s: \n  e: z\n---'
     )
 
 
@@ -415,3 +416,169 @@ def test_session_with_colon_title_does_not_break_export(run_script, fake_repo):
     assert new_raw(run_script, title="Onboarding: flow test").returncode == 0
     result = run_script("export_records.py", "--summary")
     assert result.returncode == 0, result.stderr
+
+
+# --- frontmatter escaping (v0.5.21) --------------------------------------------------------------
+# Any user value that loaded as a non-string, a dict, or not at all used to make
+# export_records.py (and so GET /records) fail for every user. Each run below puts one problem
+# input into every user-supplied field at once and asserts each field loads back exactly.
+
+INJECTION = "ok\nresearcher: Someone Else"
+
+PROBLEM_INPUTS = [
+    "[draft", "@home", "- dash", "* star", 'C:\\path "x"',
+    "2024", "Yes", "null", "~", "on", "2024-01-01",
+    "phase: 1", "a #b", "'quoted'", "end:", INJECTION,
+]
+PROMPTABLE_INPUTS = [s for s in PROBLEM_INPUTS if "\n" not in s]  # input() reads one line
+
+
+def assert_exports(run_script):
+    result = run_script("export_records.py", "--summary")
+    assert result.returncode == 0, result.stderr
+
+
+@pytest.mark.parametrize("value", PROBLEM_INPUTS)
+def test_raw_fields_round_trip(run_script, fake_repo, value):
+    result = new_raw(run_script, "--tags", value, "--related-components", value,
+                     "--related-findings", value, "--researcher", value, title=value)
+    assert result.returncode == 0, result.stderr
+    folder = fake_repo / "research/raw/2026-03-01-login-interview"
+    notes = load(folder / "session-notes.md").metadata
+    assert notes["title"] == value
+    assert notes["researcher"] == value
+    assert notes["tags"] == [value]
+    assert notes["related_components"] == [value]
+    assert notes["related_findings"] == [f"../../findings/{value}"]
+    participants = load(folder / "participants.md").metadata
+    assert participants["title"] == f"Participants — {value}"
+    assert participants["researcher"] == value
+    assert participants["tags"] == [value]
+    assert participants["related_findings"] == [f"../../findings/{value}"]
+    assert_exports(run_script)
+
+
+@pytest.mark.parametrize("value", PROBLEM_INPUTS)
+def test_deliverable_fields_round_trip(run_script, fake_repo, value):
+    result = new_deliverable(run_script, "wireframes", "--tags", value, "--related-findings", value,
+                             "--source-type", value, "--designer", value, title=value)
+    assert result.returncode == 0, result.stderr
+    meta = load(fake_repo / "wireframes/thing.md").metadata
+    assert meta["title"] == value
+    assert meta["designer"] == value
+    assert meta["tags"] == [value]
+    assert meta["related_findings"] == [f"../research/findings/{value}"]
+    assert meta["source_type"] == value
+    assert_exports(run_script)
+
+
+@pytest.mark.parametrize("value", PROBLEM_INPUTS)
+def test_heuristic_evaluator_round_trips(run_script, fake_repo, value):
+    result = new_deliverable(run_script, "heuristic-evaluations", "--evaluator", value, title=value)
+    assert result.returncode == 0, result.stderr
+    meta = load(fake_repo / "heuristic-evaluations/thing.md").metadata
+    assert meta["title"] == value
+    assert meta["evaluator"] == value
+    assert_exports(run_script)
+
+
+@pytest.mark.parametrize("value", PROMPTABLE_INPUTS)
+def test_prompted_fields_round_trip(run_script, fake_repo, value):
+    # research-plans: method, study_dates.start, study_dates.end, related_guide (str + dict subfields)
+    result = new_deliverable(run_script, "research-plans", prompt=True, input=f"{value}\n" * 4)
+    assert result.returncode == 0, result.stderr
+    # personas: segment, based_on (str + list)
+    result = new_deliverable(run_script, "personas", prompt=True, input=f"{value}\n" * 2)
+    assert result.returncode == 0, result.stderr
+    plan = load(fake_repo / "research-plans/thing.md").metadata
+    assert plan["method"] == value
+    assert plan["study_dates"] == {"start": value, "end": value}
+    assert plan["related_guide"] == value
+    persona = load(fake_repo / "personas/thing.md").metadata
+    assert persona["segment"] == value
+    assert persona["based_on"] == [value]
+    assert_exports(run_script)
+
+
+@pytest.mark.parametrize("value", PROBLEM_INPUTS + ["a\x85b", "a\u2028b", "del\x7f", "x\r\ny", " padded "])
+def test_fm_block_round_trips(value):
+    block = nrs.fm_block({"v": value, "l": [value], "d": {"s": value}})
+    assert yaml.safe_load(block.strip("-\n")) == {"v": value, "l": [value], "d": {"s": value}}
+
+
+@pytest.mark.parametrize("value", [
+    "onboarding", "../../findings/onboarding.md", "Participants — Login interview",
+    "https://figma.com/proto/example", "6-step onboarding wizard", "42-cfr-part-2",
+])
+def test_plain_values_stay_unquoted(value):
+    assert nrs.yaml_str(value) == value
+
+
+def test_raw_newline_cannot_inject_keys(run_script, fake_repo):
+    result = new_raw(run_script, "--tags", INJECTION, "--related-components", INJECTION,
+                     "--related-findings", INJECTION, "--researcher", "Original")
+    assert result.returncode == 0, result.stderr
+    for name in ("session-notes.md", "participants.md"):
+        meta = load(fake_repo / "research/raw/2026-03-01-login-interview" / name).metadata
+        assert set(meta) == {"title", "date", "type", "status", "researcher", "tags",
+                             "related_components", "related_findings"}
+        assert meta["researcher"] == "Original"
+
+
+def test_deliverable_newline_cannot_inject_keys(run_script, fake_repo):
+    injection = "ok\ndesigner: Someone Else"
+    result = new_deliverable(run_script, "wireframes", "--tags", injection, "--related-findings", injection,
+                             "--source-type", injection, "--designer", "Original")
+    assert result.returncode == 0, result.stderr
+    meta = load(fake_repo / "wireframes/thing.md").metadata
+    assert set(meta) == {"title", "date", "status", "designer", "tags", "related_findings",
+                         "source_type", "fidelity", "flow_ref"}
+    assert meta["designer"] == "Original"
+
+
+def test_raw_empty_list_items_are_dropped(run_script, fake_repo):
+    result = new_raw(run_script, "--tags", "onboarding, ,usability,", "--related-components", "a, ,b,")
+    assert result.returncode == 0, result.stderr
+    meta = load(fake_repo / "research/raw/2026-03-01-login-interview/session-notes.md").metadata
+    assert meta["tags"] == ["onboarding", "usability"]
+    assert meta["related_components"] == ["a", "b"]
+    assert_exports(run_script)
+
+
+def test_deliverable_empty_list_items_are_dropped(run_script, fake_repo):
+    result = new_deliverable(run_script, "wireframes", "--tags", "onboarding, ,usability,")
+    assert result.returncode == 0, result.stderr
+    assert load(fake_repo / "wireframes/thing.md").metadata["tags"] == ["onboarding", "usability"]
+    assert_exports(run_script)
+
+
+BAD_DATES = pytest.mark.parametrize("bad_date", [
+    "20240101", "2024-W01-1", "2024-02-30", "2024-1-5", "２０２４-01-01", "2024-01-01\n", "2024-01-01T00:00",
+])
+
+
+@BAD_DATES
+def test_raw_rejects_bad_date(run_script, fake_repo, bad_date):
+    before = snapshot(fake_repo)
+    result = run_script("new_research_session.py", "--title", "T", "--type", "interview",
+                        "--topic-slug", "s", "--date", bad_date)
+    assert result.returncode == 1
+    assert "YYYY-MM-DD" in result.stderr
+    assert snapshot(fake_repo) == before
+
+
+@BAD_DATES
+def test_deliverable_rejects_bad_date(run_script, fake_repo, bad_date):
+    result = run_script("new_research_session.py", "--type", "personas", "--title", "T",
+                        "--slug", "s", "--no-prompt", "--date", bad_date)
+    assert result.returncode == 1
+    assert "YYYY-MM-DD" in result.stderr
+    assert not (fake_repo / "personas/s.md").exists()
+
+
+def test_lone_surrogate_is_rejected(run_script, fake_repo):
+    before = snapshot(fake_repo)
+    result = new_raw(run_script, title="bad \udc80 byte")
+    assert result.returncode == 1
+    assert "--title" in result.stderr
+    assert snapshot(fake_repo) == before
