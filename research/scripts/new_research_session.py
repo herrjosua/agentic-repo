@@ -70,13 +70,25 @@ runs before any interactive prompting, so a rejected run never asks you ten ques
 
 Run with --check-tags-only <tag1,tag2,...> to validate a tag list against the glossary without
 creating anything (works the same in both modes).
+
+Every user-supplied frontmatter value is written unquoted only when it is a plain safe YAML
+string, and as an escaped double-quoted string otherwise — see yaml_str().
+
+Requires: pip install pyyaml (already pulled in by python-frontmatter, which build_index.py and
+export_records.py need anyway)
 """
 import argparse
 import copy
 import datetime
+import json
 import re
 import sys
 from pathlib import Path
+
+try:
+    import yaml
+except ImportError:
+    sys.exit("This script requires PyYAML: pip install pyyaml --break-system-packages")
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 RESEARCH_ROOT = SCRIPT_DIR.parent  # research/
@@ -87,6 +99,19 @@ TAGS_FILE = RESEARCH_ROOT / "findings" / "tags.md"
 # Same rule as the CRUD UI backend's SAFE_SLUG_RE (records.js). Applied to --slug and
 # --topic-slug before anything is created, so neither can escape its target folder.
 SAFE_SLUG_RE = re.compile(r"^[a-z0-9-]+$")
+
+# --date must be exactly YYYY-MM-DD. date.fromisoformat() alone is too loose on 3.11+ (it also
+# takes 20240101 and 2024-W01-1), so the shape is checked first: [0-9] rather than \d so Unicode
+# digits don't match, and fullmatch so a trailing newline doesn't either.
+ISO_DATE_RE = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}")
+
+# Characters a plain (unquoted) YAML scalar must not start with.
+YAML_INDICATORS = set("-?:,[]{}#&*!|>'\"%@`")
+
+# Characters that must be \u-escaped inside a double-quoted scalar: everything PyYAML's reader
+# rejects outright (e.g. \x7f, C1 controls), plus the ones it treats as line breaks and would
+# fold into a space (\x85, \u2028, \u2029). json.dumps already escapes \x00-\x1f itself.
+YAML_ESCAPE_RE = re.compile("[^\t\n\r\x20-\x7e\xa0-\ud7ff\ue000-\ufffd\U00010000-\U0010ffff]|[\u2028\u2029]")
 
 # feature-002: the 20 top-level deliverable folders and their type-specific frontmatter fields
 # (beyond the shared base block), in the order given in docs/deliverable-types.md and the
@@ -212,38 +237,87 @@ def check_tags(tags, glossary):
 
 
 def fm_block(fields):
+    """Render frontmatter. Values are passed raw — every str (scalar, list item, or dict
+    subfield) goes through yaml_str() here, so callers must not pre-quote."""
     lines = ["---"]
     for k, v in fields.items():
         if isinstance(v, dict):
             lines.append(f"{k}:")
             for sub_k, sub_v in v.items():
-                lines.append(f"  {sub_k}: {sub_v}")
+                lines.append(f"  {sub_k}: {fm_scalar(sub_v)}")
         elif isinstance(v, list):
             lines.append(f"{k}:")
             if v:
                 for item in v:
-                    lines.append(f"  - {item}")
+                    lines.append(f"  - {fm_scalar(item)}")
             else:
                 lines[-1] = f"{k}: []"
         else:
-            lines.append(f"{k}: {v}")
+            lines.append(f"{k}: {fm_scalar(v)}")
     lines.append("---")
     return "\n".join(lines)
 
 
+def fm_scalar(v):
+    if isinstance(v, str):
+        return yaml_str(v)
+    if isinstance(v, datetime.date):  # a validated --date: written unquoted so it loads as a date
+        return v.isoformat()
+    return v
+
+
+def is_plain_safe(s):
+    """True if s can be written as an unquoted YAML scalar and load back as exactly s."""
+    if not s or s != s.strip() or not s.isprintable():  # isprintable rejects \n, \r, \x85, \u2028...
+        return False
+    if s[0] in YAML_INDICATORS:
+        return False
+    if ": " in s or " #" in s or s.endswith(":") or any(c in s for c in "\"'\\"):
+        return False
+    # Last, catch anything that would load as a non-string (2024, Yes, null, ~, on, 2024-01-01,
+    # 1e3, 0x1F, ...) by round-tripping it, rather than hand-copying YAML 1.1's resolver regexes.
+    # This is verified against PyYAML (YAML 1.1), which is what export_records.py/build_index.py
+    # load with. The CRUD UI's PUT route rewrites frontmatter with gray-matter + js-yaml 3.15.2,
+    # which may differ on rare numeric-looking strings (e.g. 0o17) that PyYAML leaves as str.
+    try:
+        return yaml.safe_load(f"k: {s}") == {"k": s}
+    except yaml.YAMLError:
+        return False
+
+
 def yaml_str(s):
-    if any(c in s for c in [":", "#", '"']) or s != s.strip():
-        return '"' + s.replace('"', '\\"') + '"'
-    return s
+    """s as-is if it's a plain safe YAML string (see is_plain_safe), else as a double-quoted
+    scalar. An empty string stays empty, so `key: ` still loads as null as it always has."""
+    if s == "" or is_plain_safe(s):
+        return s
+    quoted = json.dumps(s, ensure_ascii=False)
+    return YAML_ESCAPE_RE.sub(lambda m: f"\\u{ord(m.group()):04x}", quoted)
+
+
+def parse_date(value):
+    """--date as a datetime.date, or exit 1 unless it's a real calendar date in YYYY-MM-DD form."""
+    if ISO_DATE_RE.fullmatch(value):
+        try:
+            return datetime.date.fromisoformat(value)
+        except ValueError:
+            pass
+    print(f"❌ --date must be a real calendar date in YYYY-MM-DD form, got {value!r}", file=sys.stderr)
+    sys.exit(1)
+
+
+def has_surrogate(s):
+    """A lone surrogate (from non-UTF-8 argv bytes) survives the YAML round-trip but makes
+    export_records.py crash with UnicodeEncodeError when it prints the record."""
+    return any("\ud800" <= c <= "\udfff" for c in s)
 
 
 def session_notes_template(title, date, rtype, tags, related_components, related_findings, researcher, method_label):
     fm_fields = {
-        "title": yaml_str(title),
+        "title": title,
         "date": date,
         "type": rtype,
         "status": "raw",
-        "researcher": yaml_str(researcher) if researcher else "",
+        "researcher": researcher,
         "tags": tags,
         "related_components": related_components,
         "related_findings": related_findings,
@@ -280,11 +354,11 @@ TODO: one paragraph — why this session happened, what question it was meant to
 
 def participants_template(title, date, rtype, tags, related_findings, researcher, count, roles):
     fm_fields = {
-        "title": yaml_str(f"Participants — {title}"),
+        "title": f"Participants — {title}",
         "date": date,
         "type": rtype,
         "status": "raw",
-        "researcher": yaml_str(researcher) if researcher else "",
+        "researcher": researcher,
         "tags": tags,
         "related_components": [],
         "related_findings": related_findings,
@@ -308,14 +382,14 @@ in session-notes.md instead of names.
 
 def deliverable_template(folder, title, date, status, tags, related_findings, source_type, designer, extra_fields, description):
     fm_fields = {
-        "title": yaml_str(title),
+        "title": title,
         "date": date,
         "status": status,
     }
     # heuristic-evaluations/ uses its own evaluator field for attribution instead (see AGENTS.md
     # Attribution fields) — designer is never written there, even if --designer is passed.
     if folder != "heuristic-evaluations":
-        fm_fields["designer"] = yaml_str(designer) if designer else ""
+        fm_fields["designer"] = designer
     fm_fields["tags"] = tags
     fm_fields["related_findings"] = related_findings
     fm_fields["source_type"] = source_type
@@ -390,11 +464,7 @@ def create_deliverable(folder, args, glossary):
         print("❌ --proto-type clickthrough|coded is required when --type prototypes", file=sys.stderr)
         sys.exit(1)
 
-    try:
-        datetime.date.fromisoformat(args.date)
-    except ValueError:
-        print(f"❌ --date must be YYYY-MM-DD, got {args.date!r}", file=sys.stderr)
-        sys.exit(1)
+    date = parse_date(args.date)
 
     # Overwrite guard runs before anything interactive — reject a clobber before asking ten
     # prompts nobody needed to answer.
@@ -438,7 +508,7 @@ def create_deliverable(folder, args, glossary):
     # an interactive prompt above), not a base fm_fields entry like designer — so it's applied by
     # overriding extra_fields here rather than by passing it into deliverable_template().
     if folder == "heuristic-evaluations" and args.evaluator:
-        extra_fields["evaluator"] = yaml_str(args.evaluator)
+        extra_fields["evaluator"] = args.evaluator
     elif folder != "heuristic-evaluations" and args.evaluator:
         print(
             "⚠️  --evaluator is ignored outside heuristic-evaluations/ — that field only applies "
@@ -448,7 +518,7 @@ def create_deliverable(folder, args, glossary):
 
     folder_path.mkdir(parents=True, exist_ok=True)
     file_path.write_text(
-        deliverable_template(folder, args.title, args.date, args.status, tags, related_findings,
+        deliverable_template(folder, args.title, date, args.status, tags, related_findings,
                               source_type, args.designer, extra_fields, args.description),
         encoding="utf-8",
     )
@@ -496,6 +566,11 @@ def main():
                   file=sys.stderr)
             sys.exit(1)
 
+    for name, value in vars(args).items():
+        if isinstance(value, str) and has_surrogate(value):
+            print(f"❌ --{name.replace('_', '-')} contains invalid (non-UTF-8) characters", file=sys.stderr)
+            sys.exit(1)
+
     glossary = load_tag_glossary()
 
     if args.check_tags_only is not None:
@@ -511,10 +586,7 @@ def main():
     if missing:
         parser.error(f"missing required argument(s): {', '.join(missing)}")
 
-    try:
-        datetime.date.fromisoformat(args.date)
-    except ValueError:
-        parser.error(f"--date must be YYYY-MM-DD, got {args.date!r}")
+    date = parse_date(args.date)
 
     tags = [t.strip() for t in args.tags.split(",") if t.strip()]
     related_components = [c.strip() for c in args.related_components.split(",") if c.strip()]
@@ -540,12 +612,12 @@ def main():
     folder_path.mkdir(parents=True)
 
     (folder_path / "session-notes.md").write_text(
-        session_notes_template(args.title, args.date, args.rtype, tags, related_components,
+        session_notes_template(args.title, date, args.rtype, tags, related_components,
                                 related_findings, args.researcher, args.method_label),
         encoding="utf-8",
     )
     (folder_path / "participants.md").write_text(
-        participants_template(args.title, args.date, args.rtype, tags, related_findings,
+        participants_template(args.title, date, args.rtype, tags, related_findings,
                                args.researcher, args.participants_count, roles),
         encoding="utf-8",
     )
