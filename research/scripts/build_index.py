@@ -48,6 +48,7 @@ from pathlib import Path
 
 try:
     import frontmatter
+    import yaml
 except ImportError:
     sys.exit("This script requires python-frontmatter: pip install python-frontmatter --break-system-packages")
 
@@ -92,6 +93,88 @@ DELIVERABLE_CROSS_LINK_TARGETS = {
     "based_on": ["research-plans", "research/findings"],
 }
 
+# Frontmatter fields every script treats as a list of strings (joined, sorted, iterated as paths).
+LIST_FIELDS = ("tags", "related_components", "related_findings", "related_analytics")
+
+
+class StrictLoader(frontmatter.default_handlers.SafeLoader):
+    """The same YAML loader python-frontmatter uses by default (CSafeLoader when available),
+    plus one check: a duplicate mapping key is an error instead of silently keeping the last
+    value. Everything else parses exactly as before."""
+
+    def construct_mapping(self, node, deep=False):
+        seen = set()
+        for key_node, _ in node.value:
+            if key_node.tag == "tag:yaml.org,2002:merge":
+                continue
+            key = self.construct_object(key_node, deep=deep)
+            try:
+                if key in seen:
+                    raise yaml.constructor.ConstructorError(
+                        "while constructing a mapping", node.start_mark,
+                        f"found duplicate key {key!r}", key_node.start_mark)
+                seen.add(key)
+            except TypeError:
+                pass  # unhashable key — let the base constructor report it
+        return super().construct_mapping(node, deep=deep)
+
+
+class StrictYAMLHandler(frontmatter.YAMLHandler):
+    """frontmatter.load() treats extra kwargs as metadata defaults, not loader options, so the
+    loader has to be swapped in via the handler."""
+
+    def load(self, fm, **kwargs):
+        kwargs.setdefault("Loader", StrictLoader)
+        return super().load(fm, **kwargs)
+
+
+class RecordError(Exception):
+    """A single record's frontmatter can't be parsed or has a wrong-typed field."""
+
+
+# path -> reason for every record skipped this run (so --check can fail on it).
+SKIPPED = {}
+
+
+def load_record(path):
+    """frontmatter.load() one record, rejecting duplicate keys and any LIST_FIELDS value that
+    isn't a list of strings (null is normalized to []). Raises RecordError."""
+    try:
+        post = frontmatter.load(path, handler=StrictYAMLHandler())
+    except Exception as e:
+        raise RecordError("unparseable frontmatter: " + " ".join(str(e).split())) from e
+    meta = post.metadata
+    for field in LIST_FIELDS:
+        if field not in meta:
+            continue
+        if meta[field] is None:
+            meta[field] = []
+        elif not isinstance(meta[field], list) or not all(isinstance(v, str) for v in meta[field]):
+            raise RecordError(f"{field} must be a list of strings, got {meta[field]!r}")
+    return post
+
+
+def skip_record(path, reason):
+    """Warn once on stderr that `path` is being skipped, and remember it."""
+    path = Path(path)
+    try:
+        shown = path.resolve().relative_to(REPO_ROOT)
+    except ValueError:
+        shown = path
+    if path.resolve() not in SKIPPED:
+        SKIPPED[path.resolve()] = str(reason)
+        print(f"⚠️  Skipping {shown}: {reason}", file=sys.stderr)
+    return shown
+
+
+def try_load_record(path):
+    """load_record(), or None (with a one-line stderr warning) if the record is bad."""
+    try:
+        return load_record(path)
+    except RecordError as e:
+        skip_record(path, e)
+        return None
+
 
 def load_tag_glossary():
     if not TAGS_FILE.exists():
@@ -106,7 +189,9 @@ def load_findings():
     for p in sorted(glob.glob(str(FINDINGS_ROOT / "*.md"))):
         if Path(p).name in EXCLUDE_FROM_FINDINGS:
             continue
-        post = frontmatter.load(p)
+        post = try_load_record(p)
+        if post is None:
+            continue
         findings[Path(p).stem] = dict(meta=post.metadata, path=Path(p))
     return findings
 
@@ -115,7 +200,9 @@ def load_raw_sessions():
     """Return a list of {meta, folder, path} for every raw/*/session-notes.md."""
     sessions = []
     for p in sorted(glob.glob(str(RAW_ROOT / "*" / "session-notes.md"))):
-        post = frontmatter.load(p)
+        post = try_load_record(p)
+        if post is None:
+            continue
         sessions.append(dict(meta=post.metadata, folder=Path(p).parent.name, path=Path(p)))
     return sessions
 
@@ -125,7 +212,9 @@ def load_analytics_summaries():
     Returns {} if analytics/ doesn't exist yet in this checkout — analytics is optional."""
     summaries = {}
     for p in sorted(glob.glob(str(ANALYTICS_SUMMARIES_ROOT / "*.md"))):
-        post = frontmatter.load(p)
+        post = try_load_record(p)
+        if post is None:
+            continue
         summaries[Path(p).stem] = dict(meta=post.metadata, path=Path(p))
     return summaries
 
@@ -151,7 +240,9 @@ def load_deliverables():
             for p in sorted(glob.glob(str(root / "*.md"))):
                 if Path(p).name == "_index.md":
                     continue
-                post = frontmatter.load(p)
+                post = try_load_record(p)
+                if post is None:
+                    continue
                 items[Path(p).stem] = dict(meta=post.metadata, path=Path(p))
         deliverables[folder] = items
     return deliverables
@@ -170,7 +261,9 @@ def validate_tags(glossary):
     for folder in DELIVERABLE_FOLDERS:
         all_files += [str(p) for p in (REPO_ROOT / folder).glob("*.md") if p.name != "_index.md"] if (REPO_ROOT / folder).exists() else []
     for p in all_files:
-        post = frontmatter.load(p)
+        post = try_load_record(p)
+        if post is None:
+            continue
         for t in post.metadata.get("tags", []):
             if t not in glossary:
                 problems.append((p, t))
@@ -474,6 +567,8 @@ def main():
         exit_code = 1
 
     if args.check:
+        if SKIPPED:
+            exit_code = 1
         if new_research_content != old_research_content:
             print("❌ research/_index.md is out of date. Run without --check to regenerate.", file=sys.stderr)
             exit_code = 1

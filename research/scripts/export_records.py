@@ -47,6 +47,7 @@ from build_search_ui import (  # noqa: E402
     build_deliverable_records,
     build_search_text,
     RESEARCH_ROOT,
+    SKIPPED,
 )
 
 VALID_KINDS = {"raw", "finding", "component", "analytics", "deliverable"}
@@ -72,7 +73,9 @@ def main():
     parser.add_argument("--id", default=None,
                          help="Print only the single record whose id matches exactly, including "
                               "its full raw markdown content (rawContent field). "
-                              "Exits 1 with an error on stderr if no record matches.")
+                              "Exits 1 with an error on stderr if no record matches, or if "
+                              "the matching record's file is invalid (other invalid records "
+                              "are skipped with a warning and don't affect it).")
     parser.add_argument("--summary", action="store_true",
                          help="Strip the html and searchText fields from each record, for a "
                               "lightweight list payload. Has no effect combined with --id, "
@@ -86,6 +89,10 @@ def main():
 
     if args.id is not None:
         match = next((r for r in records if r["id"] == args.id), None)
+        if match is None and args.id in SKIPPED and (
+                args.kind is None or args.id.startswith(f"{args.kind}:")):
+            print(f"❌ Record {args.id!r} is invalid ({SKIPPED[args.id]})", file=sys.stderr)
+            sys.exit(1)
         if match is None:
             print(f"❌ No record found with id {args.id!r}", file=sys.stderr)
             sys.exit(1)

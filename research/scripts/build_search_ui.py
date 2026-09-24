@@ -39,6 +39,7 @@ except ImportError:
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from md_render import render_markdown  # noqa: E402  (local helper, see md_render.py)
 from build_index import DELIVERABLE_FOLDERS  # noqa: E402  (shared source of truth for the 20 folders)
+from build_index import RecordError, load_record, skip_record  # noqa: E402  (shared per-record loader)
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 RESEARCH_ROOT = SCRIPT_DIR.parent          # research/
@@ -125,17 +126,36 @@ def _attribution_fields(meta):
     )
 
 
+# record id -> "path: reason" for every record skipped this run, so export_records.py --id can
+# tell "that record is broken" apart from "no such record".
+SKIPPED = {}
+
+
+def _load(path, record_id):
+    """load_record() one file for record `record_id`, or None (with a one-line stderr warning)
+    if it's bad — one bad record must not take down the whole export."""
+    try:
+        return load_record(path)
+    except RecordError as e:
+        SKIPPED[record_id] = f"{skip_record(path, e)}: {e}"
+        return None
+
+
 def build_raw_records():
     records = []
     for session_path in sorted(glob.glob(str(RAW_ROOT / "*" / "session-notes.md"))):
         folder = Path(session_path).parent
-        post = frontmatter.load(session_path)
+        post = _load(session_path, f"raw:{folder.name}")
+        if post is None:
+            continue
         meta = post.metadata
         body_html = render_markdown(post.content)
 
         participants_path = folder / "participants.md"
         if participants_path.exists():
-            p_post = frontmatter.load(participants_path)
+            p_post = _load(participants_path, f"raw:{folder.name}")
+            if p_post is None:
+                continue
             body_html += "<h2>Participants</h2>" + render_markdown(p_post.content)
 
         rel_path = f"raw/{folder.name}/session-notes.md"
@@ -162,7 +182,9 @@ def build_findings_records():
     for path in sorted(glob.glob(str(FINDINGS_ROOT / "*.md"))):
         if Path(path).name == "tags.md":
             continue
-        post = frontmatter.load(path)
+        post = _load(path, f"finding:{Path(path).stem}")
+        if post is None:
+            continue
         meta = post.metadata
         body_html = render_markdown(post.content)
         rel_path = f"findings/{Path(path).name}"
@@ -189,7 +211,9 @@ def build_component_records():
     if not COMPONENTS_ROOT.exists():
         return records
     for path in sorted(glob.glob(str(COMPONENTS_ROOT / "*.md"))):
-        post = frontmatter.load(path)
+        post = _load(path, f"component:{Path(path).stem}")
+        if post is None:
+            continue
         meta = post.metadata
         body_html = render_markdown(post.content)
         rel_path = f"../design-tokens/components/{Path(path).name}"
@@ -216,7 +240,9 @@ def build_analytics_records():
     if not ANALYTICS_SUMMARIES_ROOT.exists():
         return records
     for path in sorted(glob.glob(str(ANALYTICS_SUMMARIES_ROOT / "*.md"))):
-        post = frontmatter.load(path)
+        post = _load(path, f"analytics:{Path(path).stem}")
+        if post is None:
+            continue
         meta = post.metadata
         body_html = render_markdown(post.content)
         rel_path = f"../analytics/summaries/{Path(path).name}"
@@ -252,7 +278,9 @@ def build_deliverable_records():
         for path in sorted(glob.glob(str(folder_root / "*.md"))):
             if Path(path).name == "_index.md":
                 continue
-            post = frontmatter.load(path)
+            post = _load(path, f"deliverable:{folder}/{Path(path).stem}")
+            if post is None:
+                continue
             meta = post.metadata
             body_html = render_markdown(post.content)
             rel_path = f"../{folder}/{Path(path).name}"

@@ -223,3 +223,61 @@ def test_exported_html_is_sanitized(run_script, fake_repo):
     assert '" onmouseover="' not in html
     assert "<script>" not in html
     assert "&lt;script&gt;" in html
+
+
+# --- one bad record doesn't break the rest (v0.5.22) ---------------------------------------------
+
+BAD_FRONTMATTER = {
+    "unparseable": ("title: [unclosed", "unparseable frontmatter"),
+    "duplicate-key": ("title: A\ntitle: B", "duplicate key 'title'"),
+    "components-int": ("title: C\nrelated_components: 5", "related_components must be a list of strings"),
+    "findings-dict": ('title: D\nrelated_findings: [{"a": 1}]', "related_findings must be a list of strings"),
+}
+
+
+def add_bad_finding(root, trigger):
+    frontmatter_text, _ = BAD_FRONTMATTER[trigger]
+    path = root / "research/findings" / f"bad-{trigger}.md"
+    path.write_text(f"---\n{frontmatter_text}\n---\n\nBody.\n", encoding="utf-8")
+    return path
+
+
+@pytest.mark.parametrize("trigger", sorted(BAD_FRONTMATTER))
+def test_summary_skips_bad_record_and_keeps_the_rest(run_script, fake_repo, trigger):
+    add_bad_finding(fake_repo, trigger)
+    result = run_script("export_records.py", "--summary")
+    assert result.returncode == 0, result.stderr
+    assert {r["id"] for r in json.loads(result.stdout)} == EXPECTED_IDS
+    warnings = result.stderr.strip().splitlines()
+    assert len(warnings) == 1
+    assert f"research/findings/bad-{trigger}.md" in warnings[0]
+    assert BAD_FRONTMATTER[trigger][1] in warnings[0]
+
+
+@pytest.mark.parametrize("trigger", ["unparseable", "components-int"])
+def test_id_returns_valid_target_despite_broken_sibling(run_script, fake_repo, trigger):
+    add_bad_finding(fake_repo, trigger)
+    result = run_script("export_records.py", "--id", "finding:onboarding")
+    assert result.returncode == 0, result.stderr
+    record = json.loads(result.stdout)
+    assert record["id"] == "finding:onboarding"
+    assert record["rawContent"]
+
+
+@pytest.mark.parametrize("trigger", ["duplicate-key", "findings-dict"])
+def test_id_of_bad_record_exits_1_with_reason(run_script, fake_repo, trigger):
+    add_bad_finding(fake_repo, trigger)
+    result = run_script("export_records.py", "--id", f"finding:bad-{trigger}")
+    assert result.returncode == 1
+    assert result.stdout == ""
+    assert f"Record 'finding:bad-{trigger}' is invalid" in result.stderr
+    assert BAD_FRONTMATTER[trigger][1] in result.stderr
+
+
+def test_null_list_fields_are_accepted_as_empty(run_script, fake_repo):
+    path = fake_repo / "research/findings/nulls.md"
+    path.write_text("---\ntitle: Nulls\ntags:\nrelated_components: null\n---\n\nBody.\n", encoding="utf-8")
+    result = run_script("export_records.py", "--id", "finding:nulls")
+    assert result.returncode == 0, result.stderr
+    record = json.loads(result.stdout)
+    assert record["tags"] == [] and record["related_components"] == []
