@@ -19,6 +19,35 @@ evidence kept separate from — but cross-linked with — the qualitative findin
 > fictional sample data** for a hypothetical healthcare organization ("Meridian Health Network")
 > and its "Compass AI" modernization program. No real patients, staff, or PHI are represented.
 
+## Development
+
+Requires Python 3.13.
+
+```
+pip install -r requirements-dev.txt
+```
+
+Run the test suite (330 tests):
+
+```
+pytest
+```
+
+Lint and type-check:
+
+```
+ruff check .
+mypy
+```
+
+CI (`.github/workflows/ci.yml`) runs all of the above, plus `build_index.py --check`,
+`build_search_ui.py --check`, and `pip-audit`, on every push and pull request to `main`.
+
+`research/scripts/` contains runnable tooling beyond the checks above — `new_research_session.py`,
+`build_index.py`, `build_search_ui.py`. See `AGENTS.md` for full usage.
+
+A public read-only demo is in progress but not yet live — see `docs/demo-deploy.md` for status.
+
 ## AI-Assisted Development
 
 This project was built by Joshua Bock with AI assistance from Claude — used both as the AI agent this tooling is designed to work with, and as a development collaborator throughout the build (planning, implementation, testing, and code review), under direct human review and direction at every step.
