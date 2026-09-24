@@ -32,14 +32,18 @@ from datetime import datetime
 from pathlib import Path
 
 try:
-    import frontmatter
+    import frontmatter  # noqa: F401 -- fail fast with a clear message if missing
 except ImportError:
     sys.exit("This script requires python-frontmatter: pip install python-frontmatter")
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from build_index import (  # noqa: E402  (shared per-record loader)
+    DELIVERABLE_FOLDERS,  # noqa: E402  (shared source of truth for the 20 folders)
+    RecordError,
+    load_record,
+    skip_record,
+)
 from md_render import render_markdown  # noqa: E402  (local helper, see md_render.py)
-from build_index import DELIVERABLE_FOLDERS  # noqa: E402  (shared source of truth for the 20 folders)
-from build_index import RecordError, load_record, skip_record  # noqa: E402  (shared per-record loader)
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 RESEARCH_ROOT = SCRIPT_DIR.parent          # research/
@@ -128,7 +132,7 @@ def _attribution_fields(meta):
 
 # record id -> "path: reason" for every record skipped this run, so export_records.py --id can
 # tell "that record is broken" apart from "no such record".
-SKIPPED = {}
+SKIPPED: dict[str, str] = {}
 
 
 def _load(path, record_id):

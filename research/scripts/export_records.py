@@ -38,16 +38,15 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR))
 
 import frontmatter
-
 from build_search_ui import (  # noqa: E402
-    build_raw_records,
-    build_findings_records,
-    build_component_records,
-    build_analytics_records,
-    build_deliverable_records,
-    build_search_text,
     RESEARCH_ROOT,
     SKIPPED,
+    build_analytics_records,
+    build_component_records,
+    build_deliverable_records,
+    build_findings_records,
+    build_raw_records,
+    build_search_text,
 )
 
 VALID_KINDS = {"raw", "finding", "component", "analytics", "deliverable"}

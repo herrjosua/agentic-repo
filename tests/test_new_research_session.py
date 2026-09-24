@@ -6,10 +6,9 @@ feature-002 deliverables. The script validates --slug and --topic-slug with the 
 import datetime
 
 import frontmatter
+import new_research_session as nrs
 import pytest
 import yaml
-
-import new_research_session as nrs
 
 TODAY_ARGS = ["--date", "2026-03-01"]
 

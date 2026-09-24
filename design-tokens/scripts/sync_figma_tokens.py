@@ -164,7 +164,7 @@ def figma_variables_to_dtcg(variables_json):
     DIMENSION_GROUPS = {"spacing", "radius", "size"}
 
     tokens = {}
-    for var_id, var in variables.items():
+    for var in variables.values():
         name = var.get("name", "")  # e.g. "color/semantic/action/primary"
         group = next((g for prefix, g in PREFIX_TO_GROUP.items() if name.startswith(prefix)), None)
         if group is None:
@@ -190,7 +190,7 @@ def figma_variables_to_dtcg(variables_json):
 def _figma_value_to_dtcg(group, value):
     if group == "color" and isinstance(value, dict) and "r" in value:
         r, g, b = (round(value[c] * 255) for c in "rgb")
-        return "#{:02X}{:02X}{:02X}".format(r, g, b)
+        return f"#{r:02X}{g:02X}{b:02X}"
     return value
 
 

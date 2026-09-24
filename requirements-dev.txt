@@ -7,3 +7,10 @@ iniconfig==2.3.0
 packaging==26.3
 pluggy==1.6.0
 Pygments==2.21.0
+
+# Lint / type-check / audit (run in CI — see .github/workflows/ci.yml)
+ruff==0.16.8
+mypy==2.3.1
+pip-audit==2.10.1
+types-PyYAML==6.0.12.20260906
+types-requests==2.33.0.20260906

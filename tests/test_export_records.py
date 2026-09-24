@@ -4,9 +4,9 @@ GET /api/records and GET /api/records/:id, so its JSON shape is the contract und
 """
 import json
 import shutil
+from datetime import UTC
 
 import pytest
-
 from conftest import RAW_SESSION
 
 EXPECTED_KEYS = {
@@ -45,7 +45,7 @@ def add_frontmatter(path, *lines):
     """Insert extra frontmatter lines right after the opening ---."""
     text = path.read_text(encoding="utf-8")
     assert text.startswith("---\n")
-    path.write_text("---\n" + "".join(f"{l}\n" for l in lines) + text[4:], encoding="utf-8")
+    path.write_text("---\n" + "".join(f"{line}\n" for line in lines) + text[4:], encoding="utf-8")
 
 
 # --- shape ------------------------------------------------------------------------------------
@@ -186,11 +186,12 @@ def test_edit_fields_non_string_by_is_stringified(run_script, fake_repo):
 
 
 def test_edit_fields_helper_direct():
+    from datetime import datetime
+
     from build_search_ui import _edit_fields
-    from datetime import datetime, timezone
 
     assert _edit_fields({}) == {"last_edited_by": None, "last_edited_at": None}
-    at = datetime(2026, 9, 18, 10, 16, 26, 123000, tzinfo=timezone.utc)
+    at = datetime(2026, 9, 18, 10, 16, 26, 123000, tzinfo=UTC)
     assert _edit_fields({"last_edited_at": at})["last_edited_at"] == "2026-09-18T10:16:26.123Z"
 
 
