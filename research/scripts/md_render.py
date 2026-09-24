@@ -1,5 +1,5 @@
-import re
 import html as html_lib
+import re
 
 # Security fix (2026-09-18): the markdown-link transform below splices the URL
 # straight into href="..." after inline() has already run html.escape on the

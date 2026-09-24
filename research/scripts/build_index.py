@@ -40,10 +40,10 @@ Usage:
                                       # invalid, without writing anything (for CI / pre-commit)
 """
 import argparse
+import datetime
 import glob
 import re
 import sys
-import datetime
 from pathlib import Path
 
 try:
@@ -97,7 +97,8 @@ DELIVERABLE_CROSS_LINK_TARGETS = {
 LIST_FIELDS = ("tags", "related_components", "related_findings", "related_analytics")
 
 
-class StrictLoader(frontmatter.default_handlers.SafeLoader):
+# SafeLoader is a runtime alias (CSafeLoader if available, else SafeLoader), so mypy can't use it as a base.
+class StrictLoader(frontmatter.default_handlers.SafeLoader):  # type: ignore[valid-type,misc]
     """The same YAML loader python-frontmatter uses by default (CSafeLoader when available),
     plus one check: a duplicate mapping key is an error instead of silently keeping the last
     value. Everything else parses exactly as before."""
@@ -133,7 +134,7 @@ class RecordError(Exception):
 
 
 # path -> reason for every record skipped this run (so --check can fail on it).
-SKIPPED = {}
+SKIPPED: dict[Path, str] = {}
 
 
 def load_record(path):
@@ -392,12 +393,12 @@ def validate_analytics_links(findings, summaries):
     related_analytics is NOT flagged — analytics is optional per finding, not every finding has
     quant data behind it."""
     problems = []
-    for topic, data in findings.items():
+    for data in findings.values():
         for rel in data["meta"].get("related_analytics", []):
             stem = Path(rel).stem
             if stem not in summaries:
                 problems.append(f"{data['path']}: related_analytics points at missing analytics/summaries/{stem}.md")
-    for stem, data in summaries.items():
+    for data in summaries.values():
         for rel in data["meta"].get("related_findings", []):
             topic = Path(rel).stem
             if topic not in findings:
@@ -412,7 +413,7 @@ def validate_component_links(findings, sessions, components):
     problems = []
     if not COMPONENTS_ROOT.exists():
         return problems
-    for topic, data in findings.items():
+    for data in findings.values():
         for c in data["meta"].get("related_components", []) or []:
             stem = Path(c).stem
             if stem not in components:
@@ -457,8 +458,8 @@ def build_deliverable_index_content(folder, items):
 def validate_deliverable_findings_links(deliverables, findings):
     """Check related_findings in every deliverable folder resolves to a real findings/*.md."""
     problems = []
-    for folder, items in deliverables.items():
-        for stem, data in items.items():
+    for items in deliverables.values():
+        for data in items.values():
             for rel in data["meta"].get("related_findings", []) or []:
                 topic = Path(rel).stem
                 if topic not in findings:
@@ -475,8 +476,8 @@ def validate_deliverable_cross_links(deliverables, findings, summaries):
     stem_sets["research/findings"] = set(findings.keys())
     stem_sets["analytics/summaries"] = set(summaries.keys())
 
-    for folder, items in deliverables.items():
-        for stem, data in items.items():
+    for items in deliverables.values():
+        for data in items.values():
             meta = data["meta"]
             for field, targets in DELIVERABLE_CROSS_LINK_TARGETS.items():
                 if field not in meta:

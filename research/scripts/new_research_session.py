@@ -623,9 +623,9 @@ def main():
     )
 
     print(f"✅ Created {folder_path}/")
-    print(f"   - session-notes.md")
-    print(f"   - participants.md")
-    print(f"Next: fill in the TODOs, then synthesize into research/findings/<topic>.md and run build_index.py.")
+    print("   - session-notes.md")
+    print("   - participants.md")
+    print("Next: fill in the TODOs, then synthesize into research/findings/<topic>.md and run build_index.py.")
 
 
 if __name__ == "__main__":

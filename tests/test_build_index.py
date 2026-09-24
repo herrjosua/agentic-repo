@@ -7,7 +7,6 @@ import re
 import shutil
 
 import pytest
-
 from conftest import RAW_SESSION, write_file
 
 INDEXES = [

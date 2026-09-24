@@ -5,7 +5,6 @@ escaping is the XSS boundary. Pure function, tested directly.
 import re
 
 import pytest
-
 from md_render import render_markdown
 
 
