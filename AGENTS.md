@@ -138,7 +138,11 @@ isolated, private repo, `research-repo-demo`, kept in sync by
 separate script sync needed), `design-tokens/`, `analytics/`, the 20 top-level deliverable
 folders (read from `DELIVERABLE_SCHEMAS` in `new_research_session.py`, not a second hand-typed
 list — the workflow fails if that dict doesn't have exactly 20 entries), and `requirements.txt`
-into the demo repo. Before committing or moving the tag, it runs `build_index.py --check` against
+into the demo repo. Because syncing `research/scripts/` means importing one of its modules
+mid-workflow, the job sets `PYTHONDONTWRITEBYTECODE=1` and the sync step also strips any stray
+`__pycache__/`/`*.pyc` and writes a `.gitignore` for them into the demo repo, so a compiled
+bytecode file never gets published or reappears as an untracked file when the scripts run on the
+demo server. Before committing or moving the tag, it runs `build_index.py --check` against
 the assembled demo content and fails the job if that check fails, so a sync that would leave
 broken cross-references (e.g. a finding's `related_analytics` pointing at a summary that didn't
 get synced) never gets published. On success it commits, pushes to the demo repo's `main`, and
