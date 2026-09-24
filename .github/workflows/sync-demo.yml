@@ -26,6 +26,11 @@ env:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    env:
+      # No step in this job should write __pycache__/*.pyc in the first place (the "Sync
+      # content" step below imports new_research_session.py, which would otherwise leave one
+      # under research/scripts/ that the copy step would publish into the demo repo).
+      PYTHONDONTWRITEBYTECODE: "1"
     steps:
       - name: Checkout real repo
         uses: actions/checkout@v5
@@ -71,6 +76,15 @@ jobs:
             rm -rf "${target:?}"
             cp -r "${p}" "${target}"
           done
+
+          # Second guard, on top of PYTHONDONTWRITEBYTECODE above: strip any __pycache__/*.pyc
+          # that made it into the copy regardless of how it got written.
+          find demo-repo -depth -name "__pycache__" -type d -exec rm -rf {} +
+          find demo-repo -name "*.pyc" -delete
+
+          # So running the scripts on the demo server doesn't leave untracked cache files in
+          # that clone.
+          printf '__pycache__/\n*.pyc\n' > demo-repo/.gitignore
 
       - name: "Guard: validate synced content before publishing"
         working-directory: demo-repo
