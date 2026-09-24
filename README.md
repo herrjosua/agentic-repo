@@ -18,3 +18,11 @@ evidence kept separate from — but cross-linked with — the qualitative findin
 > This repository's content (research sessions, findings, design tokens, analytics) is **entirely
 > fictional sample data** for a hypothetical healthcare organization ("Meridian Health Network")
 > and its "Compass AI" modernization program. No real patients, staff, or PHI are represented.
+
+## AI-Assisted Development
+
+This project was built by Joshua Bock with AI assistance from Claude — used both as the AI agent this tooling is designed to work with, and as a development collaborator throughout the build (planning, implementation, testing, and code review), under direct human review and direction at every step.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
