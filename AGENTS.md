@@ -134,12 +134,18 @@ research/scripts/new_research_session.py --type personas --title "Frontline Nurs
 The public CRUD UI demo never runs against this (real) repo — it runs against a separate,
 isolated, private repo, `research-repo-demo`, kept in sync by
 `.github/workflows/sync-demo.yml`. That workflow runs on a schedule (every 6 hours) and on
-`workflow_dispatch`, copies **only** `research/` and `design-tokens/` (which brings
-`research/scripts/` along with it — no separate script sync needed) into the demo repo, commits,
-pushes to its `main`, and force-moves a fixed tag, `demo-baseline`, onto that commit. It
-authenticates to the demo repo with the `DEMO_REPO_PAT` repo secret, a fine-grained PAT scoped
-only to `research-repo-demo` with Contents: Read and write — nothing else in this repo (docs/,
-.github/, README.md, AGENTS.md) is synced.
+`workflow_dispatch`, copies `research/` (which brings `research/scripts/` along with it — no
+separate script sync needed), `design-tokens/`, `analytics/`, the 20 top-level deliverable
+folders (read from `DELIVERABLE_SCHEMAS` in `new_research_session.py`, not a second hand-typed
+list — the workflow fails if that dict doesn't have exactly 20 entries), and `requirements.txt`
+into the demo repo. Before committing or moving the tag, it runs `build_index.py --check` against
+the assembled demo content and fails the job if that check fails, so a sync that would leave
+broken cross-references (e.g. a finding's `related_analytics` pointing at a summary that didn't
+get synced) never gets published. On success it commits, pushes to the demo repo's `main`, and
+force-moves a fixed tag, `demo-baseline`, onto that commit. It authenticates to the demo repo with
+the `DEMO_REPO_PAT` repo secret, a fine-grained PAT scoped only to `research-repo-demo` with
+Contents: Read and write — nothing else in this repo (docs/, .github/, tests/, README.md,
+AGENTS.md, CLAUDE.md, dev-only config) is synced.
 
 On the demo server (once it exists), `research/scripts/reset_demo.sh` resets that checkout to
 `demo-baseline` (`git fetch` + `git reset --hard`) and reruns `build_index.py`, so the demo can't
