@@ -195,6 +195,20 @@ def test_non_native_source_type_gets_stub_body(run_script, fake_repo):
     assert "## Description" not in post.content
 
 
+@pytest.mark.parametrize("value", nrs.SOURCE_TYPES)
+def test_source_type_accepts_all_allowed_values(run_script, fake_repo, value):
+    result = new_deliverable(run_script, "wireframes", "--source-type", value)
+    assert result.returncode == 0, result.stderr
+    meta = load(fake_repo / "wireframes/thing.md").metadata
+    assert meta["source_type"] == value
+
+
+def test_source_type_rejects_unknown_value(run_script, fake_repo):
+    result = new_deliverable(run_script, "wireframes", "--source-type", "bogus-type")
+    assert result.returncode == 2
+    assert not (fake_repo / "wireframes/thing.md").exists()
+
+
 # attribution
 
 def test_heuristic_evaluation_evaluator_and_no_designer(run_script, fake_repo):
@@ -459,15 +473,17 @@ def test_raw_fields_round_trip(run_script, fake_repo, value):
 
 @pytest.mark.parametrize("value", PROBLEM_INPUTS)
 def test_deliverable_fields_round_trip(run_script, fake_repo, value):
+    # source_type is excluded here (and from the newline-injection test below) — it's an enum
+    # (choices=SOURCE_TYPES) since this fix, not free text, so it's covered separately by
+    # test_source_type_accepts_all_allowed_values / test_source_type_rejects_unknown_value.
     result = new_deliverable(run_script, "wireframes", "--tags", value, "--related-findings", value,
-                             "--source-type", value, "--designer", value, title=value)
+                             "--designer", value, title=value)
     assert result.returncode == 0, result.stderr
     meta = load(fake_repo / "wireframes/thing.md").metadata
     assert meta["title"] == value
     assert meta["designer"] == value
     assert meta["tags"] == [value]
     assert meta["related_findings"] == [f"../research/findings/{value}"]
-    assert meta["source_type"] == value
     assert_exports(run_script)
 
 
@@ -527,7 +543,7 @@ def test_raw_newline_cannot_inject_keys(run_script, fake_repo):
 def test_deliverable_newline_cannot_inject_keys(run_script, fake_repo):
     injection = "ok\ndesigner: Someone Else"
     result = new_deliverable(run_script, "wireframes", "--tags", injection, "--related-findings", injection,
-                             "--source-type", injection, "--designer", "Original")
+                             "--designer", "Original")
     assert result.returncode == 0, result.stderr
     meta = load(fake_repo / "wireframes/thing.md").metadata
     assert set(meta) == {"title", "date", "status", "designer", "tags", "related_findings",

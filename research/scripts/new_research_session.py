@@ -213,6 +213,13 @@ VALID_TYPES = [
     "analytics",
 ]
 
+# Deliverable mode's source_type field. Kept in sync by hand with SOURCE_TYPES in
+# backend/validation.js in the research-repo-crud-ui repo, which enforces the same allowlist for
+# the CRUD UI — see AGENTS.md's note on this pair of lists. That backend is the strict side today,
+# so drift fails safely there (a clean 400); enforcing the same list here closes off the other
+# direction, where this script could accept a value the backend would go on to reject.
+SOURCE_TYPES = ["native", "figma-link", "github-link", "confluence-link", "docx-link", "figma-export"]
+
 
 def load_tag_glossary():
     """Return the set of canonical tags defined in findings/tags.md."""
@@ -549,7 +556,7 @@ def main():
     # feature-002 deliverable mode (triggered by --type <folder-name>, see above)
     parser.add_argument("--slug", default="", help="Deliverable mode: kebab-case filename (no .md); file is written to <type>/<slug>.md. Required in deliverable mode.")
     parser.add_argument("--status", default="draft", choices=["draft", "in-review", "final", "superseded"], help="Deliverable mode: status field")
-    parser.add_argument("--source-type", default="", help="Deliverable mode: source_type field (native | figma-link | github-link | confluence-link | docx-link | figma-export). Defaults to the folder's schema default.")
+    parser.add_argument("--source-type", default="", choices=SOURCE_TYPES, help="Deliverable mode: source_type field (native | figma-link | github-link | confluence-link | docx-link | figma-export). Defaults to the folder's schema default.")
     parser.add_argument("--proto-type", choices=sorted(PROTO_TYPE_SOURCE_TYPE), default=None, help="Deliverable mode, required when --type prototypes: clickthrough or coded")
     parser.add_argument("--no-prompt", action="store_true", help="Deliverable mode: skip interactive prompting for type-specific extra fields; leave them at their schema defaults. Use for scripted/non-interactive runs (e.g. a cold agent session).")
     parser.add_argument("--force", action="store_true", help="Deliverable mode: overwrite an existing deliverable file")
