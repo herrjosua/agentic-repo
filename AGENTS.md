@@ -152,9 +152,9 @@ Contents: Read and write — nothing else in this repo (docs/, .github/, tests/,
 AGENTS.md, CLAUDE.md, dev-only config) is synced.
 
 On the demo server (once it exists), `research/scripts/reset_demo.sh` resets that checkout to
-`demo-baseline` (`git fetch` + `git reset --hard`) and reruns `build_index.py`, so the demo can't
-accumulate visitor edits between resets. It isn't scheduled anywhere yet — see
-`docs/demo-deploy.md` for what's still unwired before it can be.
+`demo-baseline` (`git fetch` + `git reset --hard`) and reruns `build_index.py` (via `PYTHON_BIN`,
+falling back to `python3`), so the demo can't accumulate visitor edits between resets. It isn't
+scheduled anywhere yet — see `docs/demo-deploy.md` for what's still unwired before it can be.
 
 ## Git discipline
 Every synthesis is its own commit; say what raw evidence triggered the change. Never rewrite
