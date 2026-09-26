@@ -14,7 +14,9 @@ existing:
    `DEMO_REPO_PAT`, which is scoped for the sync workflow's push access and shouldn't be reused
    for this.
 2. **Scheduling `reset_demo.sh`.** Once the server exists, point an hourly cron entry (or
-   equivalent scheduler) at it from within its `research-repo-demo` checkout.
+   equivalent scheduler) at it from within its `research-repo-demo` checkout. If the demo
+   server's Python 3 interpreter isn't on `PATH` as `python3`, set `PYTHON_BIN` in that cron
+   entry's environment to override it — the script falls back to `python3` when unset.
 
 Also out of scope here: wiring the CRUD UI itself (pointing `AGENTIC_REPO_ROOT` at the demo repo
 path) — that's separate, already-scoped work for once an actual server exists.

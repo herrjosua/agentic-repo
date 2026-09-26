@@ -8,9 +8,21 @@
 # for what's still unwired before that can happen.
 set -euo pipefail
 
-cd "$(dirname "$0")/../.."
+# Wrapped in main(), called only after the whole file is parsed: this script runs from inside
+# the clone it resets, so `git reset --hard` below can rewrite this very file mid-run, and an
+# unwrapped script would have bash reading those rewritten bytes partway through.
+main() {
+  cd "$(dirname "$0")/../.."
 
-git fetch origin
-git reset --hard demo-baseline
+  # --tags --force: demo-baseline is force-moved on GitHub on every demo sync, and a plain
+  # fetch will not update a local tag that already exists, so this script would silently keep
+  # resetting to a stale commit. This is intentionally different from research-repo-crud-ui's
+  # scripts/deploy.sh, which must NOT force-fetch tags.
+  git fetch --tags --force origin
+  git reset --hard demo-baseline
 
-python3 research/scripts/build_index.py
+  PYTHON_BIN="${PYTHON_BIN:-python3}"
+  "$PYTHON_BIN" research/scripts/build_index.py
+}
+
+main "$@"
