@@ -10,7 +10,7 @@ evidence kept separate from — but cross-linked with — the qualitative findin
   `analytics/_index.md` for synthesized quant evidence, or `design-tokens/design.md` for the
   current token/component reference.
 - **Project background & build plan:** `docs/`
-- **Web UI:** a separate app, [Research Repo CRUD UI](../Research%20Repo%20CRUD%20UI), provides
+- **Web UI:** a separate app, [Research Repo CRUD UI](https://github.com/herrjosua/research-repo-crud-ui), provides
   multi-user login, a full create/read/update/delete interface, and git-based edit attribution on
   top of this repo's content. It reads and writes this repo's markdown files (via its own Python
   scripts, unchanged) but is not stored inside it, to avoid risking this repo's working content.
@@ -27,7 +27,7 @@ Requires Python 3.13.
 pip install -r requirements-dev.txt
 ```
 
-Run the test suite (330 tests):
+Run the test suite:
 
 ```
 pytest
@@ -46,7 +46,8 @@ CI (`.github/workflows/ci.yml`) runs all of the above, plus `build_index.py --ch
 `research/scripts/` contains runnable tooling beyond the checks above — `new_research_session.py`,
 `build_index.py`, `build_search_ui.py`. See `AGENTS.md` for full usage.
 
-A public read-only demo is in progress but not yet live — see `docs/demo-deploy.md` for status.
+A public read-only demo is live at https://ux-research.joshuabock.com — see `docs/demo-deploy.md`
+for how it's kept in sync and reset.
 
 ## AI-Assisted Development
 

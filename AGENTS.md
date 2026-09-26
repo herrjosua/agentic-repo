@@ -151,10 +151,11 @@ the `DEMO_REPO_PAT` repo secret, a fine-grained PAT scoped only to `research-rep
 Contents: Read and write — nothing else in this repo (docs/, .github/, tests/, README.md,
 AGENTS.md, CLAUDE.md, dev-only config) is synced.
 
-On the demo server (once it exists), `research/scripts/reset_demo.sh` resets that checkout to
-`demo-baseline` (`git fetch` + `git reset --hard`) and reruns `build_index.py` (via `PYTHON_BIN`,
-falling back to `python3`), so the demo can't accumulate visitor edits between resets. It isn't
-scheduled anywhere yet — see `docs/demo-deploy.md` for what's still unwired before it can be.
+The demo resets hourly so it can't accumulate visitor edits. `research/scripts/reset_demo.sh` is
+the checked-in script for that reset — schedule it via cron (with `PYTHON_BIN` set to the host's
+Python if `python3` on `PATH` isn't the right interpreter) — and it resets a checkout to
+`demo-baseline` (`git fetch` + `git reset --hard`) then reruns `build_index.py`. See
+`docs/demo-deploy.md` for how the sync and reset are wired together.
 
 ## Git discipline
 Every synthesis is its own commit; say what raw evidence triggered the change. Never rewrite
