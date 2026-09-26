@@ -65,9 +65,10 @@ manually reviewed a dashboard as a discovery activity, distinct from an automate
 `research/raw/2026-01-27-dashboard-review-ambient-scribe-ga-adoption/` for a sample `type: analytics`
 session.
 
-## Topics in `findings/` (10)
+## Topics in `findings/`
 
 - `ambient-scribe.md` — v0.1 → v0.2 → GA release candidate, longitudinal
+- `ambient-scribe-post-ga-refinements.md` — post-GA follow-on, reviewed by a second researcher
 - `prior-authorization.md` — v1 → v2
 - `governance-and-phi.md` — the year-long executive/privacy/CMIO thread
 - `accessibility-cross-cutting.md` — a pattern found independently in 3 separate audits
@@ -77,6 +78,7 @@ session.
 - `him-coding-and-billing.md`
 - `scope-boundaries-and-workflow-fit.md` — deliberate "don't build this yet" findings
 - `rollout-and-change-management.md`
+- `onboarding.md` — setup-step confusion, backed by `analytics/summaries/onboarding-funnel-dropoff.md`
 
 Each `findings/*.md` has an **Evidence Trail** section linking back to every `raw/` session that
 backs it, and a **Related Findings** section cross-linking to thematically connected topics — e.g.
@@ -97,9 +99,10 @@ plan, which this account doesn't have — `tokens.tokens.json` remains a hand-ma
 until either that changes or an alternate token source (Style Dictionary, Tokens Studio) is wired
 in via `--regenerate-design-only`.
 
-`analytics/summaries/` and `analytics/raw/` currently have no fictional sample content — the folder
-structure exists per the resolved plan decision, but no analytics-platform data has been written
-for this dataset yet. There's also no `analytics/scripts/pull_analytics.py` — that's expected until
-a real analytics platform is actually in the picture; there's nothing to pull from yet. (A
-`type: analytics` sample *does* exist under `research/raw/` — see the note above — but that's a
-manually-reviewed dashboard session, distinct from an automated `analytics/raw/` export.)
+`analytics/summaries/` now has one fictional sample (`onboarding-funnel-dropoff.md`, cross-linked
+from `research/findings/onboarding.md`), but `analytics/raw/` still has no content — no
+analytics-platform export has been written for this dataset yet. There's also no
+`analytics/scripts/pull_analytics.py` — that's expected until a real analytics platform is
+actually in the picture; there's nothing to pull from yet. (A `type: analytics` sample *does*
+exist under `research/raw/` — see the note above — but that's a manually-reviewed dashboard
+session, distinct from an automated `analytics/raw/` export.)

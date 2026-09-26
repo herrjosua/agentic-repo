@@ -1,22 +1,19 @@
-# Demo deploy — what's still unwired
+# Demo deploy
 
-The demo isolation pieces that don't depend on a live server exist as of this writing: the
-`research-repo-demo` repo, the `sync-demo.yml` GitHub Actions workflow that keeps it in sync with
-this repo's `research/` and `design-tokens/`, the `demo-baseline` tag it force-moves each run, and
-`research/scripts/reset_demo.sh`, ready to reset a checkout back to that tag. See AGENTS.md →
-"Demo repo sync" for how those fit together.
+A public, read-only demo is live at https://ux-research.joshuabock.com.
 
-Two things remain before this is fully live, both blocked on the CRUD UI's webhost deployment
-existing:
+It runs against `research-repo-demo`, a separate, private repo kept in sync with this repo's
+`research/`, `design-tokens/`, and `analytics/` content (plus the 20 deliverable folders and
+`requirements.txt`) — see AGENTS.md → "Demo repo sync" for the full sync mechanics.
 
-1. **The demo server's own fetch-only credential.** Whatever process pulls `research-repo-demo`
-   onto the demo server needs its own read-only credential to that repo — separate from
-   `DEMO_REPO_PAT`, which is scoped for the sync workflow's push access and shouldn't be reused
-   for this.
-2. **Scheduling `reset_demo.sh`.** Once the server exists, point an hourly cron entry (or
-   equivalent scheduler) at it from within its `research-repo-demo` checkout. If the demo
-   server's Python 3 interpreter isn't on `PATH` as `python3`, set `PYTHON_BIN` in that cron
-   entry's environment to override it — the script falls back to `python3` when unset.
-
-Also out of scope here: wiring the CRUD UI itself (pointing `AGENTIC_REPO_ROOT` at the demo repo
-path) — that's separate, already-scoped work for once an actual server exists.
+- **Sync:** `.github/workflows/sync-demo.yml` runs on a schedule (every 6 hours) and on
+  `workflow_dispatch`. On success it force-moves a fixed tag, `demo-baseline`, onto the synced
+  commit.
+- **Access:** the demo server pulls `research-repo-demo` with its own read-only deploy key on that
+  repo — separate from the `DEMO_REPO_PAT` repo secret, which the sync workflow uses for push
+  access and isn't reused here.
+- **Reset:** the demo resets hourly so it can't accumulate visitor edits. To wire this up on any
+  host with a checkout of `research-repo-demo`: schedule `research/scripts/reset_demo.sh` to run
+  hourly via cron, setting `PYTHON_BIN` in that cron entry's environment to the host's virtualenv
+  Python if `python3` on `PATH` isn't the right interpreter. The script force-fetches tags, resets
+  the checkout to `demo-baseline`, and rebuilds `research/_index.md`.
