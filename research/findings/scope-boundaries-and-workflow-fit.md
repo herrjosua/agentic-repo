@@ -31,8 +31,11 @@ related_findings:
 
 ## Overview
 Three sessions across the year are grouped here because their common output was a "don't build
-this yet, or don't build it here" conclusion — which the December executive retro specifically
-praised as valuable in its own right.
+this yet, or don't build it here" conclusion. The December executive retro praised this kind of
+scope discipline in general ("The stuff you told us not to build yet mattered as much as the stuff
+you told us to build"), but the only exclusions it named were behavioral health (covered below)
+and complex prior-auth cases (not part of this finding). It did not discuss the ED intake or
+SSO/MFA boundaries.
 
 - **ED intake (contextual inquiry, Apr 2025):** peak-hour interruption frequency (every 2-4 minutes)
   makes any AI tool requiring sustained review attention a poor fit for ED intake nurses
@@ -55,12 +58,15 @@ praised as valuable in its own right.
   near-term ambient scribe rollout as a result.
 
 Recommendation: keep these three exclusions as explicit, documented scope boundaries in the 2026
-roadmap (per the December retro) rather than informal assumptions that could quietly erode.
+roadmap rather than informal assumptions that could quietly erode. This is this finding's
+recommendation, not a retro action item — the retro's own recommendations were a formal metrics
+document and a cross-cutting findings section.
 
 ## Evidence Trail
 - **2025-04-22** — [Contextual Inquiry — Emergency Department Intake Shadowing](../raw/2025-04-22-contextual-inquiry-ed-intake-shadowing/session-notes.md) *(`contextual-inquiry`)*
 - **2025-05-20** — [Interview — IT Security on SSO/MFA Modernization Impact](../raw/2025-05-20-interview-it-security-sso-mfa-modernization/session-notes.md) *(`interview`)*
 - **2025-10-07** — [Contextual Inquiry — Behavioral Health Unit, Sensitive Note Handling](../raw/2025-10-07-contextual-inquiry-behavioral-health-sensitive-notes/session-notes.md) *(`contextual-inquiry`)*
+- **2025-12-16** — [Executive Steering Committee — Year-End Retro & 2026 Roadmap Input](../raw/2025-12-16-stakeholder-interview-executive-steering-committee-retro/session-notes.md) *(`interview`)* — cited for the scope-discipline praise only
 
 ## Related Findings
 - [AI Governance, PHI & Compliance](governance-and-phi.md)
