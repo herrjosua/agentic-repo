@@ -17,8 +17,8 @@ trust-calibration result to date (visible uncertainty, not raw accuracy, changed
 behavior).
 
 ## Notes
-Three-tier treatment: high-confidence lines render as default text with no marking (deliberately
-inviting skimming); medium-confidence lines get a subtle dotted underline; low-confidence lines
-get a solid underline plus an on-hover explanation. Deliberately avoids color-only signaling, per
-the cross-cutting accessibility finding — the tiers are distinguishable by underline style, not
-color alone.
+Two-state treatment, as tested in the 2026-01-13 GA-candidate round: high-confidence lines render
+as default text with no marking (deliberately inviting skimming); low-confidence lines get a
+subtle underline plus an on-hover explanation. There is no separate medium-confidence tier.
+Deliberately avoids color-only signaling, per the cross-cutting accessibility finding — flagged
+lines are distinguishable by the underline itself, not color alone.
