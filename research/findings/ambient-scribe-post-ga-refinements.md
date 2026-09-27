@@ -38,8 +38,8 @@ both worth closing before they harden into permanent gaps.
 - **Session lock during active dictation currently reads as silent data loss, even though it
   isn't.** The `locked` state's interaction with an in-progress recording was flagged as
   unresolved in `encounter-view`'s own notes, sourced from a May 2025 SSO/MFA interview side
-  comment. Direct observation confirms the practical impact: 4 of 5 clinicians assumed a locked
-  session had destroyed their draft and restarted dictation from scratch, even though the draft
+  comment. Direct observation confirms the practical impact: all 4 shadowed clinicians assumed a
+  locked session had destroyed their draft and restarted dictation from scratch, even though the draft
   is preserved server-side. IT Security confirmed the 10-minute idle-timeout policy itself is fixed, but an
   explicit "paused, draft preserved" state is a UI-only fix, not a policy change.
 - Both threads point the same direction: **the underlying safety/reliability behavior is already
@@ -49,7 +49,7 @@ both worth closing before they harden into permanent gaps.
 
 ## Evidence Trail
 - **2026-02-10** — [Usability Test — Ambient Scribe Sound-Alike Medication Flag Concept](../raw/2026-02-10-ambient-scribe-medication-flag-concept/session-notes.md) *(`usability-test`)*
-- **2026-02-17** — [Contextual Inquiry — Session Lock During Active Ambient Scribe Dictation](../raw/2026-02-17-session-lock-during-dictation/session-notes.md) *(`contextual-inquiry`)*
+- **2026-02-17** — [Contextual Inquiry — Session Lock During Active Ambient Scribe Dictation](../raw/2026-02-17-session-lock-during-dictation/session-notes.md) *(`contextual-inquiry`)* — 5 participants: 4 shadowed clinicians plus 1 IT Security stakeholder (see the session's [correction](../raw/2026-02-17-session-lock-during-dictation/correction-2026-09-27.md); the session notes say "5 clinicians")
 
 ## Related Findings
 - [Ambient AI Scribe](ambient-scribe.md)

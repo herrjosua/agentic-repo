@@ -32,7 +32,7 @@ that window, not when it triggers.
 2. **Idle timeout fires → Paused (new state)** — `encounter-view` moves to `locked`;
    `ambient-scribe-widget` moves to a new `paused-preserved` state showing "Session paused — your
    draft is saved. Re-authenticate to resume." Recording audio stops; draft is not discarded
-   client- or server-side. This replaces today's silent freeze, which 4 of 5 observed clinicians
+   client- or server-side. This replaces today's silent freeze, which all 4 observed clinicians
    misread as data loss.
 3. **Re-authenticate → Resume** — on successful SSO/MFA re-auth, `encounter-view` returns to
    `default`, `ambient-scribe-widget` returns to `recording` (if the clinician chooses to
