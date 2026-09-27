@@ -39,8 +39,9 @@ survey (Dec 2025).
   scheduling chatbot (see [patient-scheduling-chatbot.md](patient-scheduling-chatbot.md)), which is
   the first admin-facing, non-clinical feature nearing rollout — communications need to reach that
   audience before launch, not after.
-- The survey's directional sentiment comparison to the September burnout survey is noted but
-  flagged as not a clean apples-to-apples comparison (different question wording).
+- The survey's directional sentiment comparison to the February 2025 nursing attitudes survey is
+  noted but flagged as not a clean apples-to-apples comparison (different question wording). The
+  survey recommends re-running the exact February instrument if a clean trend is needed.
 
 Recommendation: use the unit-champion training model for the ambient scribe GA rollout (avoiding
 flu-season timing), and run a dedicated non-clinical-staff communications push before the
