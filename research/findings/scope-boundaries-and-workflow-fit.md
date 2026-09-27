@@ -43,7 +43,10 @@ praised as valuable in its own right.
   and nobody had yet defined what happens to an in-progress ambient scribe recording session if a
   forced re-auth interrupts it mid-visit. This was flagged as an unhandled edge case for the
   ambient scribe team (see [ambient-scribe.md](ambient-scribe.md)) rather than something to solve
-  in this session.
+  in this session. The 15-minute figure was a *planned* policy that was still disputed as of May
+  2025. By Feb 2026, IT Security described a 10-minute idle timeout as fixed policy (see
+  [ambient-scribe-post-ga-refinements.md](ambient-scribe-post-ga-refinements.md)). The raw notes
+  don't say whether that settles this dispute or is a separate idle-lock setting.
 - **Behavioral health (contextual inquiry, Oct 2025):** reiterated, independently, the same "no
   structured way to flag a 42 CFR Part 2-protected note" platform gap first identified in the July
   HIM research (see [him-coding-and-billing.md](him-coding-and-billing.md)) — and added a harder
