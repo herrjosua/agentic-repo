@@ -14,9 +14,12 @@ screens_count: 6
 Signup through first workspace created, v2 (post-research revisions).
 
 ## Steps
-1. Signup
-2. Basics (workspace name, team size)
-3. Calendar connect (now clearly marked required)
-4. Invite team (now shows draft/not-sent state)
-5. Preferences
-6. Review & finish
+Canonical step numbering for the onboarding wizard — Signup counts as step 1. Other onboarding
+records use these numbers.
+
+1. Step 1 — Signup
+2. Step 2 — Basics (workspace name, team size)
+3. Step 3 — Connect calendar (now clearly marked required)
+4. Step 4 — Invite your team (now shows draft/not-sent state)
+5. Step 5 — Preferences
+6. Step 6 — Review & finish

@@ -16,8 +16,8 @@ laptop while half-watching Slack.
 
 ## Panels
 1. Dana opens the signup link from an email, still reading a Slack message.
-2. She breezes through steps 1–2, barely reading.
-3. Step 3 — she stops, phone buzzes, she hesitates before adding real emails.
+2. She breezes through steps 1–3 (signup, basics, calendar), barely reading.
+3. Step 4 ("Invite your team") — she stops, phone buzzes, she hesitates before adding real emails.
 4. She adds one test email first to see what happens (current design gives
    her no way to do this safely).
 5. Relief when nothing sends immediately — but she wasn't sure until then.

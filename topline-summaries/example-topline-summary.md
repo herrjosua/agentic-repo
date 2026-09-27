@@ -11,12 +11,12 @@ session_dates: ["2026-01-19", "2026-01-20", "2026-01-21"]
 ---
 
 ## Quick takeaways
-- All 3 participants paused at step 3 ("Invite your team") — unsure whether
+- All 3 participants paused at step 4 ("Invite your team") — unsure whether
   invites send immediately or wait until setup is finished.
-- 2 of 3 tried to skip step 2 ("Connect calendar") entirely, assuming it was
+- 2 of 3 tried to skip step 3 ("Connect calendar") entirely, assuming it was
   optional even though it's required.
 - Nobody read the sidebar progress indicator — all navigated by scrolling.
 
 ## Open questions
-- Is the step-3 hesitation about wording, or about not trusting the system
+- Is the step-4 (invite) hesitation about wording, or about not trusting the system
   yet this early in the relationship? Watch for this in sessions 4–6.

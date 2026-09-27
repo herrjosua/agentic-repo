@@ -17,5 +17,5 @@ they trigger: account creation, workspace provisioning, and calendar OAuth.
 ## Map
 Signup form -> Account Service (sync) -> Workspace Provisioning (async, ~8s
 average) -> Calendar OAuth (external, Google/Outlook) -> Invite Service
-(sends on submit, not on step completion — this is the source of the step-3
-"does this send now?" confusion identified in the usability study).
+(sends on submit, not on step completion — this is the source of the step-4
+("Invite your team") "does this send now?" confusion identified in the usability study).

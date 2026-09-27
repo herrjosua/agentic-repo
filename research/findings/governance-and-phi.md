@@ -30,9 +30,9 @@ related_findings:
 # AI Governance, PHI & Compliance
 
 ## Overview
-This is the connective tissue for the whole program: four executive-level sessions across the
-year, from initial kickoff (Jan 2025) to year-end retro (Dec 2025), plus a Privacy Officer
-interview (Mar 2025) and a CMIO interview (Aug 2025) in between.
+This is the connective tissue for the whole program: four sessions across the year — two
+executive-level sessions, the initial kickoff (Jan 2025) and the year-end retro (Dec 2025), with a
+Privacy Officer interview (Mar 2025) and a CMIO interview (Aug 2025) in between.
 
 - **The shared-metrics gap identified in January was real and took all year to close.** At kickoff,
   the CIO and VP Clinical Informatics couldn't agree on what "success" meant. By December's retro,

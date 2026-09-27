@@ -13,8 +13,8 @@ presented_to: ["Product Team", "CX Team"]
 ## Summary
 Across all 6 onboarding usability sessions (Jan 19-23, 2026), the single largest source of
 first-time-setup friction is step 3 ("Connect calendar") reading as optional when it's actually
-required — all 3 participants observed in sessions 1-3 paused there, and 2 of 3 attempted to skip
-it outright. This is independently corroborated by the Jan 2026 funnel export, which shows step 3
+required — 2 of 3 participants in sessions 1-3 attempted to skip it outright, and sessions 4-6
+read it as optional in the same way. This is independently corroborated by the Jan 2026 funnel export, which shows step 3
 as the largest drop-off point in the wizard.
 
 ## Key findings
@@ -27,7 +27,8 @@ as the largest drop-off point in the wizard.
 ## Recommendations
 1. Relabel step 3 to state plainly that calendar connection is required before later functionality
    works.
-2. Give visible feedback that invites (entered in step 4) aren't sent until the whole wizard is
-   submitted — addressing a related hesitation seen in sessions 4-6.
+2. Give visible feedback that invites (entered in step 4, "Invite your team") aren't sent until
+   the whole wizard is submitted — addressing a related hesitation seen in session 3 and the
+   sessions 1-3 topline.
 3. Retest step 3 specifically once the wording change ships, per `research/findings/onboarding.md`'s
    status note.

@@ -40,7 +40,7 @@ both worth closing before they harden into permanent gaps.
   unresolved in `encounter-view`'s own notes, sourced from a May 2025 SSO/MFA interview side
   comment. Direct observation confirms the practical impact: 4 of 5 clinicians assumed a locked
   session had destroyed their draft and restarted dictation from scratch, even though the draft
-  is preserved server-side. IT Security confirmed the idle-timeout policy itself is fixed, but an
+  is preserved server-side. IT Security confirmed the 10-minute idle-timeout policy itself is fixed, but an
   explicit "paused, draft preserved" state is a UI-only fix, not a policy change.
 - Both threads point the same direction: **the underlying safety/reliability behavior is already
   correct (drafts are preserved; sound-alike names are technically detectable) — what's missing is

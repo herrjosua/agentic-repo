@@ -12,5 +12,5 @@ stack: ""
 ---
 
 Click-through prototype covering the full reworked onboarding flow,
-steps 1–6, including the step 3 draft/not-sent state. Used for the Feb 28
+steps 1–6, including the step 4 ("Invite your team") draft/not-sent state. Used for the Feb 28
 stakeholder walkthrough and as the reference for the v2 usability re-test.

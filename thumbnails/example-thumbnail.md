@@ -6,7 +6,7 @@ designer: Sam Okafor
 tags: ["onboarding", "thumbnails"]
 related_findings: []
 source_type: native
-concept: "Reworking step 3 (invite team) to remove the 'is this sending now' ambiguity"
+concept: "Reworking step 4 (invite team) to remove the 'is this sending now' ambiguity"
 related_wireframes: ["wireframes/workspace-setup-step3.md"]
 ---
 
