@@ -1,5 +1,5 @@
 ---
-title: "Workspace Setup — Step 3 Mockup"
+title: "Workspace Setup — Step 4 (Invite Your Team) Mockup"
 date: 2026-02-26
 status: in-review
 designer: Sam Okafor
@@ -11,7 +11,7 @@ figma_url: ""
 ---
 
 ## Overview
-Hi-fi visual design for the reworked step 3, matching the wireframe and
+Hi-fi visual design for the reworked step 4 ("Invite your team"), matching the wireframe and
 brand style guide.
 
 ## Notes

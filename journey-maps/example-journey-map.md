@@ -15,11 +15,11 @@ Follows Dana from receiving the "set up Fernway" task through first
 successful workspace creation.
 
 ## Stages
-1. **Signup** — Confident, low effort.
-2. **Step 1–2 (Basics, Calendar)** — Still confident; pauses briefly at
+1. **Step 1 (Signup)** — Confident, low effort.
+2. **Steps 2–3 (Basics, Connect calendar)** — Still confident; pauses briefly at
    calendar connection, unsure if required, proceeds anyway.
-3. **Step 3 (Invite team)** — Anxious — worried invites are sending before
+3. **Step 4 (Invite your team)** — Anxious — worried invites are sending before
    she's ready. Stalls here longest of any step.
-4. **Step 4–5 (Preferences, Review)** — Relief; the hard part felt over.
+4. **Steps 5–6 (Preferences, Review & finish)** — Relief; the hard part felt over.
 5. **Completion** — Mild surprise the setup is actually done — no strong
    confirmation moment.
