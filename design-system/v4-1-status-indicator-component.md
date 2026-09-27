@@ -12,9 +12,11 @@ related_style_guide: ""
 
 ## Overview
 Snapshot of the shared component library as of v4.1, adding a single `status-indicator` component
-(icon + text-label variants: needs-attention / in-progress / resolved) to replace the three
-independent color-only status-dot instances confirmed in
-`accessibility-screenings/status-indicator-remediation-screening.md`.
+(icon + text-label variants: needs-attention / in-progress / resolved) to replace the color-only
+status-dot markup in the two live components confirmed in
+`accessibility-screenings/status-indicator-remediation-screening.md` (`care-gap-badge` and
+`alert-triage-queue`) — the shared root behind the color-only pattern found in all three 2025
+accessibility audits (legacy console, design system library, mobile app).
 
 ## Components
 `status-indicator` (new) — replaces the bespoke dot markup in `care-gap-badge` and
