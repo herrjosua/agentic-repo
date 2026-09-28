@@ -15,6 +15,7 @@ tags:
   - survey
   - trust-in-ai
   - usability
+  - project-cross-cutting
 related_components:
   - ambient-scribe-widget
   - care-gap-badge

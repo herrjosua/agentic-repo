@@ -3,7 +3,7 @@ title: "Onboarding & Account Provisioning — Service Topology"
 date: 2026-02-10
 status: in-review
 designer: Sam Okafor
-tags: ["onboarding", "service-blueprint"]
+tags: ["onboarding", "service-blueprint", "project-onboarding"]
 related_findings: []
 source_type: native
 scope: "Signup through first workspace creation"

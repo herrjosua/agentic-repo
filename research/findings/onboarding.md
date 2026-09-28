@@ -4,7 +4,7 @@ date: 2026-02-03
 type: synthesis
 status: synthesized
 researcher: Priya Patel
-tags: [onboarding]
+tags: [onboarding, project-onboarding]
 related_components: []
 related_findings: []
 related_analytics: [onboarding-funnel-dropoff]

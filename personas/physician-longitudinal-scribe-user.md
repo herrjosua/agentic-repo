@@ -7,6 +7,7 @@ tags:
   - persona
   - longitudinal
   - trust-in-ai
+  - project-ambient-scribe
 related_findings:
   - ../research/findings/ambient-scribe.md
   - ../research/findings/ambient-scribe-post-ga-refinements.md

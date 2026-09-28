@@ -11,6 +11,7 @@ tags:
   - utilization-management
   - v1
   - v2
+  - project-prior-auth
 related_components:
   - prior-auth-drafting-panel
 related_findings:

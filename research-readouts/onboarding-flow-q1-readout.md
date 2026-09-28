@@ -3,7 +3,7 @@ title: "Onboarding Flow — Q1 Readout"
 date: 2026-02-02
 status: final
 designer: Sam Okafor
-tags: ["onboarding", "readout", "q1"]
+tags: ["onboarding", "readout", "q1", "project-onboarding"]
 related_findings: ["onboarding"]
 source_type: native
 related_analytics: ["onboarding-funnel-dropoff"]

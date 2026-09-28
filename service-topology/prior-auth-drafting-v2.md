@@ -3,7 +3,7 @@ title: "AI-Assisted Prior Authorization Drafting — Service Topology (v2)"
 date: 2025-11-20
 status: final
 designer: Sam Okafor
-tags: ["prior-auth", "utilization-management", "v2", "service-blueprint"]
+tags: ["prior-auth", "utilization-management", "v2", "service-blueprint", "project-prior-auth"]
 related_findings: ["../research/findings/prior-authorization.md"]
 source_type: native
 scope: "AI-drafted prior authorization justification, from encounter chart to UM submission"

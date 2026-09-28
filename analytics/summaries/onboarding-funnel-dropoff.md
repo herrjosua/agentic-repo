@@ -4,7 +4,7 @@ date: 2026-01-28
 type: synthesis
 status: synthesized
 researcher: Jordan Lee
-tags: [onboarding, funnel]
+tags: [onboarding, funnel, project-onboarding]
 related_findings: [onboarding]
 ---
 

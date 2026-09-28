@@ -3,7 +3,7 @@ title: "Onboarding Flow v2 — Click-through"
 date: 2026-02-27
 status: final
 designer: Sam Okafor
-tags: ["onboarding", "prototype"]
+tags: ["onboarding", "prototype", "project-onboarding"]
 related_findings: ["onboarding"]
 source_type: figma-link
 type: "clickthrough"

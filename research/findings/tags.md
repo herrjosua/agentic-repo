@@ -74,6 +74,15 @@ Canonical list of tags used across `raw/` and `findings/` frontmatter. `build_in
 - **`phi`** — Protected Health Information handling, exposure, or risk.
 - **`prior-auth`** — Prior authorization workflow for utilization management.
 - **`privacy`** — Data privacy topics not specific to a single regulation (contrast with `hipaa`, `phi`).
+- **`project-ambient-scribe`** — Project tag: Ambient AI Scribe. Every record carries exactly one `project-*` tag; see `docs/projects.md` and `research/projects.yml`.
+- **`project-care-coordination`** — Project tag: Care Coordination & Alert Triage.
+- **`project-clinician-dashboard`** — Project tag: Clinician Dashboard.
+- **`project-cross-cutting`** — Project tag: program-level work belonging to no single project.
+- **`project-design-system`** — Project tag: Design System (component library, style guide, and their audits).
+- **`project-him`** — Project tag: HIM Coding, Billing & Release of Information.
+- **`project-onboarding`** — Project tag: Onboarding (first-run workspace setup).
+- **`project-patient-chatbot`** — Project tag: Patient Scheduling Chatbot.
+- **`project-prior-auth`** — Project tag: AI-Assisted Prior Authorization.
 - **`prototype`** — Click-through or coded prototype deliverable (feature-002 `prototypes/`, stub-only).
 - **`pulse`** — A short, lightweight recurring survey instrument.
 - **`q1`** — Work scoped to the first calendar quarter.

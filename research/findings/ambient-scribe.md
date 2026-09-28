@@ -12,6 +12,7 @@ tags:
   - usability
   - v0.1
   - v0.2
+  - project-ambient-scribe
 related_components:
   - ambient-scribe-widget
   - encounter-view

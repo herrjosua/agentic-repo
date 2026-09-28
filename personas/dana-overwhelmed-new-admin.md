@@ -3,7 +3,7 @@ title: "Dana — The Overwhelmed New Admin"
 date: 2026-02-12
 status: final
 designer: Sam Okafor
-tags: ["onboarding", "persona"]
+tags: ["onboarding", "persona", "project-onboarding"]
 related_findings: ["onboarding"]
 source_type: native
 segment: "First-time workspace admin"

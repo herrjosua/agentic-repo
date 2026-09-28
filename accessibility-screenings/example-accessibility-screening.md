@@ -3,7 +3,7 @@ title: "Onboarding Wizard — Accessibility Screening"
 date: 2026-02-06
 status: final
 designer: Sam Okafor
-tags: ["onboarding", "accessibility"]
+tags: ["onboarding", "accessibility", "project-onboarding"]
 related_findings: []
 source_type: native
 wcag_level: "AA"

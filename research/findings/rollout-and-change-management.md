@@ -12,6 +12,7 @@ tags:
   - survey
   - training
   - year-end
+  - project-cross-cutting
 related_components:
   - patient-chatbot-widget
 related_findings:

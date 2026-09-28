@@ -2,7 +2,7 @@
 title: "Onboarding Wizard — Heuristic Evaluation"
 date: 2026-02-05
 status: final
-tags: ["onboarding", "heuristic-evaluation"]
+tags: ["onboarding", "heuristic-evaluation", "project-onboarding"]
 related_findings: ["onboarding"]
 source_type: native
 method: "heuristic-evaluation"

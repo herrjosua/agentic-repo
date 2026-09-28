@@ -3,7 +3,7 @@ title: "Ambient Scribe GA Release Candidate — Click-through Prototype"
 date: 2025-12-10
 status: final
 designer: Sam Okafor
-tags: ["ambient-scribe", "ga-release", "prototype"]
+tags: ["ambient-scribe", "ga-release", "prototype", "project-ambient-scribe"]
 related_findings: ["../research/findings/ambient-scribe.md"]
 source_type: figma-link
 type: "clickthrough"

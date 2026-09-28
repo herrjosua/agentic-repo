@@ -4,4 +4,4 @@ Maintained by `research/scripts/build_index.py`. Flat table of synthesized analy
 
 | Summary | Tool | Tags | Related Findings | Last Updated |
 |---|---|---|---|---|
-| [Onboarding funnel — drop-off analysis](summaries/onboarding-funnel-dropoff.md) | — | funnel, onboarding | ../research/findings/onboarding | 2026-01-28 |
+| [Onboarding funnel — drop-off analysis](summaries/onboarding-funnel-dropoff.md) | — | funnel, onboarding, project-onboarding | ../research/findings/onboarding | 2026-01-28 |

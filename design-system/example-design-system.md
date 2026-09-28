@@ -3,7 +3,7 @@ title: "Design System — v3.2 Snapshot"
 date: 2026-02-28
 status: final
 designer: Sam Okafor
-tags: ["design-system"]
+tags: ["design-system", "project-design-system"]
 related_findings: []
 source_type: native
 version: "v3.2"

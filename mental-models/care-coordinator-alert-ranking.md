@@ -3,7 +3,7 @@ title: "Care Coordinators' Mental Model of Alert Ranking"
 date: 2025-09-05
 status: final
 designer: Sam Okafor
-tags: ["care-coordination", "alert-triage", "alert-fatigue", "workflow"]
+tags: ["care-coordination", "alert-triage", "alert-fatigue", "workflow", "project-care-coordination"]
 related_findings: ["../research/findings/care-coordination-triage.md"]
 source_type: native
 scope: "Alert triage ranking in the care-coordination queue"

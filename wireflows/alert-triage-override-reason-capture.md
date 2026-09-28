@@ -3,7 +3,7 @@ title: "Alert Triage Override — Reason-Capture Wireflow"
 date: 2025-09-15
 status: in-review
 designer: Sam Okafor
-tags: ["care-coordination", "alert-triage", "alert-fatigue", "wireflow", "workflow"]
+tags: ["care-coordination", "alert-triage", "alert-fatigue", "wireflow", "workflow", "project-care-coordination"]
 related_findings: ["../research/findings/care-coordination-triage.md"]
 source_type: native
 flow_name: "Alert override with reason capture, addressing the missing override-reason gap"

@@ -273,6 +273,7 @@ def patch_roots(fake_repo, monkeypatch):
             "ANALYTICS_SUMMARIES_ROOT": fake_repo / "analytics" / "summaries",
             "ANALYTICS_INDEX_FILE": fake_repo / "analytics" / "_index.md",
             "COMPONENTS_ROOT": fake_repo / "design-tokens" / "components",
+            "PROJECTS_FILE": research / "projects.yml",
             "OUTPUT_FILE": research / "search.html",
         }.items():
             if hasattr(mod, name):

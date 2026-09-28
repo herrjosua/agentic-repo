@@ -3,7 +3,7 @@ title: "Design System — v4.1 Snapshot (Shared Status-Indicator Component)"
 date: 2026-01-22
 status: final
 designer: Sam Okafor
-tags: ["design-system", "accessibility", "wcag", "components"]
+tags: ["design-system", "accessibility", "wcag", "components", "project-design-system"]
 related_findings: ["../research/findings/accessibility-cross-cutting.md"]
 source_type: native
 version: "v4.1"

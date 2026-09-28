@@ -1,0 +1,92 @@
+# Canonical project list, plus the project assignment for the two record kinds whose own files
+# can't carry a project tag: raw sessions (research/raw/ is append-only) and components
+# (design-tokens/components/ is generated output). Every other record kind — findings,
+# analytics summaries, deliverables — carries its project-* tag in its own `tags:` frontmatter.
+#
+# build_search_ui.py / export_records.py append the mapped tag to raw and component records at
+# load time; an unmapped entry falls back to project-cross-cutting with a warning.
+# build_index.py (and --check) fails on any unmapped, stale, or unknown entry.
+#
+# See docs/projects.md for the rules and per-project counts. Every id here must also be defined
+# in research/findings/tags.md.
+
+projects:
+  - id: project-ambient-scribe
+    label: Ambient AI Scribe
+    description: Ambient documentation scribe, v0.1 through GA and post-GA refinements.
+  - id: project-onboarding
+    label: Onboarding
+    description: First-run workspace setup flow for new admins.
+  - id: project-care-coordination
+    label: Care Coordination & Alert Triage
+    description: AI alert ranking and chart-review summaries for care coordinators.
+  - id: project-design-system
+    label: Design System
+    description: Shared component library, style guide, and their audits.
+  - id: project-prior-auth
+    label: AI-Assisted Prior Authorization
+    description: Prior-auth drafting for utilization management, v1 and v2.
+  - id: project-him
+    label: HIM Coding, Billing & Release of Information
+    description: AI coding suggestions and ROI redaction for Health Information Management.
+  - id: project-patient-chatbot
+    label: Patient Scheduling Chatbot
+    description: Patient-facing scheduling chatbot and scheduling widget.
+  - id: project-clinician-dashboard
+    label: Clinician Dashboard
+    description: Clinician home dashboard redesign and its care-gap flags.
+  - id: project-cross-cutting
+    label: Cross-cutting
+    description: Program-level work that belongs to no single project (governance, baselines, scope, rollout, platform).
+
+raw:
+  2025-01-14-stakeholder-interview-ai-strategy-kickoff: project-cross-cutting
+  2025-01-29-contextual-inquiry-chart-review-baseline: project-care-coordination
+  2025-02-11-survey-nursing-attitudes-ai-documentation: project-cross-cutting
+  2025-02-25-usability-test-ambient-scribe-v01: project-ambient-scribe
+  2025-03-10-accessibility-audit-legacy-extjs-admin-console: project-cross-cutting
+  2025-03-24-interview-privacy-officer-deidentification-requirements: project-cross-cutting
+  2025-04-08-usability-test-prior-auth-ai-v1: project-prior-auth
+  2025-04-22-contextual-inquiry-ed-intake-shadowing: project-cross-cutting
+  2025-05-06-usability-test-clinician-dashboard-redesign-v1: project-clinician-dashboard
+  2025-05-20-interview-it-security-sso-mfa-modernization: project-cross-cutting
+  2025-06-03-survey-patient-portal-ai-chatbot-trust: project-patient-chatbot
+  2025-06-17-usability-test-patient-chatbot-prototype: project-patient-chatbot
+  2025-07-01-accessibility-audit-new-design-system-components: project-design-system
+  2025-07-15-contextual-inquiry-him-release-of-information: project-him
+  2025-07-29-usability-test-ai-coding-billing-suggestions: project-him
+  2025-08-12-interview-cmio-ai-generated-content-governance: project-cross-cutting
+  2025-08-26-usability-test-alert-triage-ai-care-coordination: project-care-coordination
+  2025-09-09-survey-clinician-burnout-documentation-burden-baseline: project-cross-cutting
+  2025-09-23-usability-test-ambient-scribe-v02: project-ambient-scribe
+  2025-10-07-contextual-inquiry-behavioral-health-sensitive-notes: project-cross-cutting
+  2025-10-21-interview-training-department-rollout-change-management: project-cross-cutting
+  2025-11-04-usability-test-prior-auth-ai-v2: project-prior-auth
+  2025-11-18-accessibility-audit-mobile-clinician-app: project-cross-cutting
+  2025-12-02-survey-allstaff-ai-readiness-pulse: project-cross-cutting
+  2025-12-16-stakeholder-interview-executive-steering-committee-retro: project-cross-cutting
+  2026-01-13-usability-test-ambient-scribe-ga-release-candidate: project-ambient-scribe
+  2026-01-19-onboarding-usability-test: project-onboarding
+  2026-01-27-dashboard-review-ambient-scribe-ga-adoption: project-ambient-scribe
+  2026-02-10-ambient-scribe-medication-flag-concept: project-ambient-scribe
+  2026-02-17-session-lock-during-dictation: project-ambient-scribe
+
+components:
+  admin-console-grid: project-cross-cutting
+  alert-badge: project-cross-cutting
+  alert-triage-queue: project-care-coordination
+  ambient-scribe-widget: project-ambient-scribe
+  care-gap-badge: project-clinician-dashboard
+  chart-review-summary-panel: project-care-coordination
+  clinician-dashboard: project-clinician-dashboard
+  coding-suggestion-panel: project-him
+  design-system-form-field: project-design-system
+  design-system-modal: project-design-system
+  ed-intake-form: project-cross-cutting
+  encounter-view: project-ambient-scribe
+  mobile-app-alert-list: project-care-coordination
+  patient-chatbot-widget: project-patient-chatbot
+  prior-auth-drafting-panel: project-prior-auth
+  roi-redaction-tool: project-him
+  scheduling-widget: project-patient-chatbot
+  sso-mfa-login: project-cross-cutting

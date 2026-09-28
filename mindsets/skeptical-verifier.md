@@ -3,7 +3,7 @@ title: "The Skeptical Verifier"
 date: 2025-12-01
 status: final
 designer: Sam Okafor
-tags: ["trust-in-ai", "ambient-scribe", "prior-auth", "coding", "him"]
+tags: ["trust-in-ai", "ambient-scribe", "prior-auth", "coding", "him", "project-cross-cutting"]
 related_findings: ["../research/findings/him-coding-and-billing.md", "../research/findings/prior-authorization.md", "../research/findings/ambient-scribe-post-ga-refinements.md"]
 source_type: native
 segment: "Wants explicit, visible verification affordances for any AI output before relying on it — regardless of clinical role"

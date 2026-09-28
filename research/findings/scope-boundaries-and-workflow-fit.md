@@ -19,6 +19,7 @@ tags:
   - sensitive-notes
   - sso
   - workflow
+  - project-cross-cutting
 related_components:
   - ambient-scribe-widget
   - ed-intake-form

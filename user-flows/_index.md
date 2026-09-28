@@ -4,5 +4,5 @@ Maintained by `research/scripts/build_index.py`. Flat table of files in `user-fl
 
 | Title | Status | Tags | Source Type | Last Updated | Related Findings |
 |---|---|---|---|---|---|
-| [Onboarding Flow — v2](onboarding-flow.md) | in-review | onboarding, user-flow | native | 2026-02-20 | — |
-| [Ambient Scribe — Session Lock Recovery](ambient-scribe-session-lock-recovery.md) | in-review | ambient-scribe, mfa, sso, user-flow | native | 2026-02-25 | ../research/findings/ambient-scribe-post-ga-refinements.md |
+| [Onboarding Flow — v2](onboarding-flow.md) | in-review | onboarding, project-onboarding, user-flow | native | 2026-02-20 | — |
+| [Ambient Scribe — Session Lock Recovery](ambient-scribe-session-lock-recovery.md) | in-review | ambient-scribe, mfa, project-ambient-scribe, sso, user-flow | native | 2026-02-25 | ../research/findings/ambient-scribe-post-ga-refinements.md |

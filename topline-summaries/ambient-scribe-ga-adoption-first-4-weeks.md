@@ -3,7 +3,7 @@ title: "Ambient Scribe GA Candidate — First 4 Weeks Adoption Topline"
 date: 2026-01-28
 status: final
 designer: Sam Okafor
-tags: ["ambient-scribe", "ga-release", "dashboard", "longitudinal"]
+tags: ["ambient-scribe", "ga-release", "dashboard", "longitudinal", "project-ambient-scribe"]
 related_findings: ["../research/findings/ambient-scribe.md"]
 source_type: native
 related_plan: ""

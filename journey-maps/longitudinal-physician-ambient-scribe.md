@@ -3,7 +3,7 @@ title: "The Longitudinal Physician — Ambient Scribe Journey (v0.1 to Post-GA)"
 date: 2026-02-27
 status: final
 designer: Sam Okafor
-tags: ["ambient-scribe", "persona", "journey-map", "longitudinal", "trust-in-ai"]
+tags: ["ambient-scribe", "persona", "journey-map", "longitudinal", "trust-in-ai", "project-ambient-scribe"]
 related_findings: ["../research/findings/ambient-scribe.md", "../research/findings/ambient-scribe-post-ga-refinements.md"]
 source_type: native
 persona_ref: "personas/physician-longitudinal-scribe-user.md"

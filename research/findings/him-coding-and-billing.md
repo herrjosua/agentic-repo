@@ -13,6 +13,7 @@ tags:
   - release-of-information
   - usability
   - workflow
+  - project-him
 related_components:
   - coding-suggestion-panel
   - roi-redaction-tool

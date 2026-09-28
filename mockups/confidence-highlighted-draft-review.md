@@ -3,7 +3,7 @@ title: "Confidence-Highlighted Draft Review — Hi-Fi Mockup (GA Candidate)"
 date: 2026-01-05
 status: final
 designer: Sam Okafor
-tags: ["ambient-scribe", "trust-in-ai", "documentation"]
+tags: ["ambient-scribe", "trust-in-ai", "documentation", "project-ambient-scribe"]
 related_findings: ["../research/findings/ambient-scribe.md"]
 source_type: native
 fidelity: "hi-fi"
