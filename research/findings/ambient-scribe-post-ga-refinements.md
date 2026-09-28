@@ -12,6 +12,7 @@ tags:
   - mfa
   - phi
   - longitudinal
+  - project-ambient-scribe
 related_components:
   - ambient-scribe-widget
   - encounter-view

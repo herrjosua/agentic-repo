@@ -4,4 +4,4 @@ Maintained by `research/scripts/build_index.py`. Flat table of files in `researc
 
 | Title | Status | Tags | Source Type | Last Updated | Related Findings |
 |---|---|---|---|---|---|
-| [Onboarding Flow — Q1 Readout](onboarding-flow-q1-readout.md) | final | onboarding, q1, readout | native | 2026-02-02 | ../research/findings/onboarding |
+| [Onboarding Flow — Q1 Readout](onboarding-flow-q1-readout.md) | final | onboarding, project-onboarding, q1, readout | native | 2026-02-02 | ../research/findings/onboarding |

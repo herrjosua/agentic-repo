@@ -11,6 +11,7 @@ tags:
   - survey
   - trust
   - usability
+  - project-patient-chatbot
 related_components:
   - patient-chatbot-widget
   - scheduling-widget

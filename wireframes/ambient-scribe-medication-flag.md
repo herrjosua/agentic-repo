@@ -6,6 +6,7 @@ tags:
   - ambient-scribe
   - medication-safety
   - wireframe
+  - project-ambient-scribe
 related_findings:
   - ../research/findings/ambient-scribe-post-ga-refinements.md
 source_type: native

@@ -12,6 +12,7 @@ tags:
   - chart-review
   - usability
   - workflow
+  - project-care-coordination
 related_components:
   - alert-triage-queue
   - chart-review-summary-panel

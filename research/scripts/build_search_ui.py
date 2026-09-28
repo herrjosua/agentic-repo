@@ -38,9 +38,13 @@ except ImportError:
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_index import (  # noqa: E402  (shared per-record loader)
+    CROSS_CUTTING_PROJECT,
     DELIVERABLE_FOLDERS,  # noqa: E402  (shared source of truth for the 20 folders)
+    ProjectsError,
     RecordError,
+    load_projects,
     load_record,
+    project_tags,
     skip_record,
 )
 from md_render import render_markdown  # noqa: E402  (local helper, see md_render.py)
@@ -145,7 +149,36 @@ def _load(path, record_id):
         return None
 
 
+def _load_projects_tolerant():
+    """load_projects(), but an unreadable projects.yml is a warning, not a crash: every raw
+    session and component then falls back to project-cross-cutting (build_index.py fails on it)."""
+    try:
+        return load_projects()
+    except ProjectsError as e:
+        print(f"⚠️  {e} — raw sessions and components fall back to {CROSS_CUTTING_PROJECT}", file=sys.stderr)
+        return dict(projects={}, raw={}, components={})
+
+
+def _with_project(tags, projects, section, name):
+    """`tags` with the project-* tag research/projects.yml assigns raw session folder or
+    component slug `name` (see docs/projects.md). projects.yml is the only source of a raw or
+    component record's project, so any project-* tag already in the file's own frontmatter (e.g.
+    written back by a CRUD UI edit) is replaced, keeping exactly one. Unmapped or unknown falls
+    back to project-cross-cutting with a warning — the record is never dropped; build_index.py
+    is the strict gate. Returns `tags` unchanged when projects.yml doesn't exist."""
+    if projects is None:
+        return tags
+    project = projects[section].get(name)
+    if project not in projects["projects"]:
+        print(f"⚠️  {section} {name!r} has no known project in research/projects.yml — "
+              f"using {CROSS_CUTTING_PROJECT}", file=sys.stderr)
+        project = CROSS_CUTTING_PROJECT
+    own = set(project_tags(tags))
+    return [t for t in tags if t not in own] + [project]
+
+
 def build_raw_records():
+    projects = _load_projects_tolerant()
     records = []
     for session_path in sorted(glob.glob(str(RAW_ROOT / "*" / "session-notes.md"))):
         folder = Path(session_path).parent
@@ -170,7 +203,7 @@ def build_raw_records():
             date=_str(meta.get("date", "")),
             type=meta.get("type", ""),
             status=meta.get("status", ""),
-            tags=meta.get("tags", []),
+            tags=_with_project(meta.get("tags", []), projects, "raw", folder.name),
             related_components=meta.get("related_components", []),
             severity=meta.get("severity_summary", {}),
             **_edit_fields(meta),
@@ -214,6 +247,7 @@ def build_component_records():
     records = []
     if not COMPONENTS_ROOT.exists():
         return records
+    projects = _load_projects_tolerant()
     for path in sorted(glob.glob(str(COMPONENTS_ROOT / "*.md"))):
         post = _load(path, f"component:{Path(path).stem}")
         if post is None:
@@ -228,7 +262,7 @@ def build_component_records():
             date=meta.get("generated_from", ""),  # components don't carry a date; show provenance instead
             type="component",
             status=meta.get("status", ""),
-            tags=[],
+            tags=_with_project([], projects, "components", Path(path).stem),
             related_components=[],
             severity={},
             **_edit_fields(meta),

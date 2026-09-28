@@ -3,7 +3,7 @@ title: "Time-Pressed First-Time Admin"
 date: 2026-02-13
 status: final
 designer: Sam Okafor
-tags: ["onboarding", "mindset"]
+tags: ["onboarding", "mindset", "project-onboarding"]
 related_findings: []
 source_type: native
 segment: "Time-pressed, delegated the task, wants to finish fast"

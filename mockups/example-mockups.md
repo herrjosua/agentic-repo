@@ -3,7 +3,7 @@ title: "Workspace Setup — Step 4 (Invite Your Team) Mockup"
 date: 2026-02-26
 status: in-review
 designer: Sam Okafor
-tags: ["onboarding", "mockup"]
+tags: ["onboarding", "mockup", "project-onboarding"]
 related_findings: ["onboarding"]
 source_type: native
 fidelity: "hi-fi"

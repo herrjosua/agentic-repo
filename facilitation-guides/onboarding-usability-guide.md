@@ -3,7 +3,7 @@ title: "Onboarding Usability Study — Facilitation Guide"
 date: 2026-01-16
 status: final
 designer: Sam Okafor
-tags: ["onboarding", "usability"]
+tags: ["onboarding", "usability", "project-onboarding"]
 related_findings: []
 source_type: native
 related_plan: "research-plans/onboarding-usability-study-q1.md"

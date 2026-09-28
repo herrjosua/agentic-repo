@@ -7,6 +7,7 @@ tags:
   - sso
   - mfa
   - user-flow
+  - project-ambient-scribe
 related_findings:
   - ../research/findings/ambient-scribe-post-ga-refinements.md
 source_type: native

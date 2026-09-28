@@ -71,6 +71,15 @@ be valid, and each has a different scope — don't add one to a file type it isn
   `ambient-scribe-session-lock-recovery.md` deliverable. Don't add it repo-wide as a default
   field; add it only when a genuine review pass happened on that specific file.
 
+## Project tags
+Every record carries exactly one `project-*` tag (or `project-cross-cutting`) so the CRUD UI's
+project filter works. Findings, analytics summaries, and deliverables carry it in their own
+`tags:`. Raw sessions and components get theirs from `research/projects.yml` instead — never add
+one to a `raw/` file. `new_research_session.py` maps a new raw session as `project-cross-cutting`
+automatically; reassign it there once its project is known. A component (or a raw folder made by
+hand) needs its line added yourself — `build_index.py` warns until you do, and `--check` fails.
+See `docs/projects.md` for the project list and rules.
+
 ## Retrieval strategy
 Search `findings/` first (grep/glob + frontmatter tags), including each finding's
 `related_analytics` links. Fall back to `raw/` or `analytics/summaries/` only to verify or quote a

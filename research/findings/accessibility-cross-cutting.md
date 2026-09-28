@@ -15,6 +15,7 @@ tags:
   - motor-impairment
   - section-508
   - wcag
+  - project-cross-cutting
 related_components:
   - admin-console-grid
   - alert-triage-queue

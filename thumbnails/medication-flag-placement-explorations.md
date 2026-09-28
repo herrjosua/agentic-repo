@@ -3,7 +3,7 @@ title: "Sound-Alike Medication Flag — Placement Explorations"
 date: 2026-02-08
 status: final
 designer: Sam Okafor
-tags: ["ambient-scribe", "medication-safety", "thumbnails"]
+tags: ["ambient-scribe", "medication-safety", "thumbnails", "project-ambient-scribe"]
 related_findings: ["../research/findings/ambient-scribe-post-ga-refinements.md"]
 source_type: native
 concept: "Placement options for the sound-alike medication flag, tested against a margin-badge alternative"

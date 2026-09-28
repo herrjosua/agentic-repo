@@ -4,4 +4,4 @@ Maintained by `research/scripts/build_index.py`. Flat table of files in `facilit
 
 | Title | Status | Tags | Source Type | Last Updated | Related Findings |
 |---|---|---|---|---|---|
-| [Onboarding Usability Study — Facilitation Guide](onboarding-usability-guide.md) | final | onboarding, usability | native | 2026-01-16 | — |
+| [Onboarding Usability Study — Facilitation Guide](onboarding-usability-guide.md) | final | onboarding, project-onboarding, usability | native | 2026-01-16 | — |

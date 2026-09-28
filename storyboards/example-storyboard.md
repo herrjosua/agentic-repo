@@ -3,7 +3,7 @@ title: "Dana's Monday Morning Setup"
 date: 2026-02-24
 status: draft
 designer: Sam Okafor
-tags: ["onboarding", "storyboard"]
+tags: ["onboarding", "storyboard", "project-onboarding"]
 related_findings: []
 source_type: native
 scenario: "Dana sets up Fernway between meetings, phone buzzing with Slack messages"

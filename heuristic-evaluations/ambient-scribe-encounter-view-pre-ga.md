@@ -2,7 +2,7 @@
 title: "Ambient Scribe Encounter-View — Heuristic Evaluation (Pre-GA)"
 date: 2025-12-20
 status: final
-tags: ["ambient-scribe", "heuristic-evaluation", "sso", "mfa", "documentation"]
+tags: ["ambient-scribe", "heuristic-evaluation", "sso", "mfa", "documentation", "project-ambient-scribe"]
 related_findings: ["../research/findings/ambient-scribe-post-ga-refinements.md"]
 source_type: native
 method: "heuristic-evaluation"

@@ -4,4 +4,4 @@ Maintained by `research/scripts/build_index.py`. Flat table of files in `style-g
 
 | Title | Status | Tags | Source Type | Last Updated | Related Findings |
 |---|---|---|---|---|---|
-| [Style Guide — Foundations v3](foundations-v3.md) | final | style-guide | native | 2026-02-28 | — |
+| [Style Guide — Foundations v3](foundations-v3.md) | final | project-design-system, style-guide | native | 2026-02-28 | — |

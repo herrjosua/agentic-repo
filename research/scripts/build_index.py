@@ -66,6 +66,13 @@ ANALYTICS_INDEX_FILE = ANALYTICS_ROOT / "_index.md"
 
 COMPONENTS_ROOT = REPO_ROOT / "design-tokens" / "components"
 
+# Project tagging (see docs/projects.md): every record carries exactly one project-* tag. Findings,
+# analytics summaries, and deliverables carry it in their own `tags:`; raw sessions and components
+# can't (raw/ is append-only, components are generated), so theirs is assigned here instead.
+PROJECTS_FILE = RESEARCH_ROOT / "projects.yml"
+PROJECT_TAG_PREFIX = "project-"
+CROSS_CUTTING_PROJECT = "project-cross-cutting"
+
 EXCLUDE_FROM_FINDINGS = {"tags.md"}
 
 # feature-002: the 20 top-level deliverable folders, each holding real (source_type: native) or
@@ -175,6 +182,45 @@ def try_load_record(path):
     except RecordError as e:
         skip_record(path, e)
         return None
+
+
+class ProjectsError(Exception):
+    """research/projects.yml can't be parsed or has the wrong shape."""
+
+
+def load_projects():
+    """Return research/projects.yml as {"projects": {id: entry}, "raw": {folder: id},
+    "components": {slug: id}}, or None if the file doesn't exist in this checkout — project tagging
+    is then off entirely (no tags added, nothing validated), same optional-file pattern as
+    analytics/. A key listed twice in a map is an error, not a silent last-one-wins. Raises
+    ProjectsError."""
+    if not PROJECTS_FILE.exists():
+        return None
+    try:
+        data = yaml.load(PROJECTS_FILE.read_text(encoding="utf-8"), Loader=StrictLoader) or {}
+    except yaml.YAMLError as e:
+        raise ProjectsError(f"{PROJECTS_FILE.name}: unparseable: " + " ".join(str(e).split())) from e
+    if not isinstance(data, dict):
+        raise ProjectsError(f"{PROJECTS_FILE.name}: expected a mapping at the top level")
+    entries = data.get("projects") or []
+    if not isinstance(entries, list) or not all(isinstance(p, dict) and isinstance(p.get("id"), str) for p in entries):
+        raise ProjectsError(f"{PROJECTS_FILE.name}: projects must be a list of entries with a string id")
+    projects = {}
+    for p in entries:
+        if p["id"] in projects:
+            raise ProjectsError(f"{PROJECTS_FILE.name}: project {p['id']!r} is listed twice")
+        projects[p["id"]] = p
+    maps = {}
+    for section in ("raw", "components"):
+        m = data.get(section) or {}
+        if not isinstance(m, dict) or not all(isinstance(k, str) and isinstance(v, str) for k, v in m.items()):
+            raise ProjectsError(f"{PROJECTS_FILE.name}: {section} must map names to project ids")
+        maps[section] = m
+    return dict(projects=projects, **maps)
+
+
+def project_tags(tags):
+    return [t for t in tags if t.startswith(PROJECT_TAG_PREFIX)]
 
 
 def load_tag_glossary():
@@ -426,6 +472,55 @@ def validate_component_links(findings, sessions, components):
     return problems
 
 
+def validate_projects(projects, glossary, findings, summaries, components, deliverables):
+    """Check project tagging (docs/projects.md) against research/projects.yml: every project id is
+    a project-* tag defined in the glossary and project-cross-cutting exists; every raw session
+    folder and component is mapped to a known project, with no stale entries; and every finding,
+    analytics summary, and deliverable carries exactly one known project-* tag.
+
+    Returns (problems, unmapped). `unmapped` lists raw sessions and components that exist but
+    aren't in projects.yml — the loaders already fall back to project-cross-cutting for those, so
+    main() only fails on them under --check. Both are empty if projects.yml doesn't exist."""
+    if projects is None:
+        return [], []
+    problems = []
+    unmapped = []
+    known = projects["projects"]
+    for pid in known:
+        if not pid.startswith(PROJECT_TAG_PREFIX):
+            problems.append(f"{PROJECTS_FILE.name}: project id {pid!r} doesn't start with {PROJECT_TAG_PREFIX!r}")
+        if pid not in glossary:
+            problems.append(f"{PROJECTS_FILE.name}: project id {pid!r} isn't defined in findings/tags.md")
+    if CROSS_CUTTING_PROJECT not in known:
+        problems.append(f"{PROJECTS_FILE.name}: {CROSS_CUTTING_PROJECT!r} must be listed under projects")
+
+    existing = {
+        "raw": {Path(p).parent.name for p in glob.glob(str(RAW_ROOT / "*" / "session-notes.md"))},
+        "components": components,
+    }
+    for section, names in existing.items():
+        mapping = projects[section]
+        for name in sorted(names - mapping.keys()):
+            unmapped.append(f"{PROJECTS_FILE.name}: {section} entry {name!r} has no project")
+        for name in sorted(mapping.keys() - names):
+            problems.append(f"{PROJECTS_FILE.name}: {section} entry {name!r} doesn't exist")
+        for name, pid in sorted(mapping.items()):
+            if pid not in known:
+                problems.append(f"{PROJECTS_FILE.name}: {section} entry {name!r} uses unknown project {pid!r}")
+
+    tagged = list(findings.values()) + list(summaries.values())
+    for items in deliverables.values():
+        tagged += items.values()
+    for data in tagged:
+        tags = project_tags(data["meta"].get("tags", []) or [])
+        if len(tags) != 1:
+            problems.append(f"{data['path']}: needs exactly one project-* tag, has {tags or 'none'}")
+        for t in tags:
+            if t not in known:
+                problems.append(f"{data['path']}: project tag {t!r} isn't listed in {PROJECTS_FILE.name}")
+    return problems, unmapped
+
+
 def build_deliverable_index_content(folder, items):
     rows = []
     for stem, data in items.items():
@@ -512,6 +607,11 @@ def main():
     component_link_problems = validate_component_links(findings, sessions, components)
     deliverable_findings_problems = validate_deliverable_findings_links(deliverables, findings)
     deliverable_cross_link_problems = validate_deliverable_cross_links(deliverables, findings, summaries)
+    try:
+        project_problems, unmapped_projects = validate_projects(
+            load_projects(), glossary, findings, summaries, components, deliverables)
+    except ProjectsError as e:
+        project_problems, unmapped_projects = [str(e)], []
 
     new_research_content = build_index_content(findings, sessions)
     old_research_content = INDEX_FILE.read_text(encoding="utf-8") if INDEX_FILE.exists() else None
@@ -566,6 +666,22 @@ def main():
         for msg in deliverable_cross_link_problems:
             print(f"   {msg}", file=sys.stderr)
         exit_code = 1
+
+    if project_problems:
+        print("⚠️  Project tagging issues (see docs/projects.md):", file=sys.stderr)
+        for msg in project_problems:
+            print(f"   {msg}", file=sys.stderr)
+        exit_code = 1
+
+    # Unmapped raw sessions/components already export as project-cross-cutting, so a normal run
+    # (what the CRUD UI reruns after every edit) only warns; --check is the strict gate.
+    if unmapped_projects:
+        print(f"⚠️  Not in research/projects.yml — exported as {CROSS_CUTTING_PROJECT} until mapped "
+              "(see docs/projects.md):", file=sys.stderr)
+        for msg in unmapped_projects:
+            print(f"   {msg}", file=sys.stderr)
+        if args.check:
+            exit_code = 1
 
     if args.check:
         if SKIPPED:

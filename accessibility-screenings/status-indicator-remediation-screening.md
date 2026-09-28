@@ -3,7 +3,7 @@ title: "Care-Gap Badge & Alert Triage Queue — Status-Indicator Screening"
 date: 2026-01-08
 status: final
 designer: Sam Okafor
-tags: ["accessibility", "wcag", "section-508", "components", "care-coordination", "alert-triage"]
+tags: ["accessibility", "wcag", "section-508", "components", "care-coordination", "alert-triage", "project-cross-cutting"]
 related_findings: ["../research/findings/accessibility-cross-cutting.md", "../research/findings/care-coordination-triage.md"]
 source_type: native
 wcag_level: "AA"

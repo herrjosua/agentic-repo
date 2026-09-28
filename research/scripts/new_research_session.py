@@ -15,6 +15,10 @@ Both are pre-filled with the repo's frontmatter schema and TODO placeholders. Ne
 an existing session folder — if one already exists for that date+slug, the script exits with an
 error rather than clobbering notes that may already be in progress.
 
+If research/projects.yml exists, the new folder is also added to its raw: map as
+project-cross-cutting (one inserted line; see docs/projects.md) — reassign it there once the
+session's project is known.
+
 Usage (raw research session):
     python new_research_session.py \\
         --title "Onboarding flow usability test" \\
@@ -95,6 +99,8 @@ RESEARCH_ROOT = SCRIPT_DIR.parent  # research/
 REPO_ROOT = RESEARCH_ROOT.parent
 RAW_ROOT = RESEARCH_ROOT / "raw"
 TAGS_FILE = RESEARCH_ROOT / "findings" / "tags.md"
+PROJECTS_FILE = RESEARCH_ROOT / "projects.yml"
+CROSS_CUTTING_PROJECT = "project-cross-cutting"
 
 # Same rule as the CRUD UI backend's SAFE_SLUG_RE (records.js). Applied to --slug and
 # --topic-slug before anything is created, so neither can escape its target folder.
@@ -533,6 +539,71 @@ def create_deliverable(folder, args, glossary):
     print("Next: fill in the TODOs, then run build_index.py to refresh the folder's _index.md.")
 
 
+def map_session_project(folder_name):
+    """Add `<folder_name>: project-cross-cutting` to the raw: map in research/projects.yml, so a new
+    session is mapped from the start and build_index.py has nothing to warn about (see
+    docs/projects.md). Inserts one line after the raw: map's last entry instead of re-serializing
+    the YAML, so comments and formatting survive, then re-parses to confirm only that entry
+    changed. No-op if projects.yml doesn't exist or already maps the folder. Anything unexpected
+    is a stderr warning, never a failure: the session already exists by now, and the loaders fall
+    back to project-cross-cutting for an unmapped one anyway."""
+    if not PROJECTS_FILE.exists():
+        return
+
+    def skip(reason):
+        print(f"⚠️  Didn't add {folder_name} to research/projects.yml ({reason}) — add it by hand; "
+              "see docs/projects.md.", file=sys.stderr)
+
+    try:
+        text = PROJECTS_FILE.read_text(encoding="utf-8")
+        data = yaml.safe_load(text) or {}
+    except (OSError, yaml.YAMLError) as e:
+        return skip(" ".join(str(e).split()))
+    if not isinstance(data, dict):
+        return skip("not a mapping at the top level")
+    raw = data.get("raw") or {}
+    if not isinstance(raw, dict):
+        return skip("raw: isn't a mapping")
+    if folder_name in raw:
+        return
+
+    lines = text.splitlines(keepends=True)
+    start = next((i for i, line in enumerate(lines) if re.match(r"raw:[ \t]*(#.*)?$", line)), None)
+    if start is None:
+        if "raw" in data:
+            return skip("raw: isn't a block mapping")
+        if lines and not lines[-1].endswith("\n"):
+            lines[-1] += "\n"
+        lines += ["\n", "raw:\n"]
+        start = len(lines) - 1
+    last, indent = start, "  "
+    for i in range(start + 1, len(lines)):
+        line = lines[i]
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        if not line[0].isspace():
+            break
+        last, indent = i, re.match(r"[ \t]*", line).group(0)
+    if not lines[last].endswith("\n"):
+        lines[last] += "\n"
+    lines.insert(last + 1, f"{indent}{folder_name}: {CROSS_CUTTING_PROJECT}\n")
+    new_text = "".join(lines)
+
+    try:
+        parsed = yaml.safe_load(new_text)
+    except yaml.YAMLError:
+        parsed = None
+    others = {k: v for k, v in data.items() if k != "raw"}
+    if (not isinstance(parsed, dict)
+            or {k: v for k, v in parsed.items() if k != "raw"} != others
+            or parsed.get("raw") != {**raw, folder_name: CROSS_CUTTING_PROJECT}):
+        return skip("couldn't insert the entry cleanly")
+    try:
+        PROJECTS_FILE.write_text(new_text, encoding="utf-8")
+    except OSError as e:
+        skip(" ".join(str(e).split()))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--title", help="Session or deliverable title")
@@ -628,6 +699,7 @@ def main():
                                args.researcher, args.participants_count, roles),
         encoding="utf-8",
     )
+    map_session_project(folder_name)
 
     print(f"✅ Created {folder_path}/")
     print("   - session-notes.md")

@@ -3,7 +3,7 @@ title: "Workspace Setup Screen — Thumbnail Explorations"
 date: 2026-02-17
 status: draft
 designer: Sam Okafor
-tags: ["onboarding", "thumbnails"]
+tags: ["onboarding", "thumbnails", "project-onboarding"]
 related_findings: []
 source_type: native
 concept: "Reworking step 4 (invite team) to remove the 'is this sending now' ambiguity"

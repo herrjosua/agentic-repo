@@ -3,7 +3,7 @@ title: "ED Intake Nurse — Peak-Hour Interruption Storyboard"
 date: 2025-05-01
 status: final
 designer: Sam Okafor
-tags: ["ed", "high-acuity", "intake", "workflow"]
+tags: ["ed", "high-acuity", "intake", "workflow", "project-cross-cutting"]
 related_findings: ["../research/findings/scope-boundaries-and-workflow-fit.md"]
 source_type: native
 scenario: "ED intake nurse's interrupt-driven peak-hour shift, showing why sustained-review AI tools don't fit and where a narrower carve-out does"

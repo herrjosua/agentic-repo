@@ -3,7 +3,7 @@ title: "Onboarding Flow — Step 4 (Invite Your Team) Wireflow"
 date: 2026-02-21
 status: draft
 designer: Sam Okafor
-tags: ["onboarding", "wireflow"]
+tags: ["onboarding", "wireflow", "project-onboarding"]
 related_findings: ["onboarding"]
 source_type: native
 flow_name: "Step 4 invite-team, with branch for skip attempt"
