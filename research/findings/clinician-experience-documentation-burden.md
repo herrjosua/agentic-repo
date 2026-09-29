@@ -38,8 +38,9 @@ explicitly referenced the AI initiative).
   nurses, ahead of accuracy or trust concerns that were originally hypothesized to dominate.
 - **Documentation burden is real and quantifiable, not just anecdotal.** The September baseline
   found documentation burden is physicians' #1 self-selected burnout driver (52%, ahead of patient
-  volume at 31%), with 64% doing regular after-hours "pajama time" charting (avg. 1.2 hrs/day). This
-  is now the official pre-AI baseline for measuring Compass AI's impact at 6 and 12 months post-GA.
+  volume at 31%), with 64% doing regular after-hours "pajama time" charting (avg. 1.2 hrs/day). The
+  session recommends it as the official pre-AI baseline for measuring Compass AI's impact at 6 and
+  12 months post-rollout.
   **Caveat:** the September survey mentioned the AI initiative explicitly in its framing, while the
   February survey didn't — any comparison between the two datasets needs to account for that framing
   difference, not treat them as a clean before/after.
