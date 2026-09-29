@@ -51,6 +51,7 @@ problem.
 ## Evidence Trail
 - **2025-01-29** — [Contextual Inquiry — Manual Chart Review Baseline (Care Coordinators)](../raw/2025-01-29-contextual-inquiry-chart-review-baseline/session-notes.md) *(`contextual-inquiry`)*
 - **2025-08-26** — [Usability Test — AI Alert Triage for Care Coordination](../raw/2025-08-26-usability-test-alert-triage-ai-care-coordination/session-notes.md) *(`usability-test`)*
+- **2025-11-18** — [Accessibility Audit — Mobile Clinician App (Low Vision & Motor Impairment Focus)](../raw/2025-11-18-accessibility-audit-mobile-clinician-app/session-notes.md) *(`accessibility-audit`)*
 
 ## Related Findings
 - [Clinician Experience & Documentation Burden](clinician-experience-documentation-burden.md)

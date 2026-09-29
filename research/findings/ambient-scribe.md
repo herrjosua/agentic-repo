@@ -26,8 +26,9 @@ related_findings:
 
 ## Overview
 The ambient AI scribe has moved from a formative concept (v0.1, Feb 2025) through iteration
-(v0.2, Sep 2025) to a GA release candidate (Jan 2026), with 3 of the original 5 physician
-participants retained across all three rounds for longitudinal comparison.
+(v0.2, Sep 2025) to a GA release candidate (Jan 2026). 3 of the original 5 participants
+returned for v0.2, and at least one (P09) also took part in the GA-candidate round, for
+longitudinal comparison.
 
 - **PHI handling:** The critical draft-retention/audit gap found in v0.1 was fixed by v0.2 and has
   remained stable through the GA candidate — drafts auto-expire after 10 minutes of inactivity and
@@ -51,6 +52,7 @@ substance-use encounters — see [scope-boundaries-and-workflow-fit.md](scope-bo
 - **2025-02-25** — [Usability Test — Ambient AI Scribe Prototype v0.1](../raw/2025-02-25-usability-test-ambient-scribe-v01/session-notes.md) *(`usability-test`)*
 - **2025-09-23** — [Usability Test — Ambient AI Scribe Prototype v0.2 (Follow-up)](../raw/2025-09-23-usability-test-ambient-scribe-v02/session-notes.md) *(`usability-test`)*
 - **2026-01-13** — [Usability Test — Ambient AI Scribe GA Release Candidate (Final Validation)](../raw/2026-01-13-usability-test-ambient-scribe-ga-release-candidate/session-notes.md) *(`usability-test`)*
+- **2026-01-27** — [Dashboard review — Ambient scribe GA candidate adoption](../raw/2026-01-27-dashboard-review-ambient-scribe-ga-adoption/session-notes.md) *(`analytics`)*
 
 ## Related Findings
 - [AI Governance, PHI & Compliance](governance-and-phi.md)

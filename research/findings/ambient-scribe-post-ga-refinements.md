@@ -28,8 +28,8 @@ Two follow-up threads opened by [ambient-scribe.md](ambient-scribe.md)'s GA-cand
 by an open edge case noted directly in the `encounter-view` component — neither a launch blocker,
 both worth closing before they harden into permanent gaps.
 
-- **A distinct sound-alike-medication flag outperforms generic confidence highlighting for this
-  specific error class.** The GA-candidate round treated sound-alike medication errors as an
+- **In a 6-person concept test, a distinct sound-alike-medication flag was recognized as
+  different from generic confidence highlighting.** The GA-candidate round treated sound-alike medication errors as an
   ongoing monitoring item, relying on the general `confidence-highlighted` variant to surface
   them. A concept test of a dedicated, visually distinct flag found 5 of 6 participants correctly
   recognized it as categorically different from generic low confidence — but also surfaced a new

@@ -22,8 +22,9 @@ based_on:
 # The Longitudinal Physician — Ambient Scribe
 
 ## Summary
-Modeled on P09 (Internal Medicine), one of the 3 returning participants present across all three
-ambient-scribe testing rounds — v0.1 (Feb 2025), v0.2 (Sep 2025), and the GA candidate (Jan 2026). Represents the
+Modeled on P09 (Internal Medicine), one of the 3 participants who returned from v0.1 for v0.2, and
+the one confirmed in all three ambient-scribe testing rounds — v0.1 (Feb 2025), v0.2 (Sep 2025),
+and the GA candidate (Jan 2026). Represents the
 clinician whose relationship with the tool has actually changed over a year of iteration, not a
 first-time impression.
 

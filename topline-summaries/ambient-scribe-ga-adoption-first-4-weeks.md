@@ -11,7 +11,8 @@ session_dates: ["2026-01-27"]
 ---
 
 ## Quick takeaways
-Covers the first 4 weeks of GA-candidate rollout, per the 2026-01-27 dashboard review.
+Covers the first 4 weeks of GA-candidate rollout, per the 2026-01-27 dashboard review
+(`raw/2026-01-27-dashboard-review-ambient-scribe-ga-adoption/`).
 
 - Clinicians shown confidence highlighting skim high-confidence lines at roughly double the rate
   of the pre-highlighting cohort — directionally consistent with the GA-candidate usability

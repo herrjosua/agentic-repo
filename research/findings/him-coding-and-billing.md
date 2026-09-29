@@ -39,7 +39,7 @@ from two different angles: release-of-information redaction, and AI-assisted med
   two-source-confirmed gap worth fixing regardless of any AI plans.
 - **AI-assisted coding suggestions (usability test) surfaced the same underlying concern in a
   different shape**: the senior coder's objection wasn't accuracy (14/20 suggestions matched
-  independent human judgment) but audit posture — she wanted it explicit in the UI and audit log
+  independent human judgment) but audit posture — they wanted it explicit in the UI and audit log
   that the human coder made the final call, to avoid the suggestion looking like it steered toward
   upcoding. This is the same "show your work" / attribution-of-decision pattern seen in prior
   authorization testing (see [prior-authorization.md](prior-authorization.md)).
