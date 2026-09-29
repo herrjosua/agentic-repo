@@ -34,7 +34,8 @@ that window, not when it triggers.
    `ambient-scribe-widget` moves to a new `paused-preserved` state showing "Session paused — your
    draft is saved. Re-authenticate to resume." Recording audio stops; draft is not discarded
    client- or server-side. This replaces today's silent freeze, which all 4 observed clinicians
-   misread as data loss.
+   misread as data loss (see
+   `research/raw/2026-02-17-session-lock-during-dictation/correction-2026-09-27.md`).
 3. **Re-authenticate → Resume** — on successful SSO/MFA re-auth, `encounter-view` returns to
    `default`, `ambient-scribe-widget` returns to `recording` (if the clinician chooses to
    continue) or `reviewing-draft` (if they'd rather review what's captured so far first). The
