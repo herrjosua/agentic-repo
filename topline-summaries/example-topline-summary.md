@@ -4,18 +4,19 @@ date: 2026-01-21
 status: final
 designer: Sam Okafor
 tags: ["onboarding", "usability", "project-onboarding"]
-related_findings: []
+related_findings: ["onboarding"]
 source_type: native
 related_plan: "research-plans/onboarding-usability-study-q1.md"
 session_dates: ["2026-01-19", "2026-01-20", "2026-01-21"]
 ---
 
 ## Quick takeaways
-- All 3 participants paused at step 4 ("Invite your team") — unsure whether
-  invites send immediately or wait until setup is finished.
+Sourced from `raw/2026-01-19-onboarding-usability-test/`, sessions 1–3.
+
+- 1 of 3 (session 3) hesitated before inviting the team — worried invites would
+  email the whole team before they were ready.
 - 2 of 3 tried to skip step 3 ("Connect calendar") entirely, assuming it was
   optional even though it's required.
-- Nobody read the sidebar progress indicator — all navigated by scrolling.
 
 ## Open questions
 - Is the step-4 (invite) hesitation about wording, or about not trusting the system
