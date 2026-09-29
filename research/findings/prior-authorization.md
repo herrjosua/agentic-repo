@@ -32,8 +32,9 @@ whether fixes actually landed.
 - **v2**, after both fixes landed, confirmed the outdated-code issue did not recur and that the
   citation feature is actively used (3 of 4 participants checked at least one citation before
   accepting) rather than being ignored as friction.
-- **Scope discipline held.** The team deliberately limited v1 testing to "straightforward" cases
-  (defined jointly with the nursing supervisor) and kept complex cases out of scope. v2 confirmed
+- **Scope discipline held.** After v1, the team limited pilot scope to "straightforward" cases,
+  with the nursing supervisor helping define them, and kept complex cases out of that scope. v2
+  tested 2 straightforward and 2 complex cases, and confirmed
   complex cases still aren't ready — validating that the scope limitation, not a rushed fix, was
   the right call. This same "citation transparency" requirement has since shown up independently in
   the medical coding work — see [him-coding-and-billing.md](him-coding-and-billing.md).
