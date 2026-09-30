@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Resets a research-repo-demo checkout back to the demo-baseline tag and rebuilds its
-# index, so the public CRUD UI demo can't accumulate edits between resets.
+# index, so the public CRUD UI demo can't accumulate visitor edits between resets:
+# force-fetches tags from origin, hard-resets to demo-baseline, then reruns
+# build_index.py with $PYTHON_BIN (default: python3).
 #
-# NOT YET SCHEDULED ANYWHERE. This is written ahead of the demo server's own deployment
-# (the CRUD UI's webhost deployment isn't live yet as of 2026-09-22) so it's ready the
-# moment a server exists and a cron job can be pointed at it. See docs/demo-deploy.md
-# for what's still unwired before that can happen.
+# Documents the demo's hourly reset. The scheduled job on the demo host runs these same
+# steps inline rather than calling this script. See docs/demo-deploy.md.
 set -euo pipefail
 
 # Wrapped in main(), called only after the whole file is parsed: this script runs from inside
