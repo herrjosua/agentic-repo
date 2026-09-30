@@ -1,8 +1,8 @@
 # How to Query This Repo
 
-Two ways to search the research/design-tokens archive: ask an agent in natural language, or
-open the visual search interface. Both read the same underlying files — neither is more
-"authoritative" than the other.
+Three ways to search the research/design-tokens archive: ask an agent in natural language, open
+the visual search interface, or use Ask the Repo in the separate CRUD UI app. All three read the
+same underlying files — none is more "authoritative" than the others.
 
 ## Option 1 — Ask Claude Code (or any agent that reads AGENTS.md)
 
@@ -35,8 +35,8 @@ syntax — describe what you want to know.
   health, ED intake during peak hours) — useful for "did we already decide not to do X."
 
 **If the answer feels incomplete:** ask it to check `research/_index.md` directly, or to grep
-`research/findings/tags.md` for a specific tag. The retrieval strategy is explicitly
-keyword/tag-based, not semantic — an unusual phrasing might miss something a more literal
+`research/findings/tags.md` for a specific tag. An agent working in the repo searches by
+keyword and tag, not semantically — an unusual phrasing might miss something a more literal
 rephrase would catch.
 
 ## Option 2 — Open research/search.html
@@ -60,10 +60,22 @@ snapshot, not a live view. It won't update itself.
 python research/scripts/build_search_ui.py
 ```
 
+## Option 3 — Ask the Repo (CRUD UI app)
+
+Ask the Repo is a chat interface in the separate Research Repo CRUD UI app, not part of this
+repo. You type a question; the app retrieves passages from this repo's files using a local model
+and embeddings, and answers with cited sources you can click through to. It reads the corpus
+through `research/scripts/export_records.py`, so this repo stays the only source of truth, and no
+embeddings or index files are stored here.
+
+The public demo serves pre-generated answers through a question picker: you choose from a fixed
+list of questions instead of typing your own.
+
 ## Which one should I use?
 
 - Ask a specific question, want a synthesized answer with reasoning → **Claude Code**
 - Browsing/skimming, filtering by tag or type, don't have a specific question yet →
   **search.html**
+- Working in the CRUD UI and want a cited answer without opening a terminal → **Ask the Repo**
 - Something feels stale or missing from either → check `research/_index.md` was regenerated
   recently (`python research/scripts/build_index.py --check`)
