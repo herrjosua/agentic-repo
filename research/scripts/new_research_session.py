@@ -58,10 +58,11 @@ warning for heuristic-evaluations.
 
 By default (no --no-prompt), deliverable mode interactively prompts for that folder's
 type-specific extra frontmatter fields (e.g. personas prompts for segment, based_on), in the
-order given in docs/deliverable-types.md / the Decision Log. Press Enter on any prompt to leave
-that field empty — nothing is required. Pass --no-prompt for scripted/non-interactive use (a
-cold agent session should always pass this — it cannot answer interactive prompts); every extra
-field is then left at its schema default (empty for most fields) with no prompting at all.
+order given in docs/deliverable-types.md (rationale in docs/decisions.md). Press Enter on any
+prompt to leave that field empty — nothing is required. Pass --no-prompt for
+scripted/non-interactive use (a cold agent session should always pass this — it cannot answer
+interactive prompts); every extra field is then left at its schema default (empty for most
+fields) with no prompting at all.
 
 `prototypes/` additionally requires `--proto-type clickthrough|coded`, which sets that file's
 `type` field and the `source_type` default (figma-link for clickthrough, github-link for coded)
@@ -120,8 +121,8 @@ YAML_INDICATORS = set("-?:,[]{}#&*!|>'\"%@`")
 YAML_ESCAPE_RE = re.compile("[^\t\n\r\x20-\x7e\xa0-\ud7ff\ue000-\ufffd\U00010000-\U0010ffff]|[\u2028\u2029]")
 
 # feature-002: the 20 top-level deliverable folders and their type-specific frontmatter fields
-# (beyond the shared base block), in the order given in docs/deliverable-types.md and the
-# Decision Log. Values are the schema defaults used verbatim in --no-prompt mode; interactive
+# (beyond the shared base block), in the order given in docs/deliverable-types.md (rationale in
+# docs/decisions.md). Values are the schema defaults used verbatim in --no-prompt mode; interactive
 # mode (the default) prompts for each of these instead — see prompt_for_value().
 #
 # "source_type" and (prototypes-only) "type" are deliberately NOT here: source_type is a base
@@ -221,9 +222,10 @@ VALID_TYPES = [
 
 # Deliverable mode's source_type field. Kept in sync by hand with SOURCE_TYPES in
 # backend/validation.js in the research-repo-crud-ui repo, which enforces the same allowlist for
-# the CRUD UI — see AGENTS.md's note on this pair of lists. That backend is the strict side today,
-# so drift fails safely there (a clean 400); enforcing the same list here closes off the other
-# direction, where this script could accept a value the backend would go on to reject.
+# the CRUD UI — see the source_type section of docs/deliverable-types.md. That backend is the
+# strict side today, so drift fails safely there (a clean 400); enforcing the same list here
+# closes off the other direction, where this script could accept a value the backend would go on
+# to reject.
 SOURCE_TYPES = ["native", "figma-link", "github-link", "confluence-link", "docx-link", "figma-export"]
 
 
