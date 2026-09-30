@@ -1,10 +1,10 @@
 # Deliverable Types Reference
 
-Reference for the 20 notional deliverable folders added in `feature-002`, plus
-this `docs/` folder itself (21 top-level additions total — `docs/` is not a
-deliverable type, it just holds this file). See each folder's `_index.md` for
-its file list, and the Decision Log (Notion, "Agentic UX Research Repo") for
-the full rationale behind each choice below.
+Reference for the 20 notional deliverable folders added in `feature-002`. See
+each folder's `_index.md` for its file list, and [`decisions.md`](decisions.md)
+(entries 6–8) for the rationale behind the choices below. `docs/` is not a
+deliverable folder; it holds the repo's documentation (see
+[`README.md`](README.md) for the full list).
 
 ## Why these folders exist
 
@@ -39,6 +39,23 @@ later — e.g. a Confluence-native Research Plan at a client site — via the
 `confluence-link` / `docx-link` values already reserved in `source_type`,
 even though nothing uses them yet.
 
+### `source_type` values
+
+`new_research_session.py` accepts exactly these values (its `SOURCE_TYPES`
+allowlist, kept in sync by hand with the CRUD UI's backend validation):
+
+| Value | Meaning |
+|---|---|
+| `native` | The file holds the real content. Default for every folder except `prototypes/`. |
+| `figma-link` | Stub pointing at a Figma file. Default for `--proto-type clickthrough`. |
+| `github-link` | Stub pointing at a GitHub repo. Default for `--proto-type coded`. |
+| `confluence-link` | Stub pointing at a Confluence page. Reserved; unused today. |
+| `docx-link` | Stub pointing at a Word document. Reserved; unused today. |
+| `figma-export` | Allowed by the scaffold script; purpose not recorded. |
+
+Any value other than `native` makes the generated body a stub (the script
+treats `source_type != native` the same as a stub-only folder).
+
 ## The frontmatter, and why it's split this way
 
 Every file in every folder starts with the same base block:
@@ -49,7 +66,7 @@ date: YYYY-MM-DD           # when the file was written/last meaningfully updated
 status: draft               # draft | in-review | final | superseded
 tags: []                    # validated repo-wide against research/findings/tags.md
 related_findings: []        # cross-links into research/findings/
-source_type: native         # native | figma-link | github-link | confluence-link | docx-link
+source_type: native         # native | figma-link | github-link | confluence-link | docx-link | figma-export
 ```
 
 On top of that, each folder adds a small number of type-specific fields (for
@@ -57,8 +74,39 @@ example, `research-plans/` adds `method` and `study_dates`; `personas/` adds
 `segment` and `based_on`). The base fields are what make every deliverable
 type queryable the same way, regardless of what it is; the extra fields
 capture what's actually distinct about that type. See each folder's entry
-below for its specific additions, or the `example-*.md` file inside the
-folder for a filled-in illustration.
+below for its specific additions, or a filled-in file inside the folder for
+an illustration.
+
+### Extra fields per folder
+
+From `DELIVERABLE_SCHEMAS` in `research/scripts/new_research_session.py`, in
+prompt order. The default is what `--no-prompt` writes. Two fields are not in
+the schema because flags set them: `designer` (`--designer`, every folder
+except `heuristic-evaluations/`) and, for `prototypes/` only, `type`
+(`--proto-type clickthrough|coded`).
+
+| Folder | Extra fields (default) |
+|---|---|
+| `research-plans/` | `method` (""), `study_dates` ({start: "", end: ""}), `related_guide` ("") |
+| `facilitation-guides/` | `related_plan` ("") |
+| `topline-summaries/` | `related_plan` (""), `session_dates` ([]) |
+| `research-readouts/` | `related_analytics` ([]), `presented_to` ([]) |
+| `heuristic-evaluations/` | `method` ("heuristic-evaluation"), `evaluator` (""), `scope` (""), `severity_scale` ("") |
+| `accessibility-screenings/` | `wcag_level` (""), `scope` (""), `issues_found` (0) |
+| `service-topology/` | `scope` (""), `version` ("") |
+| `personas/` | `segment` (""), `based_on` ([]) |
+| `mental-models/` | `scope` ("") |
+| `mindsets/` | `segment` ("") |
+| `journey-maps/` | `persona_ref` (""), `scope` ("") |
+| `thumbnails/` | `concept` (""), `related_wireframes` ([]) |
+| `wireframes/` | `fidelity` ("lo-fi"), `flow_ref` ("") |
+| `user-flows/` | `flow_name` (""), `screens_count` (0) |
+| `wireflows/` | `flow_name` ("") |
+| `storyboards/` | `scenario` ("") |
+| `mockups/` | `fidelity` ("hi-fi"), `figma_url` ("") |
+| `prototypes/` | `url` (""), `stack` ("") |
+| `design-system/` | `version` (""), `related_style_guide` ("") |
+| `style-guide/` | `version` ("") |
 
 ## What each folder contains right now
 
@@ -71,15 +119,38 @@ file, and use `--check` to catch drift or a dangling cross-link (a
 `persona_ref`, `flow_ref`, `related_plan`, etc. that points at a file that
 doesn't exist) in CI.
 
-Each folder also has one `example-*.md` (or, where another file's
-frontmatter links to it by a specific name — e.g. `personas/dana-overwhelmed-
-new-admin.md` — a matching filename instead) filled in with realistic sample
-content. All 20 files are cross-linked around one fictional scenario (a Q1
-onboarding-flow redesign for a fictional product, "Fernway," centered on the
-persona Dana) — matching the fictional sample dataset convention already used
-in `research/`. These are meant to be replaced by real content over time, not
-kept as permanent fixtures, but they show what a real, fully-specified file
-in each folder actually looks like rather than an empty shell.
+Every folder holds at least one filled-in sample file. 13 folders have an
+`example-*.md`; the other 7 (`research-plans/`, `facilitation-guides/`,
+`research-readouts/`, `personas/`, `wireframes/`, `user-flows/`,
+`style-guide/`) have none, and their samples use descriptive names instead
+(e.g. `personas/dana-overwhelmed-new-admin.md`, which other files link to by
+that name). These are meant to be replaced by real content over time, not
+kept as permanent fixtures, but they show what a fully-specified file in each
+folder looks like rather than an empty shell.
+
+### Two fictional frames
+
+The sample corpus uses two separate fictional frames. They are not one story,
+and nothing here should be read as connecting them:
+
+- **Fernway** — a fictional workspace product. Its Q1 onboarding-flow
+  redesign, centered on the persona Dana (a first-time workspace admin), runs
+  through the deliverables tagged `project-onboarding` (most of the
+  `example-*.md` files, plus files such as
+  `research-plans/onboarding-usability-study-q1.md` and
+  `personas/dana-overwhelmed-new-admin.md`), the onboarding v2 design-system
+  snapshot and style guide (`design-system/example-design-system.md`,
+  `style-guide/foundations-v3.md`), and the participant notes of
+  `research/raw/2026-01-19-onboarding-usability-test/`.
+- **Meridian Health Network / Compass AI** — a fictional healthcare
+  organization and its AI modernization program. The README describes the
+  dataset under this frame, and it covers the ambient scribe, prior
+  authorization, care coordination, HIM, governance and rollout work,
+  including deliverables such as `personas/physician-longitudinal-scribe-user.md`
+  and `design-system/v4-1-status-indicator-component.md`.
+
+`research/projects.yml` and each file's `project-*` tag show which project a
+record belongs to.
 
 ---
 

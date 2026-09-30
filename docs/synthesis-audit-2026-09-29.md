@@ -155,7 +155,7 @@ The remaining Part B items: B6–B37 and B39–B46.
   scribe-draft-retention, all-documentation-burden, prior-auth-time-savings
   and all-coders-billing-suggestions. The last one is only the HIM
   finding's "she" changing to "they".
-- **The session-lock correction file isn't shown anywhere** (RR-97).
+- **The session-lock correction file isn't shown anywhere** (the ticket for making correction files visible to retrieval).
   - The raw loader reads only `session-notes.md` and `participants.md`,
     so `search.html`, the CRUD UI record view, `export_records.py` and
     Ask all show the uncorrected "4 of 5 clinicians".
