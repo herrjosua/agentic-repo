@@ -111,9 +111,13 @@ here should be restated as a finding until that evidence exists.
     (`raw/2025-05-20…:30,35`), and how it relates to the fixed 10-minute
     idle timeout in `raw/2026-02-17…:49`.
 11. **Whether the alert-triage queue shows its ranking basis.** Not
-    recorded in `raw/2025-08-26…`.
+    recorded in `raw/2025-08-26…`. Phase 3b deleted the care-coordinator
+    mental model's claim that "the queue doesn't surface its ranking basis"
+    (P21).
 12. **Alert-triage ranking accuracy.** Not measured; `raw/2025-08-26…:28`
-    records disagreement, not accuracy.
+    records disagreement, not accuracy. Phase 3b deleted the mental model's
+    claim that the coordinator/model mismatch, "not raw ranking accuracy, is
+    why 4 of 5 participants disagreed" (P22).
 
 ## Raw inconsistency — P17's role
 
@@ -131,7 +135,8 @@ Not created in this change.
 
 ## Logged, not changed
 
-The remaining Part B items: B6–B37 and B39–B46.
+The remaining Part B items: B6–B37 and B39–B46. Phase 3b (below) handles
+them under new IDs.
 
 - **Findings**
   - `ambient-scribe.md`: "driven by fixing outright garbling"; "Approved for GA release".
@@ -145,6 +150,98 @@ The remaining Part B items: B6–B37 and B39–B46.
   - Both mental models.
   - Both personas.
   - Session-lock user flow: "part of why" should read "likely part of why".
+
+## Phase 3b (2026-10-08)
+
+### Renumbering
+
+The individual B-numbers for B6–B37 and B39–B46 weren't recorded, only
+the grouped summary under "Logged, not changed". This phase uses new IDs,
+P1–P40, rebuilt from that summary and the tier totals in Method:
+
+| Tier | Problem claims | Fixed in phases 1–3a | Left | Records | IDs |
+|---|---|---|---|---|---|
+| 1 | 25 | A1–A16, B1–B5 | 4 | `ambient-scribe.md`, `clinician-experience-documentation-burden.md` | P1–P4 |
+| 2 | 4 | — | 4 | `care-coordination-triage.md` | P5–P8 |
+| 2b | 33 | B38 | 32 | `encounter-view`, `sso-mfa-login`, the session-lock user flow, both personas, both mental models, the onboarding journey map and storyboard | P9–P40 |
+| **Total** | **62** | **22** | **40** | | |
+
+40 matches the count of B6–B37 plus B39–B46. Per-claim verdicts are this
+phase's reading; they aren't guaranteed to match the original audit's.
+Line numbers below refer to the records at `291ff63`.
+
+### Changed
+
+| # | Record | Claim (old line) | Raw evidence | Fix |
+|---|---|---|---|---|
+| P1 | `research/findings/ambient-scribe.md` | :36-37 — dosage errors dropped "driven by fixing outright garbling" | `raw/2025-09-23-usability-test-ambient-scribe-v02/session-notes.md:31` — "Medication dosage errors dropped from 3/5 to 1/5 sessions — a clear improvement, but the remaining error type (misheard similar-sounding drug names) is a known class of error the team should track going forward." No cause given. | States the drop without a cause. |
+| P2 | same | :45-46 — "Approved for GA release. Sound-alike medication errors move to post-GA monitoring" | `raw/2026-01-13-usability-test-ambient-scribe-ga-release-candidate/session-notes.md:43` — "Approve for GA release"; `:44` — "Continue tracking sound-alike medication errors as a post-GA metric rather than delaying release further". Both are recommendations; no raw session records the approval. | "The GA-candidate session recommends GA release …" |
+| X1 | same | :38 — sound-alike errors are "now a tracked, monitored issue" | `raw/2026-01-13…:48` — "Set up post-GA monitoring dashboard for sound-alike medication error rate."; `raw/2026-02-10-ambient-scribe-medication-flag-concept/session-notes.md:71-72` — "once the post-GA monitoring dashboard (recommended 2026-01-13) has real error-rate data". | Says the dashboard was recommended. |
+| P3 | `research/findings/clinician-experience-documentation-burden.md` | :38 — "ahead of accuracy or trust concerns that were originally hypothesized to dominate" | `raw/2025-02-11-survey-nursing-attitudes-ai-documentation/session-notes.md:29` — "not accuracy or privacy as originally hypothesized." | "not accuracy or privacy as originally hypothesized." |
+| P4 | same | :50 — "the same alert-fatigue pattern later confirmed in the care-coordination alert triage testing" | `raw/2025-08-26-usability-test-alert-triage-ai-care-coordination/session-notes.md:28` — "echoes the alert-fatigue concern from the May dashboard testing." | "later echoed this alert-fatigue concern". |
+| P5 | `research/findings/care-coordination-triage.md` | :29, :31-33 — "The baseline shaped what got built"; the August concept "is a variant of that same idea" | `raw/2025-01-29-contextual-inquiry-chart-review-baseline/session-notes.md:41` — "Scope an early AI concept around 'what changed since last review' rather than full summarization". `raw/2025-08-26…:20` (objective) doesn't mention the baseline. | Both causal claims dropped; the bullet now says the baseline recommended a scope. |
+| P6 | same | :29-30 — "Coordinators explicitly said they didn't want full AI summarization" | `raw/2025-01-29…:37` (P05 only) — "I don't need it to think for me." | "One coordinator (P05) said …" |
+| P7 | same | :31 — "what changed since I last looked." | `raw/2025-01-29…:37` — "If it could just tell me what changed since I last touched this chart, that alone would save me time. I don't need it to think for me." | P05 quoted exactly. |
+| P8 | same | :40-42 — the missing override capture "undercuts the sense of agency the supervisor specifically flagged as a risk (fast-but-wrong …)" | `raw/2025-08-26…:31` — "Supervisor worried that speed gains could mask a coordinator rubber-stamping the AI order without real judgment"; `:34` (P79) — "fast and wrong is worse than slow and right in this job."; `:41` (recommendation) — "to give coordinators a sense of agency the current design lacks." | Rubber-stamping and the quote attributed to the supervisor; agency attributed to the study's recommendation. |
+| X2 | `design-tokens/components/chart-review-summary-panel.md` (Notes) | :25 — "coordinators explicitly asked for 'what changed since I last looked'" | Same as P6 and P7; `raw/2025-01-29…:41` for the scope. | Cites the recommendation and quotes P05 exactly. |
+| X3 | `wireflows/alert-triage-override-reason-capture.md` | :14-16 — "a sense of coordinator agency the study's supervisor specifically flagged as a risk" | Same as P8. | Agency attributed to the recommendation; the supervisor's rubber-stamping concern stated separately. |
+| P9 | `design-tokens/components/encounter-view.md` (Notes) | :27 — "an open edge case … not yet resolved in this component" | `raw/2026-02-17-session-lock-during-dictation/session-notes.md:38-41` — "a session lock mid-recording simply freezes the ambient-scribe widget with no message"; `correction-2026-09-27.md:41-42` — "**all 4 clinicians** assumed the draft was lost". `user-flows/ambient-scribe-session-lock-recovery.md` is `status: in-review`. | Studied, and a recovery flow is designed and in review; not called resolved. |
+| P10 | `design-tokens/components/sso-mfa-login.md` (Notes) | :28 — 15-minute re-auth "unresolved as of the 2025-05-20 interview" | `raw/2025-05-20-interview-it-security-sso-mfa-modernization/session-notes.md:30` — "re-authentication requirement every 15 minutes, down from the current 4 hours"; `raw/2026-02-17…:49-50` — "IT Security confirmed the 10-minute idle timeout is not adjustable per-feature". | Keeps the 2025-05-20 facts; adds the 10-minute idle timeout and says how the two relate isn't recorded (data gap 10). Adds the in-review recovery flow. |
+| T1 | `design-tokens/components/care-gap-badge.md` (Notes) | :26 — "Currently reuses the same color scheme as the existing EHR acuity indicators … Needs a visually distinct treatment" | `raw/2025-05-06-usability-test-clinician-dashboard-redesign-v1/session-notes.md:32` — "Badge color scheme was confused with existing acuity color-coding already used elsewhere in the EHR"; `accessibility-screenings/status-indicator-remediation-screening.md:22` — "Both components render status as color-only dots"; `design-system/v4-1-status-indicator-component.md:14-17` — "replace the color-only status-dot markup". | Says v4.1 replaces the colour-only markup and that whether it resolves the acuity-colour confusion isn't recorded. Not an original audit item (the audit counted 2 stale claims). |
+| T2 | `design-tokens/components/alert-triage-queue.md` (Notes) | :28 — "No override-reason capture exists yet" | `raw/2025-08-26…:29` — "there was no way to note why they reprioritized"; `wireflows/alert-triage-override-reason-capture.md` is `status: in-review`. | Designed and in review, not built. Not an original audit item. |
+| P11 | `user-flows/ambient-scribe-session-lock-recovery.md` | :48 — re-auth numbness "was part of why the current silent freeze reads as broken" | `raw/2026-02-17…:47-48` — "this framing gap likely drives the abandon-and-redictate behavior above as much as the missing UI does." | Uses the session's "likely drives". Adds an Evidence basis line. |
+| P12–P14 | `personas/physician-longitudinal-scribe-user.md` | :32, :33-34, :35 — Goals presented as P09's | Goal 1: P09, `raw/2025-02-25…:36-37`, `raw/2025-09-23…:36-37`, `raw/2026-01-13…:36-37`. Goal 2: P22, `raw/2026-02-10…:51-53` — "this one's telling me specifically 'check the drug name'". Goal 3: P31 and P33, `raw/2026-02-17…:54-60`. | Each goal tagged with its source; goals 2–3 marked inferred, not observed for P09. |
+| P15 | same | :43-45 — Post-GA stage as the persona's own experience | `raw/2026-02-10…:51-57` names P22 and P24; no raw session places P09 there (data gap 8). | Labeled "inferred from other participants", following `journey-maps/longitudinal-physician-ambient-scribe.md:14-16,28`. |
+| P16–P17 | same | :48, :49-50 — Frustrations | P22 (`raw/2026-02-10…:51-53`); P31 and P33 (`raw/2026-02-17…:54-60`). | Each tagged as inferred, with its session. |
+| P18 | same | :53 — "Longitudinal composite of participant P09 across the three sessions above, plus …" | As P15; no sessions are listed above. | Names P09's three sessions and says the 2026-02 material comes from other participants. Adds an Evidence basis line. |
+| P19 | `mental-models/care-coordinator-alert-ranking.md` | :18-19 — "the system should defer to my sense of this patient's history-driven risk", in quotation marks | Not a raw quote. Closest: `raw/2025-08-26…:37` (P81) — "I wanted to tell it 'no, this one's more urgent because I know this patient's history,' but there was nowhere to put that." | Unquoted, presented as the designer's paraphrase, with P81 quoted. |
+| P20 | same | :20 — "The model actually ranks by recency-weighted signals." | `raw/2025-08-26…:28` — "the model weighted 'recency' more heavily than coordinators' own sense of clinical risk" — what participants saw, not how the model works. | "Participants saw the ranking weight recency more heavily than their own sense of clinical risk". |
+| P21 | same | :21 — "the queue doesn't surface its ranking basis" | Not recorded. | Deleted. Data gap 11. |
+| P22 | same | :22-23 — "This mismatch, not raw ranking accuracy, is why 4 of 5 participants disagreed" | Not recorded; accuracy wasn't measured. | Deleted. Data gap 12. |
+| P23 | same | :23 — "objectively faster than manual review" | `raw/2025-08-26…:30` — "faster with AI ranking present (avg 6.5 min) vs. chronological (avg 9 min) in this simulated test." | "faster … than with a chronological queue in this simulated test". Adds an Evidence basis line. |
+| X4 | `research/findings/care-coordination-triage.md` | :34-37 — "The triage ranking works, but not for the reason initially expected"; disagreement because the model weighted recency over coordinators' "patient-history-driven risk" | `raw/2025-08-26-usability-test-alert-triage-ai-care-coordination/session-notes.md:28` — "4 of 5 participants disagreed with the AI's top-3 ranking on at least one of three test queues, generally because the model weighted 'recency' more heavily than coordinators' own sense of clinical risk"; `:30` — "faster with AI ranking present (avg 6.5 min) vs. chronological (avg 9 min) in this simulated test." | Bullet now says the AI-ranked queue was faster in a simulated test but most participants disagreed with its ranking; "clinical risk" and the raw's disagreement wording used. |
+| X5 | `research/findings/clinician-experience-documentation-burden.md` | :51-52 — "suggesting it's a property of how these flagging models are currently tuned generally, not a one-off UI problem" | `raw/2025-08-26…:45` — "Share the override-capture idea with the Data Science team working on the care-gap flagging model (May findings) — likely the same underlying tuning problem." Neither session tested it, and nothing covers flagging models "generally". | Labeled as the August session's inference, quoting "likely the same underlying tuning problem"; "generally" dropped. |
+| X6 | `user-flows/ambient-scribe-session-lock-recovery.md` | :47-48 — "clinicians already numb to frequent unrelated re-auth prompts" | `raw/2026-02-17-session-lock-during-dictation/session-notes.md:45-47` — "Clinicians already re-authenticate frequently for unrelated reasons (badge-tap SSO renewals); a lock during dictation is perceived as "one more annoying re-login," not as a distinct, expected safety behavior". | Uses the raw's wording. |
+
+X1–X6 weren't in the original audit. X1–X3 repeat P2's record or the P6–P8
+claims in other records; X4–X6 were noticed in the records phase 3b edited.
+
+### Evidence basis line
+
+The three Meridian design deliverables changed here (the physician
+persona, the care-coordinator mental model and the session-lock user flow)
+now open their first section with:
+
+`**Evidence basis:** <Observed | Inferred | Illustrative | mixed>. <the raw path(s) and lines>.`
+
+### Skipped
+
+P24–P40 (17 items) sit in Fernway records that RR-161 removes:
+`journey-maps/example-journey-map.md` (P24–P29),
+`storyboards/example-storyboard.md` (P30–P34),
+`personas/dana-overwhelmed-new-admin.md` (P35–P38) and
+`mental-models/example-mental-model.md` (P39–P40). They aren't fixed.
+
+### Deferred
+
+Evidence basis lines for the other 10 non-Fernway design deliverables,
+which haven't been audited yet: `mindsets/skeptical-verifier.md`,
+`journey-maps/longitudinal-physician-ambient-scribe.md`,
+`thumbnails/medication-flag-placement-explorations.md`,
+`wireframes/ambient-scribe-medication-flag.md`,
+`wireflows/alert-triage-override-reason-capture.md`,
+`storyboards/ed-intake-peak-hour-interruption.md`,
+`mockups/confidence-highlighted-draft-review.md`,
+`prototypes/ambient-scribe-ga-candidate-clickthrough.md`,
+`service-topology/prior-auth-drafting-v2.md` and
+`design-system/v4-1-status-indicator-component.md`.
+
+### Noted, out of scope
+
+- **P31 is two different people.** `raw/2025-05-20-interview-it-security-sso-mfa-modernization/session-notes.md:36,39`
+  labels P31 "IT Security Engineer"; `raw/2026-02-17-session-lock-during-dictation/session-notes.md:56`
+  labels P31 "Physician, Family Medicine". Like P17, this needs an
+  append-only correction file. Not created here.
 
 ## Not a corpus problem
 
