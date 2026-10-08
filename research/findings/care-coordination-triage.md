@@ -26,20 +26,25 @@ related_findings:
 Two sessions bookend this topic: a baseline contextual inquiry of manual chart review (Jan 2025,
 before any AI concept existed) and a usability test of an AI-ranked alert triage queue (Aug 2025).
 
-- **The baseline shaped what got built.** Coordinators explicitly said they didn't want full
-  AI summarization (they already distrust the EHR's existing auto-summary tool after it missed
-  medication changes twice) — what they wanted was "what changed since I last looked." The August
-  alert-triage concept is a variant of that same idea applied to alert prioritization rather than
-  chart summarization.
-- **The triage ranking works, but not for the reason initially expected.** It was faster
-  (6.5 min vs. 9 min to clear a 20-item queue), but 4 of 5 participants disagreed with at least one
-  ranking decision, generally because the model weighted recency over coordinators' own sense of
-  patient-history-driven risk — echoing the alert-fatigue concern raised separately in the May
+- **The baseline recommended a narrow scope.** Coordinators already distrusted the EHR's
+  auto-generated after-visit summaries, having caught them omitting recently changed medications
+  twice in the past quarter. One coordinator (P05) said: "If it could just tell me what changed
+  since I last touched this chart, that alone would save me time. I don't need it to think for
+  me." The session recommended scoping an early AI concept around 'what changed since last review'
+  rather than full summarization.
+- **The AI-ranked queue was faster, but most participants disagreed with its ranking.** In this
+  simulated test, triage of a 20-item queue was faster with AI ranking present (avg 6.5 min) than
+  with a chronological queue (avg 9 min), but 4 of 5 participants disagreed with the AI's top-3
+  ranking on at least one of three test queues, generally because the model weighted recency more
+  heavily than coordinators' own sense of clinical risk — echoing the alert-fatigue concern raised separately in the May
   clinician dashboard testing (see
   [clinician-experience-documentation-burden.md](clinician-experience-documentation-burden.md)).
-  There was also no way to capture *why* a coordinator overrode a ranking, which both loses a
-  model-improvement signal and undercuts the sense of agency the supervisor specifically flagged as
-  a risk (fast-but-wrong being worse than slow-but-right in this workflow).
+  There was also no way to capture *why* a coordinator overrode a ranking, so that correction
+  signal isn't captured anywhere for future model improvement. Separately, the supervisor (P79)
+  worried that speed gains could mask a coordinator rubber-stamping the AI order without real
+  judgment: "fast and wrong is worse than slow and right in this job." The study's own
+  recommendation adds that override-reason capture would give coordinators a sense of agency the
+  current design lacks.
 - **This is also where the mobile accessibility touch-target finding lands** — the alert-triage icon
   set audited in November is the same feature tested here in August (see
   [accessibility-cross-cutting.md](accessibility-cross-cutting.md)).

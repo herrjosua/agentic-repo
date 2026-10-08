@@ -22,4 +22,4 @@ generated_from: Figma (via sync_figma_tokens.py — not yet built; hand-authored
 - [Care Coordination Triage](../../research/findings/care-coordination-triage.md)
 
 ## Notes
-Concept scoped directly from the 2025-01-29 baseline contextual inquiry: coordinators explicitly asked for 'what changed since I last looked' rather than full AI summarization, given existing distrust of the EHR's auto-summary tool.
+Concept follows the 2025-01-29 baseline contextual inquiry's recommendation to scope an early AI concept around 'what changed since last review' rather than full summarization, given coordinators' existing distrust of the EHR's auto-generated after-visit summaries. One coordinator (P05) asked for "what changed since I last touched this chart".

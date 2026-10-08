@@ -25,4 +25,4 @@ generated_from: Figma (via sync_figma_tokens.py — not yet built; hand-authored
 - [Accessibility Cross Cutting](../../research/findings/accessibility-cross-cutting.md)
 
 ## Notes
-Icon touch targets in this component were found at 32px (below the `size.touch-target-min` token of 44px) in the 2025-11-18 mobile accessibility audit. No override-reason capture exists yet, per the 2025-08-26 usability test finding.
+Icon touch targets in this component were found at 32px (below the `size.touch-target-min` token of 44px) in the 2025-11-18 mobile accessibility audit. The 2025-08-26 usability test found no way to note why a coordinator overrode the ranking; override-reason capture is designed and in review (`wireflows/alert-triage-override-reason-capture.md`), not built.

@@ -35,7 +35,7 @@ explicitly referenced the AI initiative).
 
 - **The top volunteered concern was not accuracy or privacy — it was voice.** In February, "losing
   my clinical narrative voice / it will sound robotic" was the most common open-ended concern among
-  nurses, ahead of accuracy or trust concerns that were originally hypothesized to dominate.
+  nurses — not accuracy or privacy as originally hypothesized.
 - **Documentation burden is real and quantifiable, not just anecdotal.** The September baseline
   found documentation burden is physicians' #1 self-selected burnout driver (52%, ahead of patient
   volume at 31%), with 64% doing regular after-hours "pajama time" charting (avg. 1.2 hrs/day). The
@@ -47,9 +47,10 @@ explicitly referenced the AI initiative).
 - **Alert fatigue is an emerging risk, not yet realized.** The May dashboard test found that 5 of 6
   participants expected AI-flagged "care gap" badges to become background noise within a week if
   flagging precision isn't improved — 2 of the 3 example flags shown were judged clinically
-  low-value. This is the same alert-fatigue pattern later confirmed in the care-coordination alert
-  triage testing (see [care-coordination-triage.md](care-coordination-triage.md)), suggesting it's a
-  property of how these flagging models are currently tuned generally, not a one-off UI problem.
+  low-value. The care-coordination alert triage testing later echoed this alert-fatigue concern
+  (see [care-coordination-triage.md](care-coordination-triage.md)). That session judged the two
+  "likely the same underlying tuning problem" — an inference it recommended sharing with the
+  care-gap model's Data Science team, not something either session tested.
 
 Recommendation: do not ship the care-gap flagging feature until precision is validated against
 clinical review, and use the September survey as the fixed baseline instrument for future
