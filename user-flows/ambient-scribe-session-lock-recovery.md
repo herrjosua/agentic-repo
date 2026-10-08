@@ -20,6 +20,8 @@ screens_count: 3
 # Ambient Scribe — Session Lock Recovery
 
 ## Description
+**Evidence basis:** Observed. The problem this flow responds to is from `raw/2026-02-17-session-lock-during-dictation/session-notes.md:38-51`, read with that folder's `correction-2026-09-27.md:40-43`; the framing note's cause is the session's own "likely" inference (`:45-48`). The flow itself is a design response and hasn't been tested.
+
 Response to the 2026-02-17 contextual inquiry finding that a session lock mid-recording currently
 reads as silent draft loss. Covers the `encounter-view`/`ambient-scribe-widget` interaction from
 the moment the idle timeout fires through resumed dictation, replacing today's silent freeze with
@@ -45,5 +47,6 @@ that window, not when it triggers.
   resolved here).
 - **Framing note carried from research:** copy in step 2 should read as an expected safety
   behavior, not an unrelated login interruption — the source session found clinicians already
-  numb to frequent unrelated re-auth prompts, which was part of why the current silent freeze
-  reads as broken rather than as a deliberate pause.
+  re-authenticate frequently for unrelated reasons and perceive a lock during dictation as "one
+  more annoying re-login," which it judged likely drives the abandon-and-redictate behavior as much
+  as the missing UI does.
