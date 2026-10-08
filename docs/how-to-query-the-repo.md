@@ -71,6 +71,24 @@ embeddings or index files are stored here.
 The public demo serves pre-generated answers through a question picker: you choose from a fixed
 list of questions instead of typing your own.
 
+## Corrections to raw sessions
+
+`research/raw/` is append-only, so a wrong raw note is fixed by a `correction-YYYY-MM-DD.md` file
+in the same session folder (standard raw frontmatter, `date` required), never by editing
+`session-notes.md`. A correction corrects its own folder's `session-notes.md` and never replaces
+it. How each option above sees it:
+
+- **Claude Code** reads the files directly, so it sees a correction only if it looks in the
+  session folder. `AGENTS.md` tells it to.
+- **search.html** shows each correction after its session's notes and participants, under a
+  "Correction (YYYY-MM-DD)" heading, once you regenerate it with `build_search_ui.py`.
+- **Ask the Repo** gets the same content through `export_records.py`, which uses the same loader
+  and also lists each correction in the record's `corrections` field. So does the CRUD UI record
+  view.
+
+The original notes still come first, so read a raw session's corrections before quoting a number
+from it.
+
 ## Which one should I use?
 
 - Ask a specific question, want a synthesized answer with reasoning → **Claude Code**
