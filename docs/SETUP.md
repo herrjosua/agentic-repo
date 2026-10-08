@@ -189,7 +189,11 @@ server. It's a snapshot, so re-run it after adding content.
 
 Every synthesis is its own commit, and the message says what raw evidence triggered it. Never
 rewrite files in `research/raw/` or `analytics/raw/`: if a raw note was wrong, add a correction
-file in the session folder that references it.
+file in the session folder that references it. Name it `correction-YYYY-MM-DD.md`, give it the
+standard raw frontmatter with a `date`, and quote what it corrects. It corrects that folder's
+`session-notes.md` without replacing it. It shows next to the session in `search.html` once you
+regenerate it, and in the CRUD UI record view and Ask's corpus once the corpus copy they read (the
+one `AGENTIC_REPO_ROOT` points at) contains the file, since they run `export_records.py` live.
 
 ---
 

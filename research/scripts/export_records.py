@@ -28,6 +28,12 @@ Usage:
     python export_records.py --kind raw --summary
                                                 # list mode: strip html/searchText for a lightweight
                                                 # payload; has no effect combined with --id
+
+Every record has a `corrections` list (kept in --summary): one {path, date, title} per
+raw/<session>/correction-*.md, oldest first, and [] for every other record. Each correction is
+also appended to its session's html (and so searchText) under a "Correction (YYYY-MM-DD)"
+heading. It is never part of rawContent, which stays the body of session-notes.md alone because
+the CRUD UI edit form saves it back there, and it is never a record of its own.
 """
 import argparse
 import json
@@ -41,6 +47,7 @@ import frontmatter
 from build_search_ui import (  # noqa: E402
     RESEARCH_ROOT,
     SKIPPED,
+    CorrectionError,
     build_analytics_records,
     build_component_records,
     build_deliverable_records,
@@ -81,7 +88,11 @@ def main():
                               "since a single fully-fetched record is small regardless.")
     args = parser.parse_args()
 
-    records = load_all_records()
+    try:
+        records = load_all_records()
+    except CorrectionError as e:
+        print(f"❌ {e}", file=sys.stderr)
+        sys.exit(1)
 
     if args.kind:
         records = [r for r in records if r["kind"] == args.kind]

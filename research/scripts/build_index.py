@@ -75,6 +75,12 @@ CROSS_CUTTING_PROJECT = "project-cross-cutting"
 
 EXCLUDE_FROM_FINDINGS = {"tags.md"}
 
+# The files a raw session folder may hold: its notes and participants, plus any number of
+# append-only correction files (correction-YYYY-MM-DD.md), each correcting that folder's own
+# session-notes.md. Anything else is warned about so a misnamed correction isn't silently ignored.
+RAW_SESSION_FILES = {"session-notes.md", "participants.md"}
+CORRECTION_GLOB = "correction-*.md"
+
 # feature-002: the 20 top-level deliverable folders, each holding real (source_type: native) or
 # stub (frontmatter + short description) files per the feature-002 spec. Indexed and validated
 # the same way as research/findings/ and analytics/summaries/ — see AGENTS.md.
@@ -315,6 +321,18 @@ def validate_tags(glossary):
             if t not in glossary:
                 problems.append((p, t))
     return problems
+
+
+def find_unexpected_raw_files():
+    """Return every .md file in a raw session folder that isn't session-notes.md, participants.md
+    or a correction-*.md file, as repo-relative paths. Nothing loads these, so they're warned
+    about (never a failure) in case one is a correction with the wrong name."""
+    unexpected = []
+    for p in sorted(RAW_ROOT.glob("*/*.md")):
+        if p.name in RAW_SESSION_FILES or p.match(CORRECTION_GLOB):
+            continue
+        unexpected.append(p.relative_to(REPO_ROOT))
+    return unexpected
 
 
 def date_sort_key(value):
@@ -602,6 +620,7 @@ def main():
     analytics_exists = ANALYTICS_ROOT.exists()
 
     tag_problems = validate_tags(glossary)
+    unexpected_raw_files = find_unexpected_raw_files()
     link_problems = validate_index_links(findings, sessions)
     analytics_link_problems = validate_analytics_links(findings, summaries)
     component_link_problems = validate_component_links(findings, sessions, components)
@@ -636,6 +655,13 @@ def main():
         for f, t in tag_problems:
             print(f"   {f}: {t}", file=sys.stderr)
         exit_code = 1
+
+    # A warning only, even under --check: nothing reads these files, so they can't break anything.
+    if unexpected_raw_files:
+        print("⚠️  Unexpected files in raw session folders (not loaded; a correction must be named "
+              "correction-YYYY-MM-DD.md):", file=sys.stderr)
+        for p in unexpected_raw_files:
+            print(f"   {p}", file=sys.stderr)
 
     if link_problems:
         print("⚠️  Cross-reference issues (research):", file=sys.stderr)

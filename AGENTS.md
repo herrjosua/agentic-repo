@@ -7,7 +7,12 @@ three turn a tool's proprietary format into git-tracked Markdown you can query d
 ## Where things live
 - `research/raw/YYYY-MM-DD-topic-slug/` — one folder per research session (`session-notes.md` +
   `participants.md`). **Append-only. Never edit or rewrite a file here.** If a raw note was wrong,
-  add a new file that references and corrects it.
+  add a new file that references and corrects it: `correction-YYYY-MM-DD.md` in the session's own
+  folder, with the standard raw frontmatter (`date` required). It corrects that folder's
+  `session-notes.md` and never replaces it. The exporter appends it to the session's content under
+  a "Correction (YYYY-MM-DD)" heading and lists it in the record's `corrections` field, so it shows
+  in `search.html`, the CRUD UI record view and Ask's corpus — but never in `rawContent`. Before
+  quoting a fact from a raw session, check its folder for `correction-*.md` files.
 - `research/findings/<topic>.md` — synthesized, living per-topic conclusions. These ARE meant to be
   revised as new raw evidence comes in. Every finding must cite the raw session(s) that back it.
 - `research/findings/tags.md` — canonical tag glossary, shared across `raw/`, `findings/`, and
