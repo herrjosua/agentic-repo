@@ -11,9 +11,10 @@ flow_name: "Alert override with reason capture, addressing the missing override-
 
 ## Overview
 Combines the override-reason-capture flow logic with its screens, directly answering the Aug 2025
-usability test's recommendation that overrides currently lose the "why" — both a
-model-improvement signal and a sense of coordinator agency the study's supervisor specifically
-flagged as a risk.
+usability test's recommendation that overrides currently lose the "why". The study recommended
+capturing it both to improve the model and to give coordinators a sense of agency the current
+design lacks. The study's supervisor raised a separate concern: that speed gains could mask
+coordinators rubber-stamping the AI order without real judgment.
 
 ## Flow + screens
 `alert-triage-queue` (ranked list) -> coordinator disagrees with a rank -> taps "Override" ->
