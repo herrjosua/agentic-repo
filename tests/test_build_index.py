@@ -351,3 +351,19 @@ def test_check_exits_1_when_a_record_is_skipped(run_script, fake_repo):
     assert result.returncode == 1
     assert "Skipping research/findings/broken.md" in result.stderr
     assert "duplicate key 'title'" in result.stderr
+
+
+# --- unexpected files in raw session folders ---------------------------------------------------
+
+def test_unexpected_raw_file_warns_but_does_not_fail(run_script, fake_repo):
+    write_file(fake_repo, f"research/raw/{RAW_SESSION}/corection-2026-09-27.md", "# Misnamed\n")
+    write_file(fake_repo, f"research/raw/{RAW_SESSION}/correction-2026-09-27.md", "---\ntags: []\n---\n\nFine.\n")
+    result = build(run_script)
+    assert result.returncode == 0, result.stderr
+    assert "Unexpected files in raw session folders" in result.stderr
+    assert f"research/raw/{RAW_SESSION}/corection-2026-09-27.md" in result.stderr
+    for name in ("session-notes.md", "participants.md", "correction-2026-09-27.md"):
+        assert f"{RAW_SESSION}/{name}" not in result.stderr
+    check = build(run_script, "--check")
+    assert check.returncode == 0, check.stderr
+    assert "corection-2026-09-27.md" in check.stderr
