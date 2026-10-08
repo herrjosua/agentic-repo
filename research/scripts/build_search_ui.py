@@ -24,7 +24,9 @@ Usage:
     python build_search_ui.py --check    # exit 1 if search.html would change; write nothing
 """
 import argparse
+import datetime as dt
 import glob
+import html as html_lib
 import json
 import re
 import sys
@@ -38,6 +40,7 @@ except ImportError:
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_index import (  # noqa: E402  (shared per-record loader)
+    CORRECTION_GLOB,
     CROSS_CUTTING_PROJECT,
     DELIVERABLE_FOLDERS,  # noqa: E402  (shared source of truth for the 20 folders)
     ProjectsError,
@@ -177,6 +180,70 @@ def _with_project(tags, projects, section, name):
     return [t for t in tags if t not in own] + [project]
 
 
+class CorrectionError(Exception):
+    """A raw correction file can't be parsed or has no date. Unlike a bad record, this fails the
+    whole run: skipping it would quietly show the uncorrected notes as if nothing were wrong."""
+
+
+_DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
+_HEADING_RE = re.compile(r"<h([1-4])>(.*?)</h\1>")
+
+
+def _correction_date(path, meta):
+    """`date` from the correction's frontmatter as YYYY-MM-DD, else the YYYY-MM-DD in its file
+    name. Raises CorrectionError if it has neither, or a frontmatter date in another form."""
+    value = meta.get("date")
+    if isinstance(value, dt.date):  # PyYAML parses an unquoted date (datetime is a subclass)
+        return value.isoformat()[:10]
+    if value is not None:
+        if not _DATE_RE.fullmatch(str(value)):
+            raise CorrectionError(f"{path}: frontmatter date {value!r} isn't YYYY-MM-DD")
+        return str(value)
+    m = _DATE_RE.search(path.name)
+    if m is None:
+        raise CorrectionError(f"{path}: no frontmatter date and no YYYY-MM-DD in the file name")
+    return m.group(0)
+
+
+def _correction_html(path, date, content):
+    """The block a correction adds to its session's html: an <h2> label, a provenance line, then
+    its body with the first <h1> dropped and every other heading turned into a prefixed <h3>.
+
+    The headings are rewritten on the rendered HTML, not the markdown. render_markdown has no
+    fenced-code support and escapes every literal "<" in text, so each <hN> in its output is a
+    heading it produced itself and nothing else can match; editing the markdown instead would mean
+    re-implementing its heading rules here. The prefix keeps the "Correction" label on every
+    passage when the CRUD UI's Ask corpus splits html by the nearest heading."""
+    label = f"Correction ({date})"
+    body = render_markdown(content)
+    body = re.sub(r"<h1>.*?</h1>\n?", "", body, count=1)
+    body = _HEADING_RE.sub(lambda m: f"<h3>{label}: {m.group(2)}</h3>", body)
+    provenance = (f"<p>Filed {date} as <code>{html_lib.escape(path.name)}</code> in this session's "
+                  "folder. The original notes above are unchanged.</p>")
+    return f"<h2>{label}</h2>{provenance}{body}"
+
+
+def load_corrections(folder):
+    """Every correction-*.md in raw session `folder`, sorted by date then file name, as
+    {path, date, title} dicts plus a private "_html" block for the caller to append to the
+    session's html. Corrections are never records of their own and never touch rawContent."""
+    corrections = []
+    for path in sorted(folder.glob(CORRECTION_GLOB)):
+        try:
+            post = load_record(path)
+        except RecordError as e:
+            raise CorrectionError(f"{path}: {e}") from e
+        date = _correction_date(path, post.metadata)
+        corrections.append(dict(
+            path=f"raw/{folder.name}/{path.name}",
+            date=date,
+            title=post.metadata.get("title", path.stem),
+            _html=_correction_html(path, date, post.content),
+        ))
+    corrections.sort(key=lambda c: (c["date"], c["path"]))
+    return corrections
+
+
 def build_raw_records():
     projects = _load_projects_tolerant()
     records = []
@@ -195,6 +262,10 @@ def build_raw_records():
                 continue
             body_html += "<h2>Participants</h2>" + render_markdown(p_post.content)
 
+        corrections = load_corrections(folder)
+        for c in corrections:
+            body_html += c.pop("_html")
+
         rel_path = f"raw/{folder.name}/session-notes.md"
         records.append(dict(
             id=f"raw:{folder.name}",
@@ -209,6 +280,7 @@ def build_raw_records():
             **_edit_fields(meta),
             **_attribution_fields(meta),
             path=rel_path,
+            corrections=corrections,
             html=body_html,
         ))
     return records
@@ -238,6 +310,7 @@ def build_findings_records():
             **_edit_fields(meta),
             **_attribution_fields(meta),
             path=rel_path,
+            corrections=[],
             html=body_html,
         ))
     return records
@@ -268,6 +341,7 @@ def build_component_records():
             **_edit_fields(meta),
             **_attribution_fields(meta),
             path=rel_path,
+            corrections=[],
             html=body_html,
         ))
     return records
@@ -297,6 +371,7 @@ def build_analytics_records():
             **_edit_fields(meta),
             **_attribution_fields(meta),
             path=rel_path,
+            corrections=[],
             html=body_html,
         ))
     return records
@@ -335,6 +410,7 @@ def build_deliverable_records():
                 **_edit_fields(meta),
             **_attribution_fields(meta),
                 path=rel_path,
+                corrections=[],
                 html=body_html,
             ))
     return records
@@ -706,13 +782,16 @@ def main():
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
 
-    records = (
-            build_raw_records()
-            + build_findings_records()
-            + build_component_records()
-            + build_analytics_records()
-            + build_deliverable_records()
-    )
+    try:
+        records = (
+                build_raw_records()
+                + build_findings_records()
+                + build_component_records()
+                + build_analytics_records()
+                + build_deliverable_records()
+        )
+    except CorrectionError as e:
+        sys.exit(f"❌ {e}")
     for r in records:
         r["searchText"] = build_search_text(r)
 
