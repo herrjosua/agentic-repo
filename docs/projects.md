@@ -93,11 +93,11 @@ one the CRUD UI reruns after every edit), and fails on it only under `--check`, 
 If `research/projects.yml` doesn't exist in a checkout (for example the throwaway test corpora),
 project tagging is off: nothing is added and nothing is validated.
 
-## Caveat: editing raw sessions in the CRUD UI
+## Editing raw sessions in the CRUD UI (resolved)
 
-The CRUD UI's edit form pre-fills `tags` from the exported record and its `PUT` merges them into
-the file. For a raw session, the exported tags include the `project-*` tag added from
-`projects.yml`, so saving an edit would write that tag into the session's `raw/` frontmatter. The
-loader tolerates this (the mapped tag replaces it, so the record still has exactly one), but it is
-still a write into `raw/` that `projects.yml` is meant to avoid. **The CRUD UI should strip
-`project-*` tags from a raw session's `tags` before saving an edit.**
+The CRUD UI's edit form pre-fills `tags` from the exported record, and for a raw session those
+include the `project-*` tag added from `projects.yml`, so saving an edit would write that tag into
+the session's `raw/` frontmatter. The CRUD UI now strips `project-*` tags from a raw session's
+`tags` before saving (`projectSafeTags` in its `backend/projects.js`), so the mapping stays in
+`projects.yml` only. If a raw session's frontmatter does carry one, the loader still tolerates it:
+the mapped tag replaces it, so the record has exactly one.
