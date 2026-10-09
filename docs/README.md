@@ -21,8 +21,8 @@ Docs not re-checked show their last-commit date instead.
 | [`decisions.md`](decisions.md) | Decision log: one numbered entry per decision, with date, status and rationale | checked against repo 2026-09-30 |
 | [`deliverable-types.md`](deliverable-types.md) | The 20 deliverable folders, their frontmatter fields and the stub pattern | checked against repo 2026-09-30 |
 | [`how-to-query-the-repo.md`](how-to-query-the-repo.md) | Ways to query the corpus: an agent, `research/search.html`, and Ask the Repo | checked against repo 2026-09-30 |
-| [`projects.md`](projects.md) | `project-*` tags and `research/projects.yml` rules | not re-verified (last commit 2026-09-28) |
-| [`demo-deploy.md`](demo-deploy.md) | How the public demo is synced and reset | checked against repo 2026-09-30 |
+| [`projects.md`](projects.md) | `project-*` tags and `research/projects.yml` rules | not re-verified (last commit 2026-10-09) |
+| [`demo-deploy.md`](demo-deploy.md) | How the public demo is synced and reset | checked against repo 2026-10-09 (reset, sync and merge-to-live chain sections; the CRUD UI-side steps 5–7 not re-verified in this repo) |
 | [`ask-audit-2026-09-27.md`](ask-audit-2026-09-27.md) | Corpus consistency audit (point-in-time record) | not re-verified (last commit 2026-09-27) |
 | [`synthesis-audit-2026-09-29.md`](synthesis-audit-2026-09-29.md) | Synthesis overreach audit (point-in-time record) | not re-verified (last commit 2026-09-29) |
 
