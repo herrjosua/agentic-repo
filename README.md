@@ -21,6 +21,23 @@ evidence kept separate from — but cross-linked with — the qualitative findin
 > fictional sample data** for a hypothetical healthcare organization ("Meridian Health Network")
 > and its "Compass AI" modernization program. No real patients, staff, or PHI are represented.
 
+## How this repo relates to the others
+
+This repo is the source of truth for the corpus. Two other copies of its content exist, and
+neither is a place to author changes:
+
+- **`agentic-repo-dev`** — a local clone with push disabled. In development, the CRUD UI's
+  `AGENTIC_REPO_ROOT` points at it. It's updated by hand, with a `git fetch` and a reset to
+  `origin/main`. Corpus work is never authored there.
+- **`research-repo-demo`** — a separate, private repo that `.github/workflows/sync-demo.yml`
+  syncs from this one. The public demo checks it out.
+
+**Never point the CRUD UI at this checkout.** The CRUD UI writes to the files it serves.
+
+A corpus change can make the demo's saved (static) Ask answers stale, because they were captured
+against the old content. After a change lands, they must be recaptured — see
+[`docs/demo-deploy.md`](docs/demo-deploy.md#merge-to-live-chain) for the full chain.
+
 ## Development
 
 Requires Python 3.13.
