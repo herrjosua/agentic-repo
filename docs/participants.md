@@ -1,6 +1,6 @@
 # Participant IDs
 
-Every research participant has one participant ID (`P01`, `P02`, ... `P123`). IDs come from one
+Every research participant has one participant ID (`P01`, `P02`, ... `P126`). IDs come from one
 global sequence across every raw session. They are **not** session-scoped, and an ID is never
 reused for a different person. A participant who takes part in a later session keeps their ID.
 
@@ -59,7 +59,7 @@ coarse ("Chief Privacy Officer" and "Chief Information Officer" are both `execut
 | `app` | Advanced practice providers: Nurse Practitioner, Physician Assistant |
 | `nurse` | Registered Nurse; ED Intake Nurse; Utilization Review Nurse (± supervisor); Behavioral Health Unit Charge Nurse |
 | `care-coordinator` | Care Coordinator (± float pool); Care Coordinator Supervisor |
-| `him-coder` | HIM Specialist; HIM Supervisor; Medical Coder (± certified, senior); Coding Auditor; Clinical Documentation Integrity Specialist |
+| `him-coder` | HIM Specialist (± Release of Information); HIM Supervisor; Medical Coder (± certified, senior); Coding Auditor; Clinical Documentation Integrity Specialist; Revenue Cycle Analyst (Billing) |
 | `behavioral-health` | Behavioral Health Clinician |
 | `patient` | Patient; Patient portal user |
 | `executive` | Chief Information / Medical Information / Privacy Officer; VP Clinical Informatics; Director of Clinical Training & Education |
