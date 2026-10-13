@@ -1,6 +1,6 @@
 ---
 title: Scope Boundaries & Workflow Fit
-date: 2025-10-07
+date: 2026-09-08
 type: synthesis
 status: synthesized
 researcher: Priya Patel
@@ -31,12 +31,14 @@ related_findings:
 # Scope Boundaries & Workflow Fit
 
 ## Overview
-Three sessions across the year are grouped here because their common output was a "don't build
-this yet, or don't build it here" conclusion. The December executive retro praised this kind of
+Three 2025 sessions, plus two 2026 HIM interviews that refine a release-of-information (ROI)
+boundary first set in the July 2025 HIM research, are grouped here because their common output was
+a "don't build this yet, or don't build it here" conclusion. The December executive retro praised this kind of
 scope discipline in general ("The stuff you told us not to build yet mattered as much as the stuff
 you told us to build"), but the only exclusions it named were behavioral health (covered below)
 and complex prior-auth cases (not part of this finding). It did not discuss the ED intake or
-SSO/MFA boundaries.
+SSO/MFA boundaries, or the ROI redaction boundary below, which dates from the July 2025 HIM
+research; only the 2026 evidence added to that boundary postdates the retro.
 
 - **ED intake (contextual inquiry, Apr 2025):** peak-hour interruption frequency (every 2-4 minutes)
   makes any AI tool requiring sustained review attention a poor fit for ED intake nurses
@@ -53,12 +55,21 @@ SSO/MFA boundaries.
   don't say whether that settles this dispute or is a separate idle-lock setting.
 - **Behavioral health (contextual inquiry, Oct 2025):** reiterated, independently, the same "no
   structured way to flag a 42 CFR Part 2-protected note" platform gap first identified in the July
-  HIM research (see [him-coding-and-billing.md](him-coding-and-billing.md)) — and added a harder
+  HIM research (see [him-coding-and-billing.md](him-coding-and-billing.md)), which HIM found
+  unchanged in March 2026 (2026-03-31, HIGH) — and added a harder
   constraint on top: any AI tool listening to or drafting behavioral health notes needs a dedicated
   legal/consent review that hasn't started yet. This population was formally excluded from the
   near-term ambient scribe rollout as a result.
+- **ROI redaction (HIM research, Jul 2025; refined Mar and Sep 2026):** the suggest-only boundary
+  set in July 2025 (see [him-coding-and-billing.md](him-coding-and-billing.md)) held in 2026: a
+  person redacts and a person releases every record. Within it, an ROI specialist would accept
+  batch pre-highlighting only for low-risk requests where patients ask for their own records;
+  attorney, insurer and possible Part 2 requests are excluded from batch handling and stay one at a
+  time (2026-09-08, HIGH). An HIM supervisor said the backlog sits in the second-level Part 2
+  review queue rather than first-pass redaction, so any redaction assistance should be designed
+  around that queue (2026-03-31, MEDIUM).
 
-Recommendation: keep these three exclusions as explicit, documented scope boundaries in the 2026
+Recommendation: keep these four exclusions as explicit, documented scope boundaries in the 2026
 roadmap rather than informal assumptions that could quietly erode. This is this finding's
 recommendation, not a retro action item — the retro's own recommendations were a formal metrics
 document and a cross-cutting findings section.
@@ -68,6 +79,8 @@ document and a cross-cutting findings section.
 - **2025-05-20** — [Interview — IT Security on SSO/MFA Modernization Impact](../raw/2025-05-20-interview-it-security-sso-mfa-modernization/session-notes.md) *(`interview`)*
 - **2025-10-07** — [Contextual Inquiry — Behavioral Health Unit, Sensitive Note Handling](../raw/2025-10-07-contextual-inquiry-behavioral-health-sensitive-notes/session-notes.md) *(`contextual-inquiry`)*
 - **2025-12-16** — [Executive Steering Committee — Year-End Retro & 2026 Roadmap Input](../raw/2025-12-16-stakeholder-interview-executive-steering-committee-retro/session-notes.md) *(`interview`)* — cited for the scope-discipline praise only
+- **2026-03-31** — [Interview — HIM Supervisor on ROI Volume and Part 2 Handling](../raw/2026-03-31-interview-him-supervisor-roi-volume-and-part-2/session-notes.md) *(`interview`)*
+- **2026-09-08** — [Interview — HIM Specialist on ROI Request Turnaround](../raw/2026-09-08-interview-him-specialist-roi-request-turnaround/session-notes.md) *(`interview`)*
 
 ## Related Findings
 - [AI Governance, PHI & Compliance](governance-and-phi.md)
