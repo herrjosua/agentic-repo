@@ -22,6 +22,7 @@ Docs not re-checked show their last-commit date instead.
 | [`deliverable-types.md`](deliverable-types.md) | The 20 deliverable folders, their frontmatter fields and the stub pattern | checked against repo 2026-09-30 |
 | [`how-to-query-the-repo.md`](how-to-query-the-repo.md) | Ways to query the corpus: an agent, `research/search.html`, and Ask the Repo | checked against repo 2026-09-30 |
 | [`projects.md`](projects.md) | `project-*` tags and `research/projects.yml` rules | not re-verified (last commit 2026-10-09) |
+| [`participants.md`](participants.md) | Participant IDs: the `research/participants.yml` registry, role classes, returning participants and the collision check | checked against repo 2026-10-13 |
 | [`demo-deploy.md`](demo-deploy.md) | How the public demo is synced and reset | checked against repo 2026-10-09 (reset, sync and merge-to-live chain sections; the CRUD UI-side steps 5–7 not re-verified in this repo) |
 | [`ask-audit-2026-09-27.md`](ask-audit-2026-09-27.md) | Corpus consistency audit (point-in-time record) | not re-verified (last commit 2026-09-27) |
 | [`synthesis-audit-2026-09-29.md`](synthesis-audit-2026-09-29.md) | Synthesis overreach audit (point-in-time record) | not re-verified (last commit 2026-09-29) |
@@ -30,7 +31,7 @@ Docs not re-checked show their last-commit date instead.
 
 | Kind | Count | Where |
 |---|---|---|
-| Raw research sessions | 30 (60 `session-notes.md` / `participants.md` files, plus 1 correction file) | `research/raw/` |
+| Raw research sessions | 30 (60 `session-notes.md` / `participants.md` files, plus 3 correction files) | `research/raw/` |
 | Findings | 12 (plus the `tags.md` glossary) | `research/findings/` |
 | Analytics summaries | 1 | `analytics/summaries/` |
 | Components | 18 | `design-tokens/components/` |
@@ -44,6 +45,7 @@ research/
     YYYY-MM-DD-topic-slug/
       session-notes.md      <- objective, method, findings, quotes, recs, follow-ups
       participants.md       <- participant roster/detail, kept separate from session-notes.md
+      correction-*.md       <- append-only corrections to that folder's session-notes.md
   findings/
     <topic>.md               <- synthesized, living doc per topic, cross-referenced
     tags.md                  <- canonical tag glossary, shared with analytics/summaries/
