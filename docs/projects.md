@@ -23,13 +23,13 @@ The machine-readable source is [`research/projects.yml`](../research/projects.ym
 | `project-care-coordination` | Care Coordination & Alert Triage | 8 |
 | `project-design-system` | Design System | 6 |
 | `project-prior-auth` | AI-Assisted Prior Authorization | 5 |
-| `project-him` | HIM Coding, Billing & Release of Information | 5 |
+| `project-him` | HIM Coding, Billing & Release of Information | 9 |
 | `project-patient-chatbot` | Patient Scheduling Chatbot | 5 |
 | `project-clinician-dashboard` | Clinician Dashboard | 3 |
 | `project-cross-cutting` | Cross-cutting (no single project) | 25 |
-| | **Total** | **97** |
+| | **Total** | **101** |
 
-Counts are as of 2026-09-28, from `export_records.py` output. To recount:
+Counts are as of 2026-10-13, from `export_records.py` output. To recount:
 
 ```
 python research/scripts/export_records.py --summary | python -c "import json,sys,collections; \

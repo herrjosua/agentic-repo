@@ -1,6 +1,6 @@
 # Participant IDs
 
-Every research participant has one participant ID (`P01`, `P02`, ... `P119`). IDs come from one
+Every research participant has one participant ID (`P01`, `P02`, ... `P123`). IDs come from one
 global sequence across every raw session. They are **not** session-scoped, and an ID is never
 reused for a different person. A participant who takes part in a later session keeps their ID.
 
@@ -59,7 +59,7 @@ coarse ("Chief Privacy Officer" and "Chief Information Officer" are both `execut
 | `app` | Advanced practice providers: Nurse Practitioner, Physician Assistant |
 | `nurse` | Registered Nurse; ED Intake Nurse; Utilization Review Nurse (± supervisor); Behavioral Health Unit Charge Nurse |
 | `care-coordinator` | Care Coordinator (± float pool); Care Coordinator Supervisor |
-| `him-coder` | HIM Specialist; HIM Supervisor; Medical Coder (± certified, senior) |
+| `him-coder` | HIM Specialist; HIM Supervisor; Medical Coder (± certified, senior); Coding Auditor; Clinical Documentation Integrity Specialist |
 | `behavioral-health` | Behavioral Health Clinician |
 | `patient` | Patient; Patient portal user |
 | `executive` | Chief Information / Medical Information / Privacy Officer; VP Clinical Informatics; Director of Clinical Training & Education |
@@ -72,6 +72,8 @@ coarse ("Chief Privacy Officer" and "Chief Information Officer" are both `execut
 Nurse practitioners and physician assistants are `app`, not `physician`. Most ambient-scribe
 sessions mix physicians and NPs, and a physician's ID reused for an NP is exactly the collision the
 check should catch.
+
+`him-coder` covers the whole HIM coding side, including CDI specialists and revenue-cycle analysts.
 
 The class belongs to the participant, never to the session. A session with several roles needs
 nothing extra: its classes are just the classes of the people in it.
