@@ -26,6 +26,12 @@ research/findings/, validates the type-specific cross-link fields (related_guide
 persona_ref, flow_ref, related_wireframes, related_style_guide, based_on) against their target
 folder(s), and folds every deliverable file's tags into the repo-wide tag glossary check.
 
+RR-155: also validates research/participants.yml, the participant ID registry (see
+docs/participants.md), against every quote attribution line ("> — <role>, P<nn>") in
+raw/*/session-notes.md, and fails when one ID is attributed to two different people. Corrections
+are honored through the registry's raw_id / raw_role / corrected_by fields; correction-*.md files
+themselves are never parsed. No-op if participants.yml doesn't exist in a given checkout.
+
 Per the plan's key decisions: these files are generated, not hand-maintained. Each should be
 small enough to fit entirely in an agent's context, so most "have we looked at X" queries can be
 answered from the relevant index plus one or two findings/summaries files, without a full-repo
@@ -72,6 +78,19 @@ COMPONENTS_ROOT = REPO_ROOT / "design-tokens" / "components"
 PROJECTS_FILE = RESEARCH_ROOT / "projects.yml"
 PROJECT_TAG_PREFIX = "project-"
 CROSS_CUTTING_PROJECT = "project-cross-cutting"
+
+# Participant registry (docs/participants.md): one global ID sequence, one entry per person.
+PARTICIPANTS_FILE = RESEARCH_ROOT / "participants.yml"
+PARTICIPANT_ID_RE = re.compile(r"P[0-9]{2,4}")
+# A quote's attribution line in raw/*/session-notes.md: "> — <role>, P<nn>" plus an optional
+# "(note)", e.g. "> — Physician, Internal Medicine, P09 (returning from v0.1)". The role may itself
+# hold commas and parentheses. Only session-notes.md is scanned: correction-*.md files quote the
+# wrong attribution they correct, so parsing them would bring the error back.
+ATTRIBUTION_RE = re.compile(r"^>\s*—\s*(?P<role>.+?),\s*(?P<pid>P[0-9]{2,4})(?:\s*\((?P<note>[^)]*)\))?\s*$")
+PARTICIPANT_TOP_KEYS = {"next_id", "sequence_baseline", "role_classes", "participants"}
+PARTICIPANT_ENTRY_KEYS = {"role_class", "note", "appearances"}
+PARTICIPANT_NOTES = {"unverified-sequence"}
+APPEARANCE_KEYS = {"session", "role", "returning", "reserved", "raw_id", "raw_role", "corrected_by"}
 
 EXCLUDE_FROM_FINDINGS = {"tags.md"}
 
@@ -539,6 +558,259 @@ def validate_projects(projects, glossary, findings, summaries, components, deliv
     return problems, unmapped
 
 
+class ParticipantsError(Exception):
+    """research/participants.yml can't be parsed or isn't a mapping."""
+
+
+def load_participants():
+    """Return research/participants.yml as a dict, or None if the file doesn't exist in this
+    checkout — the participant check is then off entirely, same optional-file pattern as
+    projects.yml. A duplicate key anywhere is an error. Raises ParticipantsError; everything
+    finer-grained is reported by validate_participants()."""
+    if not PARTICIPANTS_FILE.exists():
+        return None
+    try:
+        data = yaml.load(PARTICIPANTS_FILE.read_text(encoding="utf-8"), Loader=StrictLoader) or {}
+    except yaml.YAMLError as e:
+        raise ParticipantsError(f"{PARTICIPANTS_FILE.name}: unparseable: " + " ".join(str(e).split())) from e
+    if not isinstance(data, dict):
+        raise ParticipantsError(f"{PARTICIPANTS_FILE.name}: expected a mapping at the top level")
+    return data
+
+
+def id_number(pid):
+    return int(pid[1:])
+
+
+def is_participant_id(value):
+    return isinstance(value, str) and PARTICIPANT_ID_RE.fullmatch(value) is not None
+
+
+def session_date(folder):
+    """The YYYY-MM-DD prefix every raw session folder name starts with."""
+    return folder[:10]
+
+
+def load_attributions():
+    """Every quote attribution line in raw/*/session-notes.md, as dicts of folder, line, role, pid
+    and returning (the note starts with "returning"). correction-*.md files are never read."""
+    found = []
+    for p in sorted(RAW_ROOT.glob("*/session-notes.md")):
+        for n, line in enumerate(p.read_text(encoding="utf-8").splitlines(), 1):
+            m = ATTRIBUTION_RE.match(line)
+            if m:
+                found.append(dict(folder=p.parent.name, line=n, role=m["role"].strip(), pid=m["pid"],
+                                  returning=(m["note"] or "").strip().lower().startswith("returning")))
+    return found
+
+
+def _validate_participant_shape(data):
+    """Shape problems in a loaded participants.yml, plus its {id: entry} map with only the
+    usable entries and appearances kept, so the later checks never trip over a bad one."""
+    name = PARTICIPANTS_FILE.name
+    problems = []
+    for key in sorted(set(data) - PARTICIPANT_TOP_KEYS):
+        problems.append(f"{name}: unknown top-level key {key!r}")
+
+    classes = data.get("role_classes")
+    if not isinstance(classes, list) or not classes or not all(isinstance(c, str) for c in classes):
+        problems.append(f"{name}: role_classes must be a non-empty list of strings")
+        classes = []
+    elif len(set(classes)) != len(classes):
+        problems.append(f"{name}: role_classes lists a class twice")
+
+    next_id = data.get("next_id")
+    if not is_participant_id(next_id):
+        problems.append(f"{name}: next_id must be a participant ID like P120, got {next_id!r}")
+        next_id = None
+
+    baseline = data.get("sequence_baseline")
+    if baseline is not None:
+        if (not isinstance(baseline, dict) or set(baseline) != {"date", "first_id"}
+                or not is_participant_id(baseline.get("first_id"))
+                or not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", date_sort_key(baseline.get("date")))):
+            problems.append(f"{name}: sequence_baseline must have exactly a YYYY-MM-DD date and a first_id")
+
+    raw_entries = data.get("participants")
+    if not isinstance(raw_entries, dict):
+        problems.append(f"{name}: participants must map participant IDs to entries")
+        raw_entries = {}
+
+    entries = {}
+    for pid, entry in raw_entries.items():
+        where = f"{name}: {pid}"
+        if not is_participant_id(pid):
+            problems.append(f"{name}: {pid!r} isn't a participant ID like P09")
+            continue
+        if not isinstance(entry, dict):
+            problems.append(f"{where}: expected a mapping")
+            continue
+        for key in sorted(set(entry) - PARTICIPANT_ENTRY_KEYS):
+            problems.append(f"{where}: unknown key {key!r}")
+        if entry.get("role_class") not in classes:
+            problems.append(f"{where}: role_class {entry.get('role_class')!r} isn't in role_classes")
+        if "note" in entry and entry["note"] not in PARTICIPANT_NOTES:
+            problems.append(f"{where}: note must be one of {sorted(PARTICIPANT_NOTES)}, got {entry['note']!r}")
+        if next_id and id_number(pid) >= id_number(next_id):
+            problems.append(f"{where}: is at or above next_id {next_id}; bump next_id")
+        appearances = entry.get("appearances")
+        if not isinstance(appearances, list) or not appearances:
+            problems.append(f"{where}: appearances must be a non-empty list")
+            continue
+        kept, seen = [], set()
+        for i, app in enumerate(appearances):
+            at = f"{where} appearance {i + 1}"
+            if not isinstance(app, dict):
+                problems.append(f"{at}: expected a mapping")
+                continue
+            bad = False
+            for key in sorted(set(app) - APPEARANCE_KEYS):
+                problems.append(f"{at}: unknown key {key!r}")
+                bad = True
+            session = app.get("session")
+            if not isinstance(session, str) or not (RAW_ROOT / session / "session-notes.md").is_file():
+                problems.append(f"{at}: session {session!r} isn't a raw session folder")
+                continue
+            at = f"{where} in {session}"
+            if session in seen:
+                problems.append(f"{at}: session listed twice for this ID")
+                continue
+            seen.add(session)
+            if not isinstance(app.get("role"), str) or not app["role"].strip():
+                problems.append(f"{at}: role must be a non-empty string")
+                bad = True
+            for flag in ("returning", "reserved"):
+                if flag in app and not isinstance(app[flag], bool):
+                    problems.append(f"{at}: {flag} must be true or false")
+                    bad = True
+            if "raw_id" in app and not is_participant_id(app["raw_id"]):
+                problems.append(f"{at}: raw_id must be a participant ID, got {app['raw_id']!r}")
+                bad = True
+            if "raw_role" in app and (not isinstance(app["raw_role"], str) or not app["raw_role"].strip()):
+                problems.append(f"{at}: raw_role must be a non-empty string")
+                bad = True
+            corrected_by = app.get("corrected_by")
+            if ("raw_id" in app or "raw_role" in app) and corrected_by is None:
+                problems.append(f"{at}: raw_id/raw_role needs corrected_by naming the correction file")
+                bad = True
+            if corrected_by is not None and (
+                    not isinstance(corrected_by, str) or not Path(corrected_by).match(CORRECTION_GLOB)
+                    or Path(corrected_by).name != corrected_by
+                    or not (RAW_ROOT / session / corrected_by).is_file()):
+                problems.append(f"{at}: corrected_by {corrected_by!r} isn't a correction-*.md file in that folder")
+                bad = True
+            if not bad:
+                kept.append(app)
+        entries[pid] = dict(role_class=entry.get("role_class"), note=entry.get("note"), appearances=kept)
+    return problems, entries
+
+
+def validate_participants(data, attributions):
+    """Check research/participants.yml (docs/participants.md) against the raw attribution lines.
+
+    Returns (errors, warnings, unregistered). errors fail build_index.py in any mode; warnings
+    never fail; unregistered lists raw attributions with no registry appearance and fails only
+    under --check (same split as unmapped projects). All three are empty if the file doesn't
+    exist (data is None)."""
+    if data is None:
+        return [], [], []
+    errors, entries = _validate_participant_shape(data)
+    warnings, unregistered = [], []
+
+    # (session, ID as session-notes.md writes it) -> (registry ID, appearance)
+    by_raw = {}
+    for pid, entry in entries.items():
+        for app in entry["appearances"]:
+            key = (app["session"], app.get("raw_id", pid))
+            if key in by_raw:
+                errors.append(f"{PARTICIPANTS_FILE.name}: {key[1]} in {key[0]} is claimed by both "
+                              f"{by_raw[key][0]} and {pid}")
+            by_raw[key] = (pid, app)
+
+    # Registry <-> raw: every attribution resolves to an appearance with the same role and
+    # returning marker; every appearance that isn't reserved has at least one attribution.
+    quoted = set()
+    label_class = {}
+    for entry in entries.values():
+        for app in entry["appearances"]:
+            label_class.setdefault(app["role"], set()).add(entry["role_class"])
+    effective = []  # one row per (ID, session): id, folder, role, returning, role_class, where
+    for a in attributions:
+        where = f"research/raw/{a['folder']}/session-notes.md:{a['line']}"
+        hit = by_raw.get((a["folder"], a["pid"]))
+        if hit is None:
+            unregistered.append(f"{where}: {a['pid']} ({a['role']}) isn't in {PARTICIPANTS_FILE.name}")
+            classes = label_class.get(a["role"], set())
+            effective.append(dict(id=a["pid"], folder=a["folder"], role=a["role"], returning=a["returning"],
+                                  role_class=next(iter(classes)) if len(classes) == 1 else None, where=where))
+            continue
+        pid, app = hit
+        quoted.add((pid, a["folder"]))
+        expected_role = app.get("raw_role", app["role"])
+        if a["role"] != expected_role:
+            errors.append(f"{where}: {a['pid']} is {a['role']!r} here but {expected_role!r} in "
+                          f"{PARTICIPANTS_FILE.name}")
+        if a["returning"] and not app.get("returning"):
+            errors.append(f"{where}: {a['pid']} is marked returning here but not in {PARTICIPANTS_FILE.name}")
+        if app.get("returning") and not a["returning"] and "corrected_by" not in app:
+            errors.append(f"{where}: {a['pid']} is returning in {PARTICIPANTS_FILE.name} but has no "
+                          "\"(returning from ...)\" marker here and no corrected_by")
+    for pid, entry in entries.items():
+        for app in entry["appearances"]:
+            if (pid, app["session"]) not in quoted and not app.get("reserved"):
+                errors.append(f"{PARTICIPANTS_FILE.name}: {pid} in {app['session']} has no attribution "
+                              "line in its session-notes.md (mark it reserved: true if it's allocated "
+                              "but not quoted yet)")
+            effective.append(dict(id=pid, folder=app["session"], role=app["role"],
+                                  returning=bool(app.get("returning")), role_class=entry["role_class"],
+                                  where=f"{PARTICIPANTS_FILE.name}: {pid} in {app['session']}"))
+
+    # Collision rules, over the registry plus any unregistered attribution.
+    by_id = {}
+    for row in effective:
+        by_id.setdefault(row["id"], {}).setdefault(row["folder"], []).append(row)
+    for pid, sessions in sorted(by_id.items(), key=lambda kv: id_number(kv[0])):
+        firsts = []
+        for folder, rows in sorted(sessions.items(), key=lambda kv: (session_date(kv[0]), kv[0])):
+            roles = sorted({r["role"] for r in rows})
+            if len(roles) > 1:
+                errors.append(f"{pid} in {folder}: attributed to different roles in one session: "
+                              + ", ".join(repr(r) for r in roles))
+            row = dict(rows[0], returning=any(r["returning"] for r in rows),
+                       role_class=next((r["role_class"] for r in rows if r["role_class"]), None))
+            firsts.append(row)
+        first = firsts[0]
+        if first["returning"]:
+            errors.append(f"{first['where']}: {pid} is marked returning, but this is its earliest session")
+        for row in firsts[1:]:
+            pair = f"{pid}: {first['role']!r} in {first['folder']} vs {row['role']!r} in {row['folder']}"
+            if row["role"] != first["role"] and not row["returning"]:
+                errors.append(f"{pair} — different role and no returning marker (two people share this ID)")
+            elif (row["returning"] and row["role_class"] and first["role_class"]
+                  and row["role_class"] != first["role_class"]):
+                errors.append(f"{pair} — marked returning, but role class {first['role_class']} vs "
+                              f"{row['role_class']}")
+            elif row["returning"] and row["role"] != first["role"]:
+                warnings.append(f"{pair} — returning, same role class, different role label")
+            elif not row["returning"]:
+                warnings.append(f"{pair} — same role in a later session with no returning marker")
+
+    # Sequence (warn-only).
+    for pid, entry in sorted(entries.items(), key=lambda kv: id_number(kv[0])):
+        if entry["note"] == "unverified-sequence":
+            warnings.append(f"{PARTICIPANTS_FILE.name}: {pid} is out of chronological sequence "
+                            "(note: unverified-sequence); treated as new, no source in the repo to verify it")
+    baseline = data.get("sequence_baseline")
+    if isinstance(baseline, dict) and is_participant_id(baseline.get("first_id")):
+        cutoff = date_sort_key(baseline.get("date"))
+        for pid, entry in sorted(entries.items(), key=lambda kv: id_number(kv[0])):
+            dates = [session_date(a["session"]) for a in entry["appearances"]]
+            if dates and min(dates) > cutoff and id_number(pid) < id_number(baseline["first_id"]):
+                warnings.append(f"{PARTICIPANTS_FILE.name}: {pid} first appears after {cutoff} but is "
+                                f"below the baseline's first_id {baseline['first_id']}")
+    return errors, warnings, unregistered
+
+
 def build_deliverable_index_content(folder, items):
     rows = []
     for stem, data in items.items():
@@ -631,6 +903,11 @@ def main():
             load_projects(), glossary, findings, summaries, components, deliverables)
     except ProjectsError as e:
         project_problems, unmapped_projects = [str(e)], []
+    try:
+        participant_problems, participant_warnings, unregistered_participants = validate_participants(
+            load_participants(), load_attributions())
+    except ParticipantsError as e:
+        participant_problems, participant_warnings, unregistered_participants = [str(e)], [], []
 
     new_research_content = build_index_content(findings, sessions)
     old_research_content = INDEX_FILE.read_text(encoding="utf-8") if INDEX_FILE.exists() else None
@@ -705,6 +982,28 @@ def main():
         print(f"⚠️  Not in research/projects.yml — exported as {CROSS_CUTTING_PROJECT} until mapped "
               "(see docs/projects.md):", file=sys.stderr)
         for msg in unmapped_projects:
+            print(f"   {msg}", file=sys.stderr)
+        if args.check:
+            exit_code = 1
+
+    if participant_problems:
+        print("⚠️  Participant registry issues (see docs/participants.md):", file=sys.stderr)
+        for msg in participant_problems:
+            print(f"   {msg}", file=sys.stderr)
+        exit_code = 1
+
+    # Warnings only, even under --check.
+    if participant_warnings:
+        print("⚠️  Participant ID warnings (see docs/participants.md):", file=sys.stderr)
+        for msg in participant_warnings:
+            print(f"   {msg}", file=sys.stderr)
+
+    # Like unmapped projects: a normal run (the CRUD UI reruns it after every edit) only warns,
+    # so a quote can be saved before its ID is registered; --check is the strict gate.
+    if unregistered_participants:
+        print("⚠️  Participant IDs not in research/participants.yml (see docs/participants.md):",
+              file=sys.stderr)
+        for msg in unregistered_participants:
             print(f"   {msg}", file=sys.stderr)
         if args.check:
             exit_code = 1
