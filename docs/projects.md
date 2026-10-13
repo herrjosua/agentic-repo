@@ -23,11 +23,11 @@ The machine-readable source is [`research/projects.yml`](../research/projects.ym
 | `project-care-coordination` | Care Coordination & Alert Triage | 8 |
 | `project-design-system` | Design System | 6 |
 | `project-prior-auth` | AI-Assisted Prior Authorization | 5 |
-| `project-him` | HIM Coding, Billing & Release of Information | 9 |
+| `project-him` | HIM Coding, Billing & Release of Information | 12 |
 | `project-patient-chatbot` | Patient Scheduling Chatbot | 5 |
 | `project-clinician-dashboard` | Clinician Dashboard | 3 |
 | `project-cross-cutting` | Cross-cutting (no single project) | 25 |
-| | **Total** | **101** |
+| | **Total** | **104** |
 
 Counts are as of 2026-10-13, from `export_records.py` output. To recount:
 
