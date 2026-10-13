@@ -19,6 +19,16 @@ If research/projects.yml exists, the new folder is also added to its raw: map as
 project-cross-cutting (one inserted line; see docs/projects.md) — reassign it there once the
 session's project is known.
 
+--participants allocates participant IDs from research/participants.yml (see
+docs/participants.md): each "Label=class" entry gets the next free ID, a bare label already used in
+the registry reuses that label's class, and an existing ID (e.g. P17) is a returning participant
+who keeps their class and latest role. The IDs are written as reserved appearances in
+participants.yml (next_id is bumped, inserted line by line so comments survive), listed in the new
+participants.md roster, and pre-filled as quote stubs in session-notes.md, with "(returning from
+<folder>)" for a returning ID. Every entry is checked before anything is written. Labels can't
+contain commas; use parentheses, e.g. "Physician (Internal Medicine)=physician". The flag can be
+repeated.
+
 Usage (raw research session):
     python new_research_session.py \\
         --title "Onboarding flow usability test" \\
@@ -28,7 +38,8 @@ Usage (raw research session):
         --related-findings onboarding.md \\
         [--date 2026-09-12] \\
         [--researcher "J. Alvarez"] \\
-        [--related-components onboarding-carousel,cta-primary]
+        [--related-components onboarding-carousel,cta-primary] \\
+        [--participants "Medical Coder=him-coder, Care Coordinator, P17"]
 
 --researcher writes a real researcher frontmatter field (as well as the existing
 **Researcher:** line in the Method section / participants.md body, kept as a redundant
@@ -101,6 +112,8 @@ REPO_ROOT = RESEARCH_ROOT.parent
 RAW_ROOT = RESEARCH_ROOT / "raw"
 TAGS_FILE = RESEARCH_ROOT / "findings" / "tags.md"
 PROJECTS_FILE = RESEARCH_ROOT / "projects.yml"
+PARTICIPANTS_FILE = RESEARCH_ROOT / "participants.yml"
+PARTICIPANT_ID_RE = re.compile(r"P[0-9]{2,4}")
 CROSS_CUTTING_PROJECT = "project-cross-cutting"
 
 # Same rule as the CRUD UI backend's SAFE_SLUG_RE (records.js). Applied to --slug and
@@ -326,7 +339,22 @@ def has_surrogate(s):
     return any("\ud800" <= c <= "\udfff" for c in s)
 
 
-def session_notes_template(title, date, rtype, tags, related_components, related_findings, researcher, method_label):
+def quote_stubs(participants):
+    """The Representative Quotes stubs: one per allocated participant (see plan_participants), each
+    attribution line already in the "> — <role>, P<nn>" form build_index.py checks, or one generic
+    stub when no IDs were allocated."""
+    if not participants:
+        return ('> "TODO"\n'
+                '> — Role, participant ID (a global ID from research/participants.yml; see docs/participants.md)')
+    stubs = []
+    for p in participants:
+        marker = f" (returning from {p['returning_from']})" if p["returning_from"] else ""
+        stubs.append(f'> "TODO"\n> — {p["role"]}, {p["id"]}{marker}')
+    return "\n\n".join(stubs)
+
+
+def session_notes_template(title, date, rtype, tags, related_components, related_findings, researcher, method_label,
+                           participants=None):
     fm_fields = {
         "title": title,
         "date": date,
@@ -352,8 +380,7 @@ TODO: one paragraph — why this session happened, what question it was meant to
   and a short theme label in parens.
 
 ## Representative Quotes
-> "TODO"
-> — Role, participant ID
+{quote_stubs(participants)}
 
 ## Recommendations
 1. TODO
@@ -367,7 +394,7 @@ TODO: one paragraph — why this session happened, what question it was meant to
     return fm_block(fm_fields) + "\n\n" + body
 
 
-def participants_template(title, date, rtype, tags, related_findings, researcher, count, roles):
+def participants_template(title, date, rtype, tags, related_findings, researcher, count, roles, participants=None):
     fm_fields = {
         "title": f"Participants — {title}",
         "date": date,
@@ -378,6 +405,12 @@ def participants_template(title, date, rtype, tags, related_findings, researcher
         "related_components": [],
         "related_findings": related_findings,
     }
+    if participants:
+        roles = [f"{p['id']} — {p['role']} ({p['role_class']})"
+                 + (f", returning from {p['returning_from']}" if p["returning_from"] else "")
+                 for p in participants]
+        if count is None:
+            count = len(participants)
     roles_block = "\n".join(f"- {r}" for r in roles) if roles else "- TODO"
     body = f"""# Participants — {title}
 
@@ -389,8 +422,10 @@ def participants_template(title, date, rtype, tags, related_findings, researcher
 **Researcher:** {researcher or "TODO"}
 
 **Recruitment note:** TODO — how participants were recruited. No real patient or staff identities
-should ever be recorded here; use session-scoped fictional/anonymized participant IDs (e.g. P01)
-in session-notes.md instead of names.
+should ever be recorded here; session-notes.md uses participant IDs (e.g. P09) instead of names.
+Participant IDs are one global sequence, allocated from research/participants.yml
+(new_research_session.py --participants does this) and never reused for a different person. Mark
+a returning participant's quotes "(returning from <session folder>)". See docs/participants.md.
 """
     return fm_block(fm_fields) + "\n\n" + body
 
@@ -606,6 +641,164 @@ def map_session_project(folder_name):
         skip(" ".join(str(e).split()))
 
 
+class ParticipantPlanError(Exception):
+    """--participants can't be applied; nothing has been written yet."""
+
+
+def _block_end(lines, start, indent):
+    """Index of the last content line of the YAML block whose key is on lines[start] at `indent`:
+    the block runs until the next non-blank, non-comment line indented `indent` or less, and
+    trailing blanks/comments (which belong to whatever follows) aren't part of it."""
+    last = start
+    for i in range(start + 1, len(lines)):
+        line = lines[i]
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        if len(line) - len(line.lstrip(" ")) <= indent:
+            break
+        last = i
+    return last
+
+
+def plan_participants(specs, folder_name):
+    """Resolve --participants entries against research/participants.yml without writing anything.
+
+    Returns (participants, new_text): participants is a list of {id, role, role_class,
+    returning_from} in the order given; new_text is participants.yml with next_id bumped, a
+    reserved appearance in folder_name added under each returning ID, and a new entry appended for
+    each new ID. Lines are inserted rather than the YAML re-serialized, so comments and formatting
+    survive, and the result is re-parsed to confirm nothing else changed. Raises
+    ParticipantPlanError."""
+    name = "research/participants.yml"
+    if not PARTICIPANTS_FILE.exists():
+        raise ParticipantPlanError(f"{name} doesn't exist, so there's nothing to allocate IDs from")
+    try:
+        text = PARTICIPANTS_FILE.read_text(encoding="utf-8")
+        data = yaml.safe_load(text)
+    except (OSError, yaml.YAMLError) as e:
+        raise ParticipantPlanError(f"{name}: " + " ".join(str(e).split())) from e
+    if not isinstance(data, dict):
+        raise ParticipantPlanError(f"{name}: expected a mapping at the top level")
+    entries = data.get("participants") or {}
+    classes = data.get("role_classes") or []
+    next_id = data.get("next_id")
+    if (not isinstance(entries, dict) or not isinstance(classes, list)
+            or not (isinstance(next_id, str) and PARTICIPANT_ID_RE.fullmatch(next_id))):
+        raise ParticipantPlanError(f"{name}: needs next_id, role_classes and participants; "
+                                   "run build_index.py to see what's wrong")
+
+    # Every role label already in the registry, with the class(es) it's been filed under.
+    label_classes = {}
+    for entry in entries.values():
+        for app in (entry or {}).get("appearances") or []:
+            if isinstance(app, dict) and isinstance(app.get("role"), str):
+                label_classes.setdefault(app["role"], set()).add((entry or {}).get("role_class"))
+
+    number = int(next_id[1:])
+    participants, seen = [], set()
+    for spec in specs:
+        if PARTICIPANT_ID_RE.fullmatch(spec):
+            entry = entries.get(spec)
+            if not isinstance(entry, dict) or not entry.get("appearances"):
+                raise ParticipantPlanError(f"--participants: {spec} isn't in {name}; give a new participant "
+                                           "as Label=class instead")
+            if spec in seen:
+                raise ParticipantPlanError(f"--participants: {spec} is listed twice")
+            seen.add(spec)
+            latest = max(entry["appearances"], key=lambda a: (str(a.get("session", ""))[:10], str(a.get("session", ""))))
+            participants.append(dict(id=spec, role=latest["role"], role_class=entry["role_class"],
+                                     returning_from=latest["session"]))
+            continue
+        label, sep, role_class = spec.rpartition("=")
+        if not sep:
+            label, role_class = spec, None
+        label, role_class = label.strip(), (role_class or "").strip() or None
+        if not label or not label.isprintable() or re.search(r"\bP[0-9]{2,4}\b", label):
+            raise ParticipantPlanError(f"--participants: {spec!r} needs a role label with no participant ID in it")
+        if role_class is None:
+            known = label_classes.get(label, set())
+            if len(known) != 1:
+                reason = "is filed under more than one class" if known else "isn't in the registry yet"
+                raise ParticipantPlanError(f"--participants: {label!r} {reason}; give it as {label}=<class>, "
+                                           f"one of: {', '.join(classes)}")
+            role_class = next(iter(known))
+        if role_class not in classes:
+            raise ParticipantPlanError(f"--participants: {role_class!r} isn't a role class; use one of: "
+                                       f"{', '.join(classes)}")
+        pid = f"P{number:02d}"
+        number += 1
+        if pid in entries:
+            raise ParticipantPlanError(f"{name}: next_id {next_id} is already in use; fix next_id first")
+        participants.append(dict(id=pid, role=label, role_class=role_class, returning_from=None))
+    if not participants:
+        raise ParticipantPlanError("--participants: no entries given")
+
+    lines = text.splitlines(keepends=True)
+    if lines and not lines[-1].endswith("\n"):
+        lines[-1] += "\n"
+    next_line = [i for i, line in enumerate(lines) if re.match(r"next_id:[ \t]*P[0-9]+[ \t]*(#.*)?$", line)]
+    block = [i for i, line in enumerate(lines) if re.match(r"participants:[ \t]*(#.*)?$", line)]
+    if len(next_line) != 1 or len(block) != 1:
+        raise ParticipantPlanError(f"{name}: couldn't find next_id and participants: to update")
+    new_next = f"P{number:02d}"
+    lines[next_line[0]] = re.sub(r"P[0-9]+", new_next, lines[next_line[0]], count=1)
+
+    def appearance(indent, p):
+        out = [f"{indent}- session: {folder_name}\n", f"{indent}  role: {yaml_str(p['role'])}\n"]
+        if p["returning_from"]:
+            out.append(f"{indent}  returning: true\n")
+        return out + [f"{indent}  reserved: true\n"]
+
+    # Returning IDs: one more appearance at the end of the entry's appearances list. Insert from
+    # the bottom of the file up so earlier indexes stay valid.
+    inserts = []
+    for p in participants:
+        if not p["returning_from"]:
+            continue
+        key = next((i for i, line in enumerate(lines)
+                    if re.match(rf"([ \t]+){p['id']}:[ \t]*(#.*)?$", line)), None)
+        if key is None:
+            raise ParticipantPlanError(f"{name}: couldn't find the {p['id']} entry to update")
+        indent = len(lines[key]) - len(lines[key].lstrip(" "))
+        end = _block_end(lines, key, indent)
+        dash = next((re.match(r"[ ]*", lines[i]).group(0) for i in range(key + 1, end + 1)
+                     if re.match(r"[ ]*- session:", lines[i])), " " * (indent + 4))
+        inserts.append((end + 1, appearance(dash, p)))
+    # New IDs: new entries after the participants: block's last line.
+    end = _block_end(lines, block[0], 0)
+    child = next((lines[i][:len(lines[i]) - len(lines[i].lstrip(" "))] for i in range(block[0] + 1, end + 1)
+                  if lines[i].strip() and not lines[i].lstrip().startswith("#")), "  ")
+    new_entries = []
+    for p in participants:
+        if not p["returning_from"]:
+            new_entries += [f"{child}{p['id']}:\n", f"{child}  role_class: {p['role_class']}\n",
+                            f"{child}  appearances:\n", *appearance(child + "    ", p)]
+    if new_entries:
+        inserts.append((end + 1, new_entries))
+    for at, new_lines in sorted(inserts, key=lambda x: x[0], reverse=True):
+        lines[at:at] = new_lines
+    new_text = "".join(lines)
+
+    expected = copy.deepcopy(data)
+    expected["next_id"] = new_next
+    expected["participants"] = expected.get("participants") or {}
+    for p in participants:
+        app = {"session": folder_name, "role": p["role"], "reserved": True}
+        if p["returning_from"]:
+            app["returning"] = True
+            expected["participants"][p["id"]]["appearances"].append(app)
+        else:
+            expected["participants"][p["id"]] = {"role_class": p["role_class"], "appearances": [app]}
+    try:
+        parsed = yaml.safe_load(new_text)
+    except yaml.YAMLError:
+        parsed = None
+    if parsed != expected:
+        raise ParticipantPlanError(f"{name}: couldn't insert the new entries cleanly; add them by hand "
+                                   "(see docs/participants.md)")
+    return participants, new_text
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--title", help="Session or deliverable title")
@@ -624,6 +817,11 @@ def main():
     parser.add_argument("--method-label", default="", help="Free-text method description for the Method section (raw session mode)")
     parser.add_argument("--participants-count", type=int, default=None)
     parser.add_argument("--participants-roles", default="", help="Comma-separated participant roles (raw session mode)")
+    parser.add_argument("--participants", action="append", default=[],
+                        help="Raw session mode: comma-separated participants to allocate IDs for from "
+                             "research/participants.yml — Label=class for a new participant, a bare label "
+                             "already in the registry, or an existing ID (e.g. P17) for a returning one. "
+                             "Repeatable. Can't be combined with --participants-roles.")
     parser.add_argument("--check-tags-only", default=None, help="Comma-separated tags to validate against the glossary, then exit")
 
     # feature-002 deliverable mode (triggered by --type <folder-name>, see above)
@@ -672,6 +870,10 @@ def main():
     related_components = [c.strip() for c in args.related_components.split(",") if c.strip()]
     related_findings_raw = [f.strip() for f in args.related_findings.split(",") if f.strip()]
     roles = [r.strip() for r in args.participants_roles.split(",") if r.strip()]
+    participant_specs = [p.strip() for arg in args.participants for p in arg.split(",") if p.strip()]
+    if participant_specs and roles:
+        print("❌ --participants already writes the roster; don't combine it with --participants-roles", file=sys.stderr)
+        sys.exit(1)
 
     check_tags(tags, glossary)
 
@@ -689,23 +891,42 @@ def main():
               file=sys.stderr)
         sys.exit(1)
 
+    participants, participants_text = None, None
+    if participant_specs:
+        try:
+            participants, participants_text = plan_participants(participant_specs, folder_name)
+        except ParticipantPlanError as e:
+            print(f"❌ {e}", file=sys.stderr)
+            sys.exit(1)
+
     folder_path.mkdir(parents=True)
 
     (folder_path / "session-notes.md").write_text(
         session_notes_template(args.title, date, args.rtype, tags, related_components,
-                                related_findings, args.researcher, args.method_label),
+                                related_findings, args.researcher, args.method_label, participants),
         encoding="utf-8",
     )
     (folder_path / "participants.md").write_text(
         participants_template(args.title, date, args.rtype, tags, related_findings,
-                               args.researcher, args.participants_count, roles),
+                               args.researcher, args.participants_count, roles, participants),
         encoding="utf-8",
     )
     map_session_project(folder_name)
+    if participants_text is not None:
+        try:
+            PARTICIPANTS_FILE.write_text(participants_text, encoding="utf-8")
+        except OSError as e:
+            print(f"⚠️  Didn't update research/participants.yml ({' '.join(str(e).split())}) — add "
+                  + ", ".join(p["id"] for p in participants) + " by hand; see docs/participants.md.",
+                  file=sys.stderr)
 
     print(f"✅ Created {folder_path}/")
     print("   - session-notes.md")
     print("   - participants.md")
+    if participants:
+        print("   Participant IDs: " + ", ".join(
+            p["id"] + (f" (returning from {p['returning_from']})" if p["returning_from"] else "")
+            for p in participants))
     print("Next: fill in the TODOs, then synthesize into research/findings/<topic>.md and run build_index.py.")
 
 
