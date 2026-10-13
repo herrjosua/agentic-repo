@@ -30,6 +30,7 @@ decision log, whose decisions and rationales are copied here in their recorded w
 | 13 | [Decisions are tracked outside the repo](#13-decisions-are-tracked-outside-the-repo) | 2026-09-14 | Superseded by 15 |
 | 14 | [Retrieval is two paths over one source of truth](#14-retrieval-is-two-paths-over-one-source-of-truth) | 2026-09-30 | Active |
 | 15 | [The repos are the source of truth and hold enough to build](#15-the-repos-are-the-source-of-truth-and-hold-enough-to-build) | 2026-09-30 | Active |
+| 16 | [Participant IDs live in one central registry](#16-participant-ids-live-in-one-central-registry) | 2026-10-13 | Active |
 
 ---
 
@@ -227,3 +228,21 @@ decision log, whose decisions and rationales are copied here in their recorded w
 - **Why (drafted 2026-09-30 from the documentation baseline; unconfirmed):** Documents kept in
   several places drifted apart (the plan existed in two copies, ticket statuses contradicted the
   code). One canonical place per fact removes the question of which copy to trust.
+
+## 16. Participant IDs live in one central registry
+
+- **Date:** 2026-10-13
+- **Status:** Active
+- **Decision:** Participant IDs (P01, P02, ...) are one global sequence, one ID per person, and
+  are recorded in one central file, `research/participants.yml`, modeled on
+  `research/projects.yml`. Each entry lists the person's role class and every session they
+  appear in. `build_index.py --check` validates it against the attribution lines in
+  `raw/*/session-notes.md`. A `participants.yml` sidecar inside each raw session folder was
+  considered and rejected. See [`participants.md`](participants.md).
+- **Why:** `raw/` is append-only. A sidecar would mean adding a file to all 30 existing session
+  folders, and every correction would then live in two places in `raw/`. A central file, like
+  `projects.yml`, holds the metadata the raw files can't carry, so no raw file has to change. It
+  also gives one place to allocate the next free ID, which stops an ID being reused for a
+  different person. P17 and P31 both went wrong this way (RR-124), and both were fixed by
+  correction files on 2026-10-13. The RR-155 ticket called IDs "session-scoped", but in practice
+  they are global.

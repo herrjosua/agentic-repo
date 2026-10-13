@@ -15,6 +15,9 @@ three turn a tool's proprietary format into git-tracked Markdown you can query d
   quoting a fact from a raw session, check its folder for `correction-*.md` files.
 - `research/findings/<topic>.md` — synthesized, living per-topic conclusions. These ARE meant to be
   revised as new raw evidence comes in. Every finding must cite the raw session(s) that back it.
+- `research/participants.yml` — the participant ID registry: one entry per person, keyed by a
+  global ID (`P01`...), listing their role class and every session they appear in. Mirrors
+  corrections; never edit a raw file to match it. See "Participant IDs" below.
 - `research/findings/tags.md` — canonical tag glossary, shared across `raw/`, `findings/`, and
   `analytics/summaries/`. Before using a new tag, check it's here.
 - `research/_index.md` — flat topic → tags → components → related analytics → last-updated →
@@ -89,6 +92,18 @@ automatically; reassign it there once its project is known. A component (or a ra
 hand) needs its line added yourself — `build_index.py` warns until you do, and `--check` fails.
 See `docs/projects.md` for the project list and rules.
 
+## Participant IDs
+Participant IDs are one global sequence across every raw session, never session-scoped, and an
+ID is never reused for a different person. `research/participants.yml` records each person once,
+with their role class and every session they appear in. Allocate IDs from it (its `next_id`) and
+let `new_research_session.py --participants` do that for a new session. A quote's attribution line
+in `session-notes.md` is `> — <role>, P<nn>`, plus `(returning from <session folder>)` for a
+returning participant. A wrong ID or role in `raw/` is fixed with a correction file as usual, then
+mirrored in the registry with `raw_id`/`raw_role` and `corrected_by`. `build_index.py` fails when one
+ID is attributed to two different people, and `--check` also fails on a quoted ID that isn't
+registered. The "session-scoped" wording in older `participants.md` files is superseded and left as
+is. See `docs/participants.md`.
+
 ## Retrieval strategy
 Search `findings/` first (grep/glob + frontmatter tags), including each finding's
 `related_analytics` links. Fall back to `raw/` or `analytics/summaries/` only to verify or quote a
@@ -106,6 +121,11 @@ Run `research/scripts/new_research_session.py --title ... --type ... --topic-slu
 to scaffold a new `raw/YYYY-MM-DD-topic-slug/` folder instead of creating one by hand. Pass
 `--researcher "Name"` to also populate the `researcher` frontmatter field (see Attribution
 fields above) — the pre-existing `**Researcher:**` body-text line is still written too.
+Use one raw folder per session (one per interview). Pass `--participants "Label=class, ..., P17"`
+to allocate participant IDs from `research/participants.yml`: a new participant gets the next free
+ID, and an existing ID is a returning participant. The IDs go into the registry (as reserved
+appearances), the new `participants.md` roster and pre-filled quote stubs. Every entry is checked
+before anything is written; see "Participant IDs" above.
 
 ## Creating a feature-002 deliverable file
 `new_research_session.py` also creates single files in the 20 top-level deliverable folders —

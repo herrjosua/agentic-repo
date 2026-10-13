@@ -1,0 +1,277 @@
+# Participant registry: one entry per person, keyed by their participant ID. IDs are one global
+# sequence across every raw session, never session-scoped, and an ID is never reused for a
+# different person. See docs/participants.md for the rules and docs/decisions.md (entry 16) for
+# why this is one central file rather than a file in each raw session folder.
+#
+# research/raw/ is append-only, so this file records what the raw files can't: which session
+# folders each person appears in, their role class, and what a correction file changed. Each
+# appearance is one session folder; that session's session-notes.md attribution lines
+# ("> — <role>, P<nn>") must match it. A correction is mirrored here with raw_id / raw_role (what
+# session-notes.md says) and corrected_by (the correction-*.md in that folder, which stays
+# authoritative). reserved: true marks an appearance allocated by new_research_session.py
+# --participants that doesn't have to be quoted.
+#
+# build_index.py (and --check) validates this file against raw/. IDs that were never quoted in a
+# raw session aren't recorded; next_id is the next one to allocate and is never reused.
+
+next_id: P120
+
+# IDs first used in a session dated after this baseline must be first_id or higher (warn-only).
+sequence_baseline:
+  date: 2026-10-13
+  first_id: P120
+
+role_classes:
+  - physician
+  - app                 # advanced practice provider: nurse practitioner, physician assistant
+  - nurse
+  - care-coordinator
+  - him-coder           # HIM specialists and supervisors, medical coders
+  - behavioral-health
+  - patient
+  - executive           # C-suite, VPs, directors
+  - it
+  - accessibility
+  - admin-staff         # registration, non-clinical/administrative staff
+  - clinician           # clinician, role not specified
+  - mixed-staff         # survey bucket spanning several roles
+
+participants:
+  P01:
+    role_class: executive
+    appearances:
+      - session: 2025-01-14-stakeholder-interview-ai-strategy-kickoff
+        role: Chief Information Officer
+      - session: 2025-12-16-stakeholder-interview-executive-steering-committee-retro
+        role: Chief Information Officer
+        returning: true
+  P02:
+    role_class: executive
+    appearances:
+      - session: 2025-01-14-stakeholder-interview-ai-strategy-kickoff
+        role: VP Clinical Informatics
+      - session: 2025-12-16-stakeholder-interview-executive-steering-committee-retro
+        role: VP Clinical Informatics
+        returning: true
+  P03:
+    role_class: care-coordinator
+    appearances:
+      - session: 2025-01-29-contextual-inquiry-chart-review-baseline
+        role: Care Coordinator
+  P05:
+    role_class: care-coordinator
+    appearances:
+      - session: 2025-01-29-contextual-inquiry-chart-review-baseline
+        role: Care Coordinator (float pool)
+  P07:
+    role_class: nurse
+    appearances:
+      - session: 2025-02-11-survey-nursing-attitudes-ai-documentation
+        role: Registered Nurse, ICU
+  P09:
+    role_class: physician
+    appearances:
+      - session: 2025-02-25-usability-test-ambient-scribe-v01
+        role: Physician, Internal Medicine
+      - session: 2025-09-23-usability-test-ambient-scribe-v02
+        role: Physician, Internal Medicine
+        returning: true
+      - session: 2026-01-13-usability-test-ambient-scribe-ga-release-candidate
+        role: Physician, Internal Medicine
+        returning: true
+  P11:
+    role_class: physician
+    appearances:
+      - session: 2025-02-25-usability-test-ambient-scribe-v01
+        role: Physician, Family Medicine
+      - session: 2025-09-23-usability-test-ambient-scribe-v02
+        role: Physician, Family Medicine
+        returning: true
+  P13:
+    role_class: it
+    appearances:
+      - session: 2025-03-10-accessibility-audit-legacy-extjs-admin-console
+        role: IT Admin, screen reader user
+  P15:
+    role_class: executive
+    appearances:
+      - session: 2025-03-24-interview-privacy-officer-deidentification-requirements
+        role: Chief Privacy Officer
+  # session-notes.md:35 in the v1 folder labels P17 without "(supervisor)";
+  # correction-2026-10-13.md there gives the corrected role.
+  P17:
+    role_class: nurse
+    appearances:
+      - session: 2025-04-08-usability-test-prior-auth-ai-v1
+        role: Utilization Review Nurse (supervisor)
+        raw_role: Utilization Review Nurse
+        corrected_by: correction-2026-10-13.md
+      - session: 2025-11-04-usability-test-prior-auth-ai-v2
+        role: Utilization Review Nurse (supervisor)
+        returning: true
+  P19:
+    role_class: nurse
+    appearances:
+      - session: 2025-04-08-usability-test-prior-auth-ai-v1
+        role: Utilization Review Nurse
+  P21:
+    role_class: nurse
+    appearances:
+      - session: 2025-04-22-contextual-inquiry-ed-intake-shadowing
+        role: ED Intake Nurse
+  # P22, P24, P33, P41: treated as new participants (no returning marker means new, as with P31),
+  # recorded as unverified-sequence because their IDs are out of chronological order. There is no
+  # source in the repo to verify them; see docs/participants.md.
+  P22:
+    role_class: physician
+    note: unverified-sequence
+    appearances:
+      - session: 2026-02-10-ambient-scribe-medication-flag-concept
+        role: Physician, Internal Medicine
+  P23:
+    role_class: admin-staff
+    appearances:
+      - session: 2025-04-22-contextual-inquiry-ed-intake-shadowing
+        role: ED Registration Clerk
+  P24:
+    role_class: app
+    note: unverified-sequence
+    appearances:
+      - session: 2026-02-10-ambient-scribe-medication-flag-concept
+        role: Nurse Practitioner
+  P27:
+    role_class: physician
+    appearances:
+      - session: 2025-05-06-usability-test-clinician-dashboard-redesign-v1
+        role: Physician
+  P29:
+    role_class: app
+    appearances:
+      - session: 2025-05-06-usability-test-clinician-dashboard-redesign-v1
+        role: Nurse Practitioner
+  P31:
+    role_class: it
+    appearances:
+      - session: 2025-05-20-interview-it-security-sso-mfa-modernization
+        role: IT Security Engineer
+  P33:
+    role_class: app
+    note: unverified-sequence
+    appearances:
+      - session: 2026-02-17-session-lock-during-dictation
+        role: Nurse Practitioner
+  P41:
+    role_class: nurse
+    note: unverified-sequence
+    appearances:
+      - session: 2025-02-11-survey-nursing-attitudes-ai-documentation
+        role: Registered Nurse, Outpatient Clinic
+  P44:
+    role_class: patient
+    appearances:
+      - session: 2025-06-03-survey-patient-portal-ai-chatbot-trust
+        role: Patient portal user
+  P58:
+    role_class: patient
+    appearances:
+      - session: 2025-06-03-survey-patient-portal-ai-chatbot-trust
+        role: Patient portal user
+  P61:
+    role_class: patient
+    appearances:
+      - session: 2025-06-17-usability-test-patient-chatbot-prototype
+        role: Patient
+  P64:
+    role_class: patient
+    appearances:
+      - session: 2025-06-17-usability-test-patient-chatbot-prototype
+        role: Patient
+  P67:
+    role_class: him-coder
+    appearances:
+      - session: 2025-07-15-contextual-inquiry-him-release-of-information
+        role: HIM Supervisor
+  P69:
+    role_class: him-coder
+    appearances:
+      - session: 2025-07-15-contextual-inquiry-him-release-of-information
+        role: HIM Specialist
+  P71:
+    role_class: him-coder
+    appearances:
+      - session: 2025-07-29-usability-test-ai-coding-billing-suggestions
+        role: Medical Coder (certified, senior)
+  P73:
+    role_class: him-coder
+    appearances:
+      - session: 2025-07-29-usability-test-ai-coding-billing-suggestions
+        role: Medical Coder
+  P75:
+    role_class: executive
+    appearances:
+      - session: 2025-08-12-interview-cmio-ai-generated-content-governance
+        role: Chief Medical Information Officer
+  P79:
+    role_class: care-coordinator
+    appearances:
+      - session: 2025-08-26-usability-test-alert-triage-ai-care-coordination
+        role: Care Coordinator Supervisor
+  P81:
+    role_class: care-coordinator
+    appearances:
+      - session: 2025-08-26-usability-test-alert-triage-ai-care-coordination
+        role: Care Coordinator
+  P84:
+    role_class: physician
+    appearances:
+      - session: 2025-09-09-survey-clinician-burnout-documentation-burden-baseline
+        role: Physician
+  P91:
+    role_class: app
+    appearances:
+      - session: 2025-09-09-survey-clinician-burnout-documentation-burden-baseline
+        role: Nurse Practitioner
+  P95:
+    role_class: behavioral-health
+    appearances:
+      - session: 2025-10-07-contextual-inquiry-behavioral-health-sensitive-notes
+        role: Behavioral Health Clinician
+  P97:
+    role_class: nurse
+    appearances:
+      - session: 2025-10-07-contextual-inquiry-behavioral-health-sensitive-notes
+        role: Behavioral Health Unit Charge Nurse
+  P99:
+    role_class: executive
+    appearances:
+      - session: 2025-10-21-interview-training-department-rollout-change-management
+        role: Director of Clinical Training & Education
+  P103:
+    role_class: clinician
+    appearances:
+      - session: 2025-11-18-accessibility-audit-mobile-clinician-app
+        role: Clinician, low vision
+  P105:
+    role_class: clinician
+    appearances:
+      - session: 2025-11-18-accessibility-audit-mobile-clinician-app
+        role: Clinician, limited fine motor control
+  P112:
+    role_class: admin-staff
+    appearances:
+      - session: 2025-12-02-survey-allstaff-ai-readiness-pulse
+        role: Non-clinical/administrative staff
+  P118:
+    role_class: app
+    appearances:
+      - session: 2026-01-13-usability-test-ambient-scribe-ga-release-candidate
+        role: Nurse Practitioner
+  # Quoted as P31 in session-notes.md:56; P31 is the IT Security Engineer (2025-05-20).
+  # correction-2026-10-13.md in that folder gives this physician the ID P119.
+  P119:
+    role_class: physician
+    appearances:
+      - session: 2026-02-17-session-lock-during-dictation
+        role: Physician, Family Medicine
+        raw_id: P31
+        corrected_by: correction-2026-10-13.md

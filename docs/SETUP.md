@@ -138,6 +138,12 @@ and slug. To try it without keeping the result, do it on a throwaway branch.
   left empty.
 - Other optional flags: `--related-components`, `--method-label`, `--participants-count`,
   `--participants-roles`.
+- `--participants "Medical Coder=him-coder, Care Coordinator, P17"` allocates participant IDs
+  from `research/participants.yml`. `Label=class` is a new participant, a bare label reuses that
+  label's class from the registry, and an existing ID is a returning participant. It fills in the
+  registry, the `participants.md` roster and the quote stubs in `session-notes.md`. An unknown
+  label, class or ID exits with an error before anything is written. It can't be combined with
+  `--participants-roles`. See [`participants.md`](participants.md).
 - Unknown tags produce a warning, not an error.
 
 To check tags against the glossary (`research/findings/tags.md`) before using them:
