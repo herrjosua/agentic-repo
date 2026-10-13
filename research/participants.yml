@@ -14,7 +14,7 @@
 # build_index.py (and --check) validates this file against raw/. IDs that were never quoted in a
 # raw session aren't recorded; next_id is the next one to allocate and is never reused.
 
-next_id: P120
+next_id: P124
 
 # IDs first used in a session dated after this baseline must be first_id or higher (warn-only).
 sequence_baseline:
@@ -275,3 +275,27 @@ participants:
         role: Physician, Family Medicine
         raw_id: P31
         corrected_by: correction-2026-10-13.md
+  P120:
+    role_class: him-coder
+    appearances:
+      - session: 2026-03-10-interview-medical-coder-coding-from-ai-drafted-notes
+        role: Medical Coder (certified)
+        reserved: true
+  P121:
+    role_class: him-coder
+    appearances:
+      - session: 2026-03-31-interview-him-supervisor-roi-volume-and-part-2
+        role: HIM Supervisor
+        reserved: true
+  P122:
+    role_class: him-coder
+    appearances:
+      - session: 2026-04-21-interview-coding-auditor-override-audit-trail
+        role: Coding Auditor
+        reserved: true
+  P123:
+    role_class: him-coder
+    appearances:
+      - session: 2026-05-12-interview-cdi-specialist-documentation-gaps
+        role: Clinical Documentation Integrity Specialist
+        reserved: true
