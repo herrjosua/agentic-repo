@@ -37,7 +37,7 @@ first-time impression.
   all uncertainty as equally worth flagging. *(Inferred from P22, 2026-02-10; not observed for
   P09)*
 - Not lose work to session/security interruptions that are unrelated to the clinical task.
-  *(Inferred from P31 and P33, 2026-02-17; not observed for P09)*
+  *(Inferred from P119 and P33, 2026-02-17; not observed for P09)*
 
 ## What changed for this persona, round over round
 - **v0.1 → v0.2:** Accuracy improved, but reading behavior didn't — still read every line, despite
@@ -55,7 +55,7 @@ first-time impression.
 - Generic "low confidence" signals don't tell this persona *what kind* of thing to double-check.
   *(Inferred from P22, 2026-02-10)*
 - Session locks during dictation currently look identical to data loss, which erodes trust in the
-  tool independent of transcription accuracy itself. *(Inferred from P31 and P33, 2026-02-17)*
+  tool independent of transcription accuracy itself. *(Inferred from P119 and P33, 2026-02-17)*
 
 ## Based on
 P09's sessions in the three ambient-scribe test rounds (2025-02-25, 2025-09-23, 2026-01-13). The
