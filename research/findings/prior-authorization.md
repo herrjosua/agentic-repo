@@ -54,13 +54,13 @@ whether fixes actually landed.
   daily work the nurse applies it partway through a case, not in advance as in testing. Both nurses
   open citations on every case: P19 checks the diagnosis and the date of the most recent
   supporting note first (2026-06-16, MEDIUM), and P144 checks that each cited entry says what the
-  draft says, not only that it exists (2026-09-17, MEDIUM). That confirms the citation requirement
+  draft says, not only that it exists (2026-09-17, MEDIUM). That supports the citation requirement
   outside testing, and shows that a count of citations opened, as in v2, doesn't record what was
   checked. Requests following a claim denial, requests covering several services and long
   histories are still done by hand (2026-06-16, MEDIUM); P144 starts a claim-denial case from the
   denial letter's reason and prepares calls with the health plan by hand (2026-09-17, MEDIUM).
   Still open: how the pilot is performing (no time, accuracy or claim-denial data is recorded; the
-  only time figures remain v1's estimate and v2's measurement on 2 straightforward cases), how
+  only time figures remain v1's estimate and v2's measurement on 2 straightforward test cases), how
   often a case leaves the draft partway through, and whether a submitted request keeps its
   citations.
 

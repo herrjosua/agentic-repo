@@ -74,8 +74,8 @@ recollection, not a count or a rate.
   describe physicians and should not be read as describing nurses. The September baseline's roster
   lists registered nurses among its respondents, but its notes report these figures for physicians
   only, and whether nurse results exist is not recorded.
-- **Nurses chart after the shift too, with no nurse figure.** A medical-surgical night nurse
-  regularly finishes notes after handoff, "most shifts, thirty to forty-five minutes", mostly
+- **Charting after the shift: one nurse's account, and no nurse figure.** A medical-surgical night
+  nurse regularly finishes notes after handoff, "most shifts, thirty to forty-five minutes", mostly
   narrative and end-of-shift reassessments deferred whenever a patient needed something (informal
   self-estimate; 2026-07-21, HIGH). That is one nurse on one unit, not comparable to the physician
   figures; they described fatigue, not burnout, and no burnout measure was used.
@@ -88,13 +88,13 @@ recollection, not a count or a rate.
   the provider meant to emphasise (2026-03-17, MEDIUM). This complicates the survey's framing, but
   it doesn't show which reading is more common: the two readings come from different nurses, and
   neither is a count.
-- **Nurses who read scribe-drafted notes act on the plan.** The clinic nurse now reads the whole
-  note before a callback, because plan items said during the visit sometimes land in the body
-  rather than the plan ("a few times a week", an informal impression; 2026-03-17, HIGH). If the
-  plan is incomplete, they message the provider before calling the patient, which delays the
-  callback.
-- **Start-of-shift chart review follows urgency, not the chart's sections.** A telemetry nurse
-  reviews each chart in the order of what could hurt the patient soonest (medications due,
+- **A clinic nurse who reads scribe-drafted notes reads the whole note, not just the plan.** They
+  now read the whole note before a callback, because plan items said during the visit sometimes
+  land in the body rather than the plan; they put near-misses at "a few times a week", an informal
+  impression (2026-03-17, HIGH). If the plan is incomplete, they message the provider before
+  calling the patient, which delays the callback.
+- **One telemetry nurse's start-of-shift review follows urgency, not the chart's sections.** They
+  review each chart in the order of what could hurt the patient soonest (medications due,
   overnight telemetry events and trends, labs, then the night nurse's narrative, progress notes
   last), at "about five minutes a patient" on an assignment of four (informal estimate;
   2026-10-13, MEDIUM). They would expect an AI summary to order items by what needs action first,
