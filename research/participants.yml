@@ -14,7 +14,7 @@
 # build_index.py (and --check) validates this file against raw/. IDs that were never quoted in a
 # raw session aren't recorded; next_id is the next one to allocate and is never reused.
 
-next_id: P138
+next_id: P141
 
 # IDs first used in a session dated after this baseline must be first_id or higher (warn-only).
 sequence_baseline:
@@ -123,6 +123,10 @@ participants:
     appearances:
       - session: 2025-04-22-contextual-inquiry-ed-intake-shadowing
         role: ED Intake Nurse
+      - session: 2026-04-14-interview-ed-intake-nurse-interruptions-and-downtime
+        role: ED Intake Nurse
+        returning: true
+        reserved: true
   # P22, P24, P33, P41: treated as new participants (no returning marker means new, as with P31),
   # recorded as unverified-sequence because their IDs are out of chronological order. There is no
   # source in the repo to verify them; see docs/participants.md.
@@ -390,4 +394,22 @@ participants:
     appearances:
       - session: 2026-09-29-interview-care-coordinator-referral-follow-up
         role: Care Coordinator
+        reserved: true
+  P138:
+    role_class: nurse
+    appearances:
+      - session: 2026-03-17-interview-clinic-nurse-reading-scribe-drafted-notes
+        role: Registered Nurse (primary care clinic)
+        reserved: true
+  P139:
+    role_class: nurse
+    appearances:
+      - session: 2026-05-19-interview-ed-charge-nurse-shift-oversight
+        role: Charge Nurse (emergency department)
+        reserved: true
+  P140:
+    role_class: nurse
+    appearances:
+      - session: 2026-05-28-interview-icu-nurse-handoff-narrative
+        role: Registered Nurse (ICU)
         reserved: true
