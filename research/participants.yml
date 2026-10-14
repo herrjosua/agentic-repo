@@ -14,7 +14,7 @@
 # build_index.py (and --check) validates this file against raw/. IDs that were never quoted in a
 # raw session aren't recorded; next_id is the next one to allocate and is never reused.
 
-next_id: P130
+next_id: P133
 
 # IDs first used in a session dated after this baseline must be first_id or higher (warn-only).
 sequence_baseline:
@@ -63,6 +63,10 @@ participants:
     appearances:
       - session: 2025-01-29-contextual-inquiry-chart-review-baseline
         role: Care Coordinator (float pool)
+      - session: 2026-04-07-interview-care-coordinator-float-pool-system-familiarity
+        role: Care Coordinator (float pool)
+        returning: true
+        reserved: true
   P07:
     role_class: nurse
     appearances:
@@ -334,4 +338,22 @@ participants:
     appearances:
       - session: 2026-10-06-interview-senior-medical-coder-ai-suggestions-concept
         role: Medical Coder (senior)
+        reserved: true
+  P130:
+    role_class: care-coordinator
+    appearances:
+      - session: 2026-03-03-interview-care-coordinator-chart-review-scribe-notes
+        role: Care Coordinator
+        reserved: true
+  P131:
+    role_class: care-coordinator
+    appearances:
+      - session: 2026-04-16-interview-care-coordinator-transitions-medication-changes
+        role: Care Coordinator (transitions of care)
+        reserved: true
+  P132:
+    role_class: care-coordinator
+    appearances:
+      - session: 2026-05-05-interview-care-coordinator-supervisor-queue-oversight
+        role: Care Coordinator Supervisor
         reserved: true
