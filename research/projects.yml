@@ -95,8 +95,11 @@ raw:
   2026-08-20-interview-care-coordinator-new-hire-shadowing: project-care-coordination
   2026-09-01-interview-care-coordinator-float-pool-coverage: project-care-coordination
   2026-09-08-interview-him-specialist-roi-request-turnaround: project-him
+  2026-09-15-interview-infusion-nurse-medication-changes-in-scribe-notes: project-ambient-scribe
+  2026-09-17-interview-utilization-review-nurse-citation-checking: project-prior-auth
   2026-09-29-interview-care-coordinator-referral-follow-up: project-care-coordination
   2026-10-06-interview-senior-medical-coder-ai-suggestions-concept: project-him
+  2026-10-13-interview-telemetry-nurse-start-of-shift-chart-review: project-cross-cutting
 
 components:
   admin-console-grid: project-cross-cutting
