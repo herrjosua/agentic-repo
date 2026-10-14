@@ -1,6 +1,6 @@
 # Participant IDs
 
-Every research participant has one participant ID (`P01`, `P02`, ... `P137`). IDs come from one
+Every research participant has one participant ID (`P01`, `P02`, ... `P140`). IDs come from one
 global sequence across every raw session. They are **not** session-scoped, and an ID is never
 reused for a different person. A participant who takes part in a later session keeps their ID.
 
@@ -67,7 +67,7 @@ coarse ("Chief Privacy Officer" and "Chief Information Officer" are both `execut
 |---|---|
 | `physician` | Physician; Physician, Internal Medicine; Physician, Family Medicine |
 | `app` | Advanced practice providers: Nurse Practitioner, Physician Assistant |
-| `nurse` | Registered Nurse; ED Intake Nurse; Utilization Review Nurse (± supervisor); Behavioral Health Unit Charge Nurse |
+| `nurse` | Registered Nurse (± primary care clinic; ± ICU); ED Intake Nurse; Charge Nurse (emergency department); Utilization Review Nurse (± supervisor); Behavioral Health Unit Charge Nurse |
 | `care-coordinator` | Care Coordinator (± float pool; ± transitions of care; ± complex care); Care Coordinator Supervisor |
 | `him-coder` | HIM Specialist (± Release of Information); HIM Supervisor; Medical Coder (± certified; ± senior); Coding Auditor; Clinical Documentation Integrity Specialist; Revenue Cycle Analyst (Billing) |
 | `behavioral-health` | Behavioral Health Clinician |
@@ -84,6 +84,14 @@ sessions mix physicians and NPs, and a physician's ID reused for an NP is exactl
 check should catch.
 
 `him-coder` covers the whole HIM coding side, including CDI specialists and revenue-cycle analysts.
+
+`nurse`, for the RR-124 nurse interviews (Phase 3), means a licensed RN whose main job is direct
+nursing care on a unit or in a clinic (inpatient, ED, ICU, ambulatory, infusion), frontline
+nursing leadership of that care (charge nurse, nurse manager), or nurse-specific clinical review
+(utilization review). Excluded: RN case managers, transitions or discharge nurses, nurse navigators
+and social workers (their work is coordination, and they were excluded from the Phase 2 care
+coordinator interviews too); nurse practitioners and physician assistants (`app`, Phase 4); LPNs
+and LVNs; and nurse informatics. See decision 18 in [`decisions.md`](decisions.md).
 
 The class belongs to the participant, never to the session. A session with several roles needs
 nothing extra: its classes are just the classes of the people in it.

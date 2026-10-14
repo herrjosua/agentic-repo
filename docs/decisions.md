@@ -32,6 +32,7 @@ decision log, whose decisions and rationales are copied here in their recorded w
 | 15 | [The repos are the source of truth and hold enough to build](#15-the-repos-are-the-source-of-truth-and-hold-enough-to-build) | 2026-09-30 | Active |
 | 16 | [Participant IDs live in one central registry](#16-participant-ids-live-in-one-central-registry) | 2026-10-13 | Active |
 | 17 | [Participant IDs follow allocation order, not session date](#17-participant-ids-follow-allocation-order-not-session-date) | 2026-10-14 | Active |
+| 18 | [Who counts as a nurse in the RR-124 interviews](#18-who-counts-as-a-nurse-in-the-rr-124-interviews) | 2026-10-14 | Active |
 
 ---
 
@@ -265,3 +266,21 @@ decision log, whose decisions and rationales are copied here in their recorded w
   `unverified-sequence` note and the `sequence_baseline` floor, so a backdated P130 raises
   nothing. For IDs allocated from the registry, the git history of `participants.yml` records the
   allocation order, which the four legacy IDs don't have.
+
+## 18. Who counts as a nurse in the RR-124 interviews
+
+- **Date:** 2026-10-14
+- **Status:** Active
+- **Decision:** A participant in the RR-124 nurse interviews (Phase 3) is a licensed RN whose main
+  job is direct nursing care on a unit or in a clinic (inpatient, ED, ICU, ambulatory, infusion),
+  frontline nursing leadership of that care (charge nurse, nurse manager), or nurse-specific
+  clinical review (utilization review). Their role class is `nurse`. Excluded: RN case managers,
+  transitions or discharge nurses, nurse navigators and social workers, whose work is
+  coordination; nurse practitioners and physician assistants, who are `app` and belong to Phase 4;
+  LPNs and LVNs; and nurse informatics. See [`participants.md`](participants.md#role-classes).
+- **Why:** The phases interview one user type at a time, so the line between nurses and care
+  coordinators has to be drawn once and written down. Phase 2 (care coordinators) already left
+  out RN case managers and social workers, but that exclusion was previously recorded only in the
+  RR-124 ticket, not in this repo. The `nursing` tag means the registered nurse population
+  specifically, which rules out LPNs and LVNs. Nurse informatics staff configure the tools rather
+  than use them in patient care, which makes them stakeholders rather than end users.
