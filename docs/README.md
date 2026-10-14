@@ -31,7 +31,7 @@ Docs not re-checked show their last-commit date instead.
 
 | Kind | Count | Where |
 |---|---|---|
-| Raw research sessions | 57 (114 `session-notes.md` / `participants.md` files, plus 3 correction files) | `research/raw/` |
+| Raw research sessions | 60 (120 `session-notes.md` / `participants.md` files, plus 3 correction files) | `research/raw/` |
 | Findings | 12 (plus the `tags.md` glossary) | `research/findings/` |
 | Analytics summaries | 1 | `analytics/summaries/` |
 | Components | 18 | `design-tokens/components/` |
