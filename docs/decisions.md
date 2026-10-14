@@ -31,6 +31,7 @@ decision log, whose decisions and rationales are copied here in their recorded w
 | 14 | [Retrieval is two paths over one source of truth](#14-retrieval-is-two-paths-over-one-source-of-truth) | 2026-09-30 | Active |
 | 15 | [The repos are the source of truth and hold enough to build](#15-the-repos-are-the-source-of-truth-and-hold-enough-to-build) | 2026-09-30 | Active |
 | 16 | [Participant IDs live in one central registry](#16-participant-ids-live-in-one-central-registry) | 2026-10-13 | Active |
+| 17 | [Participant IDs follow allocation order, not session date](#17-participant-ids-follow-allocation-order-not-session-date) | 2026-10-14 | Active |
 
 ---
 
@@ -246,3 +247,21 @@ decision log, whose decisions and rationales are copied here in their recorded w
   different person. P17 and P31 both went wrong this way (RR-124), and both were fixed by
   correction files on 2026-10-13. The RR-155 ticket called IDs "session-scoped", but in practice
   they are global.
+
+## 17. Participant IDs follow allocation order, not session date
+
+- **Date:** 2026-10-14
+- **Status:** Active
+- **Decision:** From P130 on, participant IDs follow the order `new_research_session.py
+  --participants` allocates them, not the order of session dates. A session can be dated earlier
+  than one with a lower ID: a session dated 2026-03-03 can carry P130 while one dated 2026-03-10
+  carries P120. Each RR-124 phase allocates its IDs as one contiguous block. `note:
+  unverified-sequence` stays only for the four pre-registry participants (P22, P24, P33, P41) and
+  is never used for an ID allocated from P130 on. `sequence_baseline` is unchanged; it is a floor,
+  not an ordering rule. See [`participants.md`](participants.md#id-order).
+- **Why:** The RR-124 phases cover the same March to October 2026 window one user type at a time,
+  so keeping IDs in date order would force each phase's IDs to be interleaved with the others'.
+  `build_index.py` never checked date order: its sequence checks cover only the
+  `unverified-sequence` note and the `sequence_baseline` floor, so a backdated P130 raises
+  nothing. For IDs allocated from the registry, the git history of `participants.yml` records the
+  allocation order, which the four legacy IDs don't have.

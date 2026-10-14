@@ -29,10 +29,10 @@ participants:
 | Field | Where | Meaning |
 |---|---|---|
 | `next_id` | top level | The next ID to allocate. Every ID in the registry is below it, so an ID is never handed out twice. |
-| `sequence_baseline` | top level | `date` and `first_id`: an ID first used in a session dated after `date` should be `first_id` or higher (a warning, not an error). |
+| `sequence_baseline` | top level | `date` and `first_id`: an ID first used in a session dated after `date` should be `first_id` or higher (a warning, not an error). A floor, not an ordering rule. |
 | `role_classes` | top level | The controlled vocabulary below. |
 | `role_class` | entry | The person's role class. One per person. |
-| `note` | entry | Optional. `unverified-sequence`: a new participant (no returning marker) whose ID is out of chronological order. There is no source in the repo to verify it. |
+| `note` | entry | Optional. `unverified-sequence`: a pre-registry participant (P22, P24, P33, P41) who is new (no returning marker) and whose ID is out of chronological order. There is no source in the repo to verify it. Never used for IDs allocated from P130 on (see [ID order](#id-order)). |
 | `appearances` | entry | One item per raw session folder the person appears in. |
 | `session` | appearance | The raw session folder name. |
 | `role` | appearance | The role label, exactly as the attribution line in that session's `session-notes.md` writes it (or the corrected label, see below). |
@@ -46,6 +46,16 @@ records who they were, and the registry doesn't invent it. `next_id` alone stops
 
 Survey respondent IDs (`P07`, `P41`, `P44`, `P58`, `P84`, `P91`, `P112`) are recorded the same way
 as any other quoted ID. How future surveys number their respondents is out of scope for now.
+
+## ID order
+
+From P130 on, IDs follow the order `new_research_session.py --participants` allocates them, not
+the order of session dates (decision 17 in [`decisions.md`](decisions.md)). For example, a session
+dated 2026-03-03 can carry P130 while 2026-03-10 carries P120; this is not out of sequence and gets
+no note. Each RR-124 phase allocates its IDs as one contiguous block, and the git history of
+`participants.yml` records the order. `note: unverified-sequence` is only for the four
+pre-registry participants (P22, P24, P33, P41), and `sequence_baseline` is a floor, not an
+ordering rule.
 
 ## Role classes
 
