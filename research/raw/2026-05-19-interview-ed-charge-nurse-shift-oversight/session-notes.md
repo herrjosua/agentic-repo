@@ -32,7 +32,7 @@ The ED intake boundary in `scope-boundaries-and-workflow-fit.md` rests on one in
 - **[LOW]** *(documentation)* Catching up on their own charting after peak is routine for the ED nurses they supervise. They did not think AI drafting of nursing notes would help at peak, for the same reason as intake: nobody could review it then.
 
 ## Representative Quotes
-> "At seven o'clock, no, nothing new, I agree with your intake nurse. At one in the morning I've got time to look at something."
+> "At seven o'clock, no, nothing new, intake can't take anything at that hour. At one in the morning I've got time to look at something."
 > — Charge Nurse (emergency department), P139
 
 > "If it could pull together who's boarding and what's still pending, and I fix what's wrong, that's my handoff. That I'd look at."

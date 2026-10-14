@@ -29,14 +29,14 @@ Check whether the ED intake boundary in `scope-boundaries-and-workflow-fit.md` s
 
 ## Key Findings
 - **[HIGH]** *(interruption tolerance)* At peak, nothing that needs sustained review would fit intake. They described the interruptions as unchanged since the April 2025 shadowing ("constant, same as when you were here"); this is their account, not a re-measurement of the 2-4 minute figure. They were open to help that needs no review, such as fields that fill themselves and can be ignored, but not to anything they would have to read and approve between interruptions. This confirms the ED intake boundary and the ED intake storyboard.
-- **[MEDIUM]** *(paper backup)* The paper triage sheet is still in use. They start one at the beginning of every peak shift whether or not the system is slow, because by the time it is slow it is too late to start one. They put system slowness at "a few times most weeks"; that is informal, and they did not know what causes it. Any AI feature at intake would still need to degrade to paper without losing what was already entered.
+- **[MEDIUM]** *(paper backup)* The paper triage sheet is still in use. They start one at the beginning of every peak shift whether or not the system is slow, because by the time it is slow it is too late to start one. The April 2025 notes record the sheet as a backup kept "in case the system is slow" (2025-04-22-contextual-inquiry-ed-intake-shadowing/session-notes.md:31) but don't say when staff started it, so this is not evidence of a change since 2025. They gave no new estimate of how often the system is slow (the 2025 notes have staff self-reporting it several times a shift) and did not know what causes it. Any AI feature at intake would still need to degrade to paper without losing what was already entered.
 - **[LOW]** *(re-entry)* After a slow spell, they re-enter what is on the paper sheet into the intake form, usually after peak. They saw that re-entry, not intake itself, as the part of the shift where a tool might help, because it happens when things are quieter.
 
 ## Representative Quotes
 > "Same as when you were here. If I have to read it and click OK, it's not happening between ambulances."
 > — ED Intake Nurse, P21 (returning from 2025-04-22-contextual-inquiry-ed-intake-shadowing)
 
-> "I start the paper sheet at the top of every shift now. By the time the system's crawling, it's too late to start one."
+> "I start the paper sheet at the top of every shift. By the time the system's crawling, it's too late to start one."
 > — ED Intake Nurse, P21 (returning from 2025-04-22-contextual-inquiry-ed-intake-shadowing)
 
 ## Recommendations
@@ -45,7 +45,7 @@ Check whether the ED intake boundary in `scope-boundaries-and-workflow-fit.md` s
 3. If ED intake is revisited, look at post-peak re-entry from the paper sheet as a separate, lower-pressure task.
 
 ## Follow-ups / Open Questions
-- What causes the system slowness, and how often it happens, is still not known; the April 2025 question to IT is unanswered in the corpus, and "a few times most weeks" is one nurse's estimate.
+- What causes the system slowness, and how often it happens, is still not known; the April 2025 question to IT is unanswered in the corpus, and the only frequency on record is the 2025 staff self-report (several times a shift).
 - Whether the insurance-card photo pre-fill for registration clerks has been piloted is not recorded; it was not discussed with this participant.
 - Whether the 2-4 minute interruption figure still holds would need another peak-hour observation.
 
