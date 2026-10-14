@@ -504,9 +504,9 @@ def test_real_registry_covers_every_attribution():
     import build_index
     data = build_index.load_participants()
     attributions = build_index.load_attributions()
-    assert len(attributions) == 89
-    assert len(data["participants"]) == 59
-    assert data["next_id"] == "P138"
+    assert len(attributions) == 97
+    assert len(data["participants"]) == 62
+    assert data["next_id"] == "P141"
     p119 = data["participants"]["P119"]["appearances"][0]
     assert (p119["raw_id"], p119["corrected_by"]) == ("P31", "correction-2026-10-13.md")
     p17 = data["participants"]["P17"]["appearances"][0]
