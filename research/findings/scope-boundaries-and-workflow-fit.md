@@ -14,6 +14,7 @@ tags:
   - high-acuity
   - intake
   - mfa
+  - nursing
   - phi
   - security
   - sensitive-notes
@@ -32,7 +33,8 @@ related_findings:
 
 ## Overview
 Three 2025 sessions, plus two 2026 HIM interviews that refine a release-of-information (ROI)
-boundary first set in the July 2025 HIM research, are grouped here because their common output was
+boundary first set in the July 2025 HIM research and two 2026 ED nurse interviews that revisit the
+ED intake boundary, are grouped here because their common output was
 a "don't build this yet, or don't build it here" conclusion. The December executive retro praised this kind of
 scope discipline in general ("The stuff you told us not to build yet mattered as much as the stuff
 you told us to build"), but the only exclusions it named were behavioral health (covered below)
@@ -40,10 +42,20 @@ and complex prior-auth cases (not part of this finding). It did not discuss the 
 SSO/MFA boundaries, or the ROI redaction boundary below, which dates from the July 2025 HIM
 research; only the 2026 evidence added to that boundary postdates the retro.
 
-- **ED intake (contextual inquiry, Apr 2025):** peak-hour interruption frequency (every 2-4 minutes)
+- **ED intake (contextual inquiry, Apr 2025; revisited Apr and May 2026):** peak-hour interruption frequency (every 2-4 minutes)
   makes any AI tool requiring sustained review attention a poor fit for ED intake nurses
   specifically during peak windows. The one positive signal — insurance-card-photo pre-fill for
   registration clerks — was carved out as a smaller, separate, lower-risk candidate instead.
+  In April 2026 the intake nurse shadowed in 2025 described the interruptions as unchanged (their
+  account, not a re-measurement) and would accept help that needs no review, but nothing they
+  would have to read and approve between interruptions (2026-04-14, HIGH). They start the paper
+  triage sheet at the top of every peak shift, so anything scoped here has to work alongside paper
+  and survive re-entry from it; the 2025 notes don't say when staff started it, so this isn't
+  evidence of a change (2026-04-14, MEDIUM). An ED charge nurse agreed the boundary holds at peak,
+  for charge work too, but not across the whole shift: after peak they could see an assist pulling
+  together the end-of-shift handoff for them to check ("twenty minutes on a bad night" by hand,
+  informal; an expectation, nothing shown; 2026-05-19, MEDIUM). The boundary is peak-specific, not
+  ED-wide. Whether the insurance-card pre-fill has been piloted is not recorded.
 - **SSO/MFA modernization (interview, May 2025):** independent of any AI feature, a planned
   15-minute forced re-authentication conflicts with clinical ops' expectation of a 4-hour session —
   and nobody had yet defined what happens to an in-progress ambient scribe recording session if a
@@ -80,6 +92,8 @@ document and a cross-cutting findings section.
 - **2025-10-07** — [Contextual Inquiry — Behavioral Health Unit, Sensitive Note Handling](../raw/2025-10-07-contextual-inquiry-behavioral-health-sensitive-notes/session-notes.md) *(`contextual-inquiry`)*
 - **2025-12-16** — [Executive Steering Committee — Year-End Retro & 2026 Roadmap Input](../raw/2025-12-16-stakeholder-interview-executive-steering-committee-retro/session-notes.md) *(`interview`)* — cited for the scope-discipline praise only
 - **2026-03-31** — [Interview — HIM Supervisor on ROI Volume and Part 2 Handling](../raw/2026-03-31-interview-him-supervisor-roi-volume-and-part-2/session-notes.md) *(`interview`)*
+- **2026-04-14** — [Interview — Returning ED Intake Nurse on Interruptions and Downtime](../raw/2026-04-14-interview-ed-intake-nurse-interruptions-and-downtime/session-notes.md) *(`interview`)*
+- **2026-05-19** — [Interview — ED Charge Nurse on Shift Oversight](../raw/2026-05-19-interview-ed-charge-nurse-shift-oversight/session-notes.md) *(`interview`)*
 - **2026-09-08** — [Interview — HIM Specialist on ROI Request Turnaround](../raw/2026-09-08-interview-him-specialist-roi-request-turnaround/session-notes.md) *(`interview`)*
 
 ## Related Findings
