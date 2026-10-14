@@ -1,11 +1,12 @@
 ---
 title: Rollout & Change Management
-date: 2025-12-02
+date: 2026-08-18
 type: synthesis
 status: synthesized
 researcher: Priya Patel
 tags:
   - change-management
+  - nursing
   - organizational-readiness
   - pulse
   - rollout
@@ -25,7 +26,8 @@ related_findings:
 ## Overview
 Two sessions, five weeks apart at year-end, look at how Compass AI features actually get adopted
 once built: a training/change-management interview (Oct 2025) and an all-staff AI readiness pulse
-survey (Dec 2025).
+survey (Dec 2025). A 2026 interview with a nurse manager (Aug 2026) adds the view of the person who
+has to release staff for that training.
 
 - **The training interview drew directly on a documented past failure.** The 2022 CDS alert
   rollout — referenced independently by executives back in January (see
@@ -34,6 +36,16 @@ survey (Dec 2025).
   Training's recommendation is a "unit champion" model (1-2 respected staff per unit, trained early
   and deeply) plus mandatory hands-on practice time, and to avoid rolling out during flu season
   (Nov-Feb) given historical attendance patterns.
+- **Practice time depends on the unit's staffing on the day.** A medical-surgical nurse manager
+  agreed with the champion model in principle, but releasing a nurse means backfilling their
+  assignment with a float nurse or overtime, and on a high-census or call-out day training is the
+  first thing they cancel (2026-08-18, MEDIUM). What they said they would need: training dates
+  known before they build the schedule, about six weeks out (their description of their own
+  practice); backfill paid from a training budget rather than the unit's; night and weekend
+  sessions; and champion time for supporting peers put on the schedule, not added to a full
+  assignment (2026-08-18, MEDIUM). They also named flu season as their hardest months to release
+  anyone. Their account draws on releasing nurses for other training, not on an AI rollout, and how
+  often training is cancelled for staffing is not measured.
 - **The December pulse survey found an awareness gap that changes rollout sequencing for
   non-clinical features specifically**: only 34% of non-clinical/admin staff were aware Compass AI
   work was even underway, vs. 71% of clinical staff. This matters directly for the patient
@@ -46,11 +58,14 @@ survey (Dec 2025).
 
 Recommendation: use the unit-champion training model for the ambient scribe GA rollout (avoiding
 flu-season timing), and run a dedicated non-clinical-staff communications push before the
-scheduling chatbot goes live.
+scheduling chatbot goes live. One nurse manager's account suggests that, for any later rollout that
+reaches nurses, champion practice time and backfill should be agreed with unit managers before
+their schedule is built (2026-08-18).
 
 ## Evidence Trail
 - **2025-10-21** — [Interview — Training & Education Dept on Rollout/Change Management Planning](../raw/2025-10-21-interview-training-department-rollout-change-management/session-notes.md) *(`interview`)*
 - **2025-12-02** — [Survey — All-Staff AI Readiness Pulse Survey](../raw/2025-12-02-survey-allstaff-ai-readiness-pulse/session-notes.md) *(`survey`)*
+- **2026-08-18** — [Interview — Nurse Manager on Unit Champions](../raw/2026-08-18-interview-nurse-manager-unit-champions/session-notes.md) *(`interview`)*
 
 ## Related Findings
 - [AI Governance, PHI & Compliance](governance-and-phi.md)
