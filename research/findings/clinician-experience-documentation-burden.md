@@ -108,12 +108,35 @@ whether skepticism varies with tenure (the February survey's cross-tab hasn't be
 newer nurse's view can't answer it); whether the survey's ICU and ED skepticism holds beyond one
 ICU interview; and how often plan items land outside the plan in scribe-drafted notes.
 
+## Since GA: After-Hours Charting (2026 Physician Interview)
+One 1:1 interview in July 2026 asked one Physician (Family Medicine) in an ambulatory primary care
+clinic, new to this research, when they finish their notes about six months after the January 2026
+GA (2026-07-02). It is one physician's informal account: nothing was timed, it does not re-measure
+anything the September 2025 survey measured, and as of that session no repeat of that survey was
+recorded in raw.
+
+- They still finish some notes after clinic on most days, at "four or five notes on a full day"; in
+  their account the evening work is now mostly reading and signing drafts they didn't get to between
+  visits, plus notes for visits where they chose not to use the scribe; before the scribe, they
+  recalled, the evening work was mostly writing notes from memory. This is not a measure of time
+  saved (2026-07-02, MEDIUM).
+- The drafts that wait until the evening are the ones that need more than a quick read: long
+  visits with several problems, and drafts where they expect to move or rewrite lines. When the
+  clinic runs late, more drafts wait (2026-07-02, MEDIUM).
+- Reviewing a draft hours after the visit is harder for them, because checking it depends on
+  remembering what was said; in the evening they read more slowly and leave more of it as written
+  when they can't recall the detail (2026-07-02, MEDIUM).
+- Much of their evening now goes to patient messages and test results, which the scribe doesn't
+  touch; that is their impression, and how their evening time divides was not measured
+  (2026-07-02, LOW).
+
 ## Evidence Trail
 - **2025-02-11** — [Survey — Nursing Staff Attitudes Toward AI-Assisted Documentation](../raw/2025-02-11-survey-nursing-attitudes-ai-documentation/session-notes.md) *(`survey`)*
 - **2025-05-06** — [Usability Test — Clinician Dashboard Redesign (v1)](../raw/2025-05-06-usability-test-clinician-dashboard-redesign-v1/session-notes.md) *(`usability-test`)*
 - **2025-09-09** — [Survey — Clinician Burnout & Documentation Burden Baseline](../raw/2025-09-09-survey-clinician-burnout-documentation-burden-baseline/session-notes.md) *(`survey`)*
 - **2026-03-17** — [Interview — Clinic Nurse on Reading Scribe-Drafted Visit Notes](../raw/2026-03-17-interview-clinic-nurse-reading-scribe-drafted-notes/session-notes.md) *(`interview`)*
 - **2026-05-28** — [Interview — ICU Nurse on the Handoff Narrative](../raw/2026-05-28-interview-icu-nurse-handoff-narrative/session-notes.md) *(`interview`)*
+- **2026-07-02** — [Interview — Family Physician on After-Hours Charting Since GA](../raw/2026-07-02-interview-family-physician-after-hours-charting-since-ga/session-notes.md) *(`interview`)*
 - **2026-07-21** — [Interview — Med-Surg Night Nurse on Charting Load](../raw/2026-07-21-interview-med-surg-night-nurse-charting-load/session-notes.md) *(`interview`)*
 - **2026-10-13** — [Interview — Telemetry Nurse on Start-of-Shift Chart Review](../raw/2026-10-13-interview-telemetry-nurse-start-of-shift-chart-review/session-notes.md) *(`interview`)*
 

@@ -139,6 +139,12 @@ below is an informal participant estimate, not a count.
   know what not to copy into queries, and nobody owns keeping it current (2026-08-11, MEDIUM). Both
   said scribe-drafted notes can capture more of that content.
 
+From the signer's side, outside the ten interviews above: one Physician Assistant (primary care)
+said most coder and CDI queries they receive on scribe-drafted notes ask for acuity or whether one
+condition is due to another, which they decided at the visit but the signed note didn't state
+outright, at "two or three a week" (informal impression; 2026-08-25, HIGH); see
+[ambient-scribe.md](ambient-scribe.md).
+
 ## Evidence Trail
 - **2025-07-15** — [Contextual Inquiry — Health Information Management (Release of Information)](../raw/2025-07-15-contextual-inquiry-him-release-of-information/session-notes.md) *(`contextual-inquiry`)*
 - **2025-07-29** — [Usability Test — AI-Assisted Medical Coding Suggestions](../raw/2025-07-29-usability-test-ai-coding-billing-suggestions/session-notes.md) *(`usability-test`)*
@@ -150,6 +156,7 @@ below is an informal participant estimate, not a count.
 - **2026-06-23** — [Interview — Medical Coder on Review and Override Habits](../raw/2026-06-23-interview-medical-coder-review-override-habits/session-notes.md) *(`interview`)*
 - **2026-07-14** — [Interview — Revenue Cycle Analyst on Claim Denials and Coding](../raw/2026-07-14-interview-revenue-cycle-analyst-claim-denials/session-notes.md) *(`interview`)*
 - **2026-08-11** — [Interview — HIM Supervisor on Coding Team Oversight](../raw/2026-08-11-interview-him-supervisor-coding-team-oversight/session-notes.md) *(`interview`)*
+- **2026-08-25** — [Interview — Primary Care Physician Assistant on Coder and CDI Queries](../raw/2026-08-25-interview-primary-care-physician-assistant-coder-and-cdi-queries/session-notes.md) *(`interview`)*
 - **2026-09-08** — [Interview — HIM Specialist on ROI Request Turnaround](../raw/2026-09-08-interview-him-specialist-roi-request-turnaround/session-notes.md) *(`interview`)*
 - **2026-10-06** — [Interview — Senior Medical Coder on AI Coding Suggestions](../raw/2026-10-06-interview-senior-medical-coder-ai-suggestions-concept/session-notes.md) *(`interview`)*
 
