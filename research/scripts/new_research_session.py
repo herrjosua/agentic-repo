@@ -25,8 +25,9 @@ the registry reuses that label's class, and an existing ID (e.g. P17) is a retur
 who keeps their class and latest role. The IDs are written as reserved appearances in
 participants.yml (next_id is bumped, inserted line by line so comments survive), listed in the new
 participants.md roster, and pre-filled as quote stubs in session-notes.md, with "(returning from
-<folder>)" for a returning ID. Every entry is checked before anything is written. Labels can't
-contain commas; use parentheses, e.g. "Physician (Internal Medicine)=physician". The flag can be
+<folder>)" for a returning ID. Every entry is checked before anything is written. Entries are
+split at commas; to keep a comma in a label, wrap it in double quotes (the quotes are stripped),
+e.g. '"Physician, Family Medicine"=physician'. An unterminated quote is an error. The flag can be
 repeated.
 
 Usage (raw research session):
@@ -645,6 +646,26 @@ class ParticipantPlanError(Exception):
     """--participants can't be applied; nothing has been written yet."""
 
 
+def split_participant_specs(arg):
+    """Split one --participants value at commas, except commas inside a pair of double quotes, so
+    '"Physician, Family Medicine"=physician' stays one entry. The quotes are stripped; input with
+    no quotes splits exactly as a plain comma split. Raises ParticipantPlanError on an unterminated
+    quote."""
+    specs, current, quoted = [], [], False
+    for ch in arg:
+        if ch == '"':
+            quoted = not quoted
+        elif ch == "," and not quoted:
+            specs.append("".join(current))
+            current = []
+        else:
+            current.append(ch)
+    if quoted:
+        raise ParticipantPlanError(f"--participants: {arg!r} has an unterminated double quote")
+    specs.append("".join(current))
+    return [s.strip() for s in specs if s.strip()]
+
+
 def _block_end(lines, start, indent):
     """Index of the last content line of the YAML block whose key is on lines[start] at `indent`:
     the block runs until the next non-blank, non-comment line indented `indent` or less, and
@@ -821,7 +842,7 @@ def main():
                         help="Raw session mode: comma-separated participants to allocate IDs for from "
                              "research/participants.yml — Label=class for a new participant, a bare label "
                              "already in the registry, or an existing ID (e.g. P17) for a returning one. "
-                             "Repeatable. Can't be combined with --participants-roles.")
+                             "Double-quote a label that contains a comma. Repeatable. Can't be combined with --participants-roles.")
     parser.add_argument("--check-tags-only", default=None, help="Comma-separated tags to validate against the glossary, then exit")
 
     # feature-002 deliverable mode (triggered by --type <folder-name>, see above)
@@ -870,7 +891,11 @@ def main():
     related_components = [c.strip() for c in args.related_components.split(",") if c.strip()]
     related_findings_raw = [f.strip() for f in args.related_findings.split(",") if f.strip()]
     roles = [r.strip() for r in args.participants_roles.split(",") if r.strip()]
-    participant_specs = [p.strip() for arg in args.participants for p in arg.split(",") if p.strip()]
+    try:
+        participant_specs = [p for arg in args.participants for p in split_participant_specs(arg)]
+    except ParticipantPlanError as e:
+        print(f"❌ {e}", file=sys.stderr)
+        sys.exit(1)
     if participant_specs and roles:
         print("❌ --participants already writes the roster; don't combine it with --participants-roles", file=sys.stderr)
         sys.exit(1)

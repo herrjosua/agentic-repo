@@ -457,6 +457,46 @@ def test_bad_participants_writes_nothing(run_script, participants_repo, spec, me
     assert snapshot(participants_repo) == before
 
 
+def test_quoted_label_with_comma_is_one_participant(run_script, participants_repo):
+    result = new_session(run_script, "--participants", '"Physician, Family Medicine"=physician, P01')
+    assert result.returncode == 0, result.stderr
+    assert "Participant IDs: P04, P01 (returning from 2026-01-05-session-a)" in result.stdout
+    data = yaml.safe_load(registry(participants_repo).read_text(encoding="utf-8"))
+    assert data["next_id"] == "P05"
+    assert data["participants"]["P04"] == {"role_class": "physician", "appearances": [
+        {"session": NEW_SESSION, "role": "Physician, Family Medicine", "reserved": True}]}
+
+
+def test_quoted_known_label_with_comma_reuses_its_class(run_script, participants_repo):
+    result = new_session(run_script, "--participants", '"Physician, Internal Medicine"')
+    assert result.returncode == 0, result.stderr
+    assert "Participant IDs: P04" in result.stdout
+    data = yaml.safe_load(registry(participants_repo).read_text(encoding="utf-8"))
+    assert data["participants"]["P04"]["role_class"] == "physician"
+    assert data["participants"]["P04"]["appearances"][0]["role"] == "Physician, Internal Medicine"
+
+
+def test_unquoted_comma_still_splits(run_script, participants_repo):
+    # Without quotes a comma still separates entries, so this is two new participants.
+    result = new_session(run_script, "--participants", "Care Coordinator, Nurse Practitioner=app")
+    assert result.returncode == 0, result.stderr
+    assert "Participant IDs: P04, P05" in result.stdout
+    data = yaml.safe_load(registry(participants_repo).read_text(encoding="utf-8"))
+    assert data["next_id"] == "P06"
+    assert data["participants"]["P04"]["appearances"][0]["role"] == "Care Coordinator"
+    assert data["participants"]["P05"]["appearances"][0]["role"] == "Nurse Practitioner"
+
+
+@pytest.mark.parametrize("spec", ['"Physician, Family Medicine=physician', 'P01, Nurse"=app'])
+def test_unterminated_quote_writes_nothing(run_script, participants_repo, spec):
+    before = snapshot(participants_repo)
+    result = new_session(run_script, "--participants", spec)
+    assert result.returncode == 1
+    assert "has an unterminated double quote" in result.stderr
+    assert "Traceback" not in result.stderr
+    assert snapshot(participants_repo) == before
+
+
 def test_participants_without_registry_writes_nothing(run_script, fake_repo):
     before = snapshot(fake_repo)
     result = new_session(run_script, "--participants", "Nurse=nurse")
