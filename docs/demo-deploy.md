@@ -13,6 +13,9 @@ The demo runs against `research-repo-demo`, a separate, private repo kept in syn
 - **Sync:** `.github/workflows/sync-demo.yml` runs on a schedule (every 6 hours) and on
   `workflow_dispatch`. On success it force-moves a fixed tag, `demo-baseline`, onto the synced
   commit.
+- **Tags:** the sync does not read agentic-repo tags. `demo-baseline` is a tag in
+  `research-repo-demo`, force-moved by the sync, and is unrelated to agentic-repo's release tags
+  (see [Versions and tags](../README.md#versions-and-tags)).
 - **Access:** the demo server pulls `research-repo-demo` with its own read-only deploy key on that
   repo — separate from the `DEMO_REPO_PAT` repo secret, which the sync workflow uses for push
   access and isn't reused here.
