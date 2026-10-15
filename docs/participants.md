@@ -105,11 +105,22 @@ inpatient, ED and behavioral health settings stay gaps. See decision 19 in
 [`decisions.md`](decisions.md).
 
 Physician labels from before the registry use a comma (`Physician, Internal Medicine`).
-New labels use parentheses (`Physician (Internal Medicine)`). Never pass a comma in a
-`new_research_session.py --participants` label: the script splits at the comma and allocates each
-part as a separate new participant. A returning participant keeps the label from their latest
-appearance: pass the bare ID (`--participants "P09"`) and the script copies it from the registry.
-Writing a returning participant's quote with a different label is a registry error.
+New labels use parentheses (`Physician (Internal Medicine)`). `new_research_session.py
+--participants` splits its value at commas, so a comma label must be wrapped in double quotes
+(`--participants '"Physician, Internal Medicine"'`) or it is cut into fragments. Each fragment is
+then read as its own entry (see [Adding participants to a new session](#adding-participants-to-a-new-session)).
+A returning participant keeps the label from their latest appearance: pass the bare ID
+(`--participants "P09"`) and the script copies it from the registry. Writing a returning
+participant's quote with a different label is a registry error.
+
+The older raw files don't agree with each other on the form, and are left as they are because
+`raw/` is append-only. In the pre-registry sessions (2025-02-25, 2025-09-23 and 2026-01-13 ambient
+scribe usability tests) the `participants.md` rosters use the parenthesised form (`Physician
+(Internal Medicine)`), while the quote attributions in `session-notes.md` and the registry use the
+comma form (`Physician, Internal Medicine`). Two rosters,
+`raw/2026-02-10-ambient-scribe-medication-flag-concept/participants.md` and
+`raw/2026-02-17-session-lock-during-dictation/participants.md`, list a bare `Physician` where the
+quote names a specialty. The quote and the registry are the labels to match; the roster is not.
 
 The class belongs to the participant, never to the session. A session with several roles needs
 nothing extra: its classes are just the classes of the people in it.
@@ -194,13 +205,17 @@ python research/scripts/new_research_session.py --title "Coder interview 1" --ty
 ```
 
 - `Label=class` gives a new participant the next free ID.
-- A bare label that's already in the registry under one class reuses that class. A label the
-  registry hasn't seen needs `=class`.
+- A bare label that's already in the registry under exactly one class reuses that class. A bare
+  label the registry hasn't seen, or has under more than one class, is an error; give it `=class`.
 - An existing ID is a returning participant. They keep their class and the role from their latest
   appearance.
-- Labels must not contain commas. The script doesn't reject them: it splits the label at the comma
-  and allocates each part as a separate new participant. Use parentheses instead:
-  `Physician (Internal Medicine)=physician`.
+- Entries are split at commas. To keep a comma in a label, wrap the label (or the whole entry) in
+  double quotes, which are stripped: `"Physician, Family Medicine"=physician`. Inside the shell
+  argument that's `--participants '"Physician, Family Medicine"=physician, P17'`. An unterminated
+  quote is an error. Without quotes, each comma-separated fragment is a separate entry: a fragment
+  that is `=class` or a bare label already in the registry allocates its own participant, and a
+  bare fragment the registry doesn't know fails the whole run. New labels can avoid the question by
+  using parentheses: `Physician (Internal Medicine)=physician`.
   The flag can be repeated.
 - Every entry is checked before anything is written. An unknown label, class or ID exits with an
   error and creates nothing.

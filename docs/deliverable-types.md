@@ -56,6 +56,42 @@ allowlist, kept in sync by hand with the CRUD UI's backend validation):
 Any value other than `native` makes the generated body a stub (the script
 treats `source_type != native` the same as a stub-only folder).
 
+## The Evidence basis line
+
+The Evidence basis line is a one-line statement of how a deliverable's
+claims trace back to raw evidence. The format, from
+[`synthesis-audit-2026-09-29.md`](synthesis-audit-2026-09-29.md#evidence-basis-line)
+(where it was introduced), is:
+
+`**Evidence basis:** <Observed | Inferred | Illustrative | Mixed>. <the raw path(s) and lines>.`
+
+It goes as the first line of the record's first section. The audit doc's
+format line writes "mixed" in lower case; it and "Mixed" are the same label.
+The audit doc gives the format only. The labels were defined on 2026-10-15:
+
+- **Observed:** the claims are stated in raw sessions, and each cites its
+  lines.
+- **Inferred:** the record's own reasoning from raw evidence. The evidence is
+  cited, but no session states the conclusion.
+- **Illustrative:** a built example or scenario, not a record of what
+  happened.
+- **Mixed:** some of each, with the record saying which sections are which.
+
+For how they're used in practice, see the records that carry the line
+today: `personas/physician-longitudinal-scribe-user.md`,
+`mental-models/care-coordinator-alert-ranking.md` and
+`user-flows/ambient-scribe-session-lock-recovery.md`.
+
+**Visual artifacts.** The repo holds a Markdown record that describes and
+points to the visual, not the visual itself: `prototypes/` files are
+stubs with `source_type: figma-link` (or `github-link`) and a `url`, and
+`mockups/` files carry a `figma_url`. On such a record the Evidence basis
+line covers the claims the Markdown makes, not the pixels in Figma or Adobe.
+
+**Scope.** Evidence basis lines belong on working records that need to
+trace back to raw evidence; a client-style summary carries highlights plus a
+pointer to the research store instead.
+
 ## The frontmatter, and why it's split this way
 
 Every file in every folder starts with the same base block:
