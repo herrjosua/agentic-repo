@@ -36,7 +36,7 @@ Docs not re-checked show their last-commit date instead.
 | Findings | 12 (plus the `tags.md` glossary) | `research/findings/` |
 | Analytics summaries | 1 | `analytics/summaries/` |
 | Components | 18 | `design-tokens/components/` |
-| Deliverables | 36, across 20 folders | the top-level deliverable folders (see [`deliverable-types.md`](deliverable-types.md)) |
+| Deliverables | 38, across 20 folders | the top-level deliverable folders (see [`deliverable-types.md`](deliverable-types.md)) |
 
 ## Structure
 
