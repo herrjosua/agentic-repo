@@ -14,7 +14,7 @@
 # build_index.py (and --check) validates this file against raw/. IDs that were never quoted in a
 # raw session aren't recorded; next_id is the next one to allocate and is never reused.
 
-next_id: P146
+next_id: P149
 
 # IDs first used in a session dated after this baseline must be first_id or higher (warn-only).
 sequence_baseline:
@@ -282,6 +282,10 @@ participants:
     appearances:
       - session: 2026-01-13-usability-test-ambient-scribe-ga-release-candidate
         role: Nurse Practitioner
+      - session: 2026-05-26-interview-returning-nurse-practitioner-training-and-review-habits
+        role: Nurse Practitioner
+        returning: true
+        reserved: true
   # Quoted as P31 in session-notes.md:56; P31 is the IT Security Engineer (2025-05-20).
   # correction-2026-10-13.md in that folder gives this physician the ID P119.
   P119:
@@ -446,4 +450,22 @@ participants:
     appearances:
       - session: 2026-10-13-interview-telemetry-nurse-start-of-shift-chart-review
         role: Registered Nurse (telemetry)
+        reserved: true
+  P146:
+    role_class: physician
+    appearances:
+      - session: 2026-03-19-interview-primary-care-physician-incidental-content-at-sign-off
+        role: Physician (Internal Medicine)
+        reserved: true
+  P147:
+    role_class: physician
+    appearances:
+      - session: 2026-03-24-interview-family-physician-plan-and-medication-changes-at-sign-off
+        role: Physician (Family Medicine)
+        reserved: true
+  P148:
+    role_class: app
+    appearances:
+      - session: 2026-04-28-interview-nurse-practitioner-session-lock-shared-workstations
+        role: Nurse Practitioner (primary care)
         reserved: true
