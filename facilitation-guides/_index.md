@@ -5,3 +5,4 @@ Maintained by `research/scripts/build_index.py`. Flat table of files in `facilit
 | Title | Status | Tags | Source Type | Last Updated | Related Findings |
 |---|---|---|---|---|---|
 | [Onboarding Usability Study — Facilitation Guide](onboarding-usability-guide.md) | final | onboarding, project-onboarding, usability | native | 2026-01-16 | — |
+| [Compass AI Practice Setup — Usability Test Facilitation Guide](compass-ai-practice-setup-usability-guide.md) | final | onboarding, project-onboarding, usability | native | 2026-01-27 | ../research/findings/compass-ai-practice-setup.md |
