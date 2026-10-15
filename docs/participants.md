@@ -198,7 +198,9 @@ python research/scripts/new_research_session.py --title "Coder interview 1" --ty
   registry hasn't seen needs `=class`.
 - An existing ID is a returning participant. They keep their class and the role from their latest
   appearance.
-- Labels can't contain commas. Use parentheses instead: `Physician (Internal Medicine)=physician`.
+- Labels must not contain commas. The script doesn't reject them: it splits the label at the comma
+  and allocates each part as a separate new participant. Use parentheses instead:
+  `Physician (Internal Medicine)=physician`.
   The flag can be repeated.
 - Every entry is checked before anything is written. An unknown label, class or ID exits with an
   error and creates nothing.
