@@ -17,7 +17,7 @@ related_findings:
 # Interview — IT Administrator on Schedule Access and Staff Invites
 
 ## Objective
-In the 2026-02-03 usability test, 3 of 4 Practice Administrators stopped at Connect calendar because they did not think they could approve Compass AI's access to patient appointments, and both IT Administrators asked which fields are read before connecting (`2026-02-03-usability-test-compass-ai-practice-setup-flow/session-notes.md:53-54`). This session asked one IT Administrator who approves access requests across practices what has to happen before a new system can read a practice's appointment schedule, and who can start that. It is about admin setup of Compass AI, not staff training (in `2026-02-10-ambient-scribe-medication-flag-concept/session-notes.md:62`, "onboarding" means training copy for clinicians).
+In the 2026-02-03 usability test, 3 of 4 Practice Administrators stopped at Connect calendar because they did not think they could approve Compass AI's access to patient appointments, and both IT Administrators asked which fields are read before connecting (`2026-02-03-usability-test-compass-ai-practice-setup-flow/session-notes.md:51-52`). This session asked one IT Administrator who approves access requests across practices what has to happen before a new system can read a practice's appointment schedule, and who can start that. It is about admin setup of Compass AI, not staff training (in `2026-02-10-ambient-scribe-medication-flag-concept/session-notes.md:62`, "onboarding" means training copy for clinicians).
 
 ## Method
 - **Method:** 1:1 interview, 45 min
@@ -37,7 +37,7 @@ In the 2026-02-03 usability test, 3 of 4 Practice Administrators stopped at Conn
 > — IT Administrator, P160
 
 ## Recommendations
-1. On Connect calendar, route an administrator who can't approve schedule access to IT, consistent with the "Send to IT for approval" path recommended on 2026-02-03 (`2026-02-03-usability-test-compass-ai-practice-setup-flow/session-notes.md:77-78`).
+1. On Connect calendar, route an administrator who can't approve schedule access to IT, consistent with the "Send to IT for approval" path recommended on 2026-02-03 (`2026-02-03-usability-test-compass-ai-practice-setup-flow/session-notes.md:75-76`).
 2. Before more practices set up, confirm with IT whether a privacy review request for Compass AI reading the appointment schedule has been filed, and list the fields it covers.
 
 ## Follow-ups / Open Questions

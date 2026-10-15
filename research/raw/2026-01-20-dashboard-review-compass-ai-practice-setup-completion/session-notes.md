@@ -17,13 +17,11 @@ related_findings:
 ## Objective
 Manually review the internal usage dashboard for the Compass AI practice setup flow, the flow a
 practice's administrator uses to set Compass AI up for their practice, to see where setups stop
-and how long they stay stopped. This is about admin setup of Compass AI, not staff training (in
-`2026-02-10-ambient-scribe-medication-flag-concept/session-notes.md:62`, "onboarding" means
-training copy for clinicians). The dashboard records setups, not why a practice started one or
-which Compass AI features it was setting up for, and the corpus doesn't record how practices were
-chosen to set up or when each planned to go live. This review is not tied to the ambient scribe GA:
-the GA candidate was still under test on 2026-01-13
-(`2026-01-13-usability-test-ambient-scribe-ga-release-candidate`).
+and how long they stay stopped. This is about admin setup of Compass AI, not staff training. The
+dashboard records setups, not why a practice started one or which Compass AI features it was
+setting up for, and the corpus doesn't record how practices were chosen to set up or when each
+planned to go live. This review is not tied to the ambient scribe GA: the GA candidate was still
+under test on 2026-01-13 (`2026-01-13-usability-test-ambient-scribe-ga-release-candidate`).
 
 ## Method
 - **Method:** Manual dashboard review (no moderated session, no participants) — internal usage

@@ -20,11 +20,9 @@ related_findings:
 ## Objective
 The 2026-01-20 dashboard review found setups of Compass AI for a practice stopping most at Connect calendar
 (7 of 24 setups started) and then at Invite your team (3 of 24), and said a dashboard can't show why
-(`2026-01-20-dashboard-review-compass-ai-practice-setup-completion/session-notes.md:47-48,74`). This session
+(`2026-01-20-dashboard-review-compass-ai-practice-setup-completion/session-notes.md:45-46,72`). This session
 watched administrators go through the practice setup flow to find out what happens at those two
-steps. It is about admin setup of Compass AI, not staff training (in
-`2026-02-10-ambient-scribe-medication-flag-concept/session-notes.md:62`, "onboarding" means
-training copy for clinicians).
+steps. It is about admin setup of Compass AI, not staff training.
 
 ## Method
 - **Method:** Moderated usability test, remote, think-aloud, 60 min/session, one participant per
