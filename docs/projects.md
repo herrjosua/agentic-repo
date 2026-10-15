@@ -18,7 +18,7 @@ The machine-readable source is [`research/projects.yml`](../research/projects.ym
 
 | Tag | Label | Records |
 |---|---|---|
-| `project-ambient-scribe` | Ambient AI Scribe | 25 |
+| `project-ambient-scribe` | Ambient AI Scribe | 27 |
 | `project-onboarding` | Onboarding | 21 |
 | `project-care-coordination` | Care Coordination & Alert Triage | 18 |
 | `project-design-system` | Design System | 6 |
@@ -26,8 +26,8 @@ The machine-readable source is [`research/projects.yml`](../research/projects.ym
 | `project-him` | HIM Coding, Billing & Release of Information | 15 |
 | `project-patient-chatbot` | Patient Scheduling Chatbot | 5 |
 | `project-clinician-dashboard` | Clinician Dashboard | 3 |
-| `project-cross-cutting` | Cross-cutting (no single project) | 31 |
-| | **Total** | **131** |
+| `project-cross-cutting` | Cross-cutting (no single project) | 32 |
+| | **Total** | **134** |
 
 Counts are as of 2026-10-15, from `export_records.py` output. To recount:
 
