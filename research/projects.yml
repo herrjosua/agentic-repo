@@ -100,6 +100,10 @@ raw:
   2026-09-29-interview-care-coordinator-referral-follow-up: project-care-coordination
   2026-10-06-interview-senior-medical-coder-ai-suggestions-concept: project-him
   2026-10-13-interview-telemetry-nurse-start-of-shift-chart-review: project-cross-cutting
+  2026-03-19-interview-primary-care-physician-incidental-content-at-sign-off: project-ambient-scribe
+  2026-03-24-interview-family-physician-plan-and-medication-changes-at-sign-off: project-ambient-scribe
+  2026-04-28-interview-nurse-practitioner-session-lock-shared-workstations: project-ambient-scribe
+  2026-05-26-interview-returning-nurse-practitioner-training-and-review-habits: project-ambient-scribe
 
 components:
   admin-console-grid: project-cross-cutting
