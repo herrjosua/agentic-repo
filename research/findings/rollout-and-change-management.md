@@ -46,15 +46,16 @@ has to release staff for that training.
   assignment (2026-08-18, MEDIUM). They also named flu season as their hardest months to release
   anyone. Their account draws on releasing nurses for other training, not on an AI rollout, and how
   often training is cancelled for staffing is not measured.
-- **One returning nurse practitioner on what the scribe's champion training pilot did and didn't
-  cover.** P118 (Nurse Practitioner), returning from 2026-01-13-usability-test-ambient-scribe-ga-release-candidate,
-  said the pilot training prepared them for the controls, for correcting a single line in place and
-  for what the underline means, but not for visits unlike the practice ones: several people
-  talking, a visit interrupted partway through, or a patient raising a second problem at the door,
-  which they learned to handle by using the scribe (2026-05-26, MEDIUM). Colleagues who started
-  using the scribe after GA ask them informally how to correct a line or what the underline means
-  (2026-05-26, LOW). This is one account, not a comparison with no training, and how clinicians who
-  started after GA were trained is not recorded in the corpus.
+- **One returning nurse practitioner on what the scribe's champion training pilot (2026-05-26,
+  session-notes.md:29) did and didn't cover.** P118 (Nurse Practitioner), returning from
+  2026-01-13-usability-test-ambient-scribe-ga-release-candidate, said the pilot training prepared
+  them for the controls, for correcting a single line in place and for what the underline means, but
+  not for visits unlike the practice ones: several people talking, a visit interrupted partway
+  through, or a patient raising a second problem at the door, which they learned to handle by using
+  the scribe (2026-05-26, MEDIUM). Colleagues who started using the scribe after GA ask them
+  informally how to correct a line or what the underline means (2026-05-26, LOW). This is one
+  account, not a comparison with no training, and how clinicians who started after GA were trained
+  is not recorded in the corpus.
 - **The December pulse survey found an awareness gap that changes rollout sequencing for
   non-clinical features specifically**: only 34% of non-clinical/admin staff were aware Compass AI
   work was even underway, vs. 71% of clinical staff. This matters directly for the patient

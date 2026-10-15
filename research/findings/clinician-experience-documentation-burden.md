@@ -115,11 +115,11 @@ GA (2026-07-02). It is one physician's informal account: nothing was timed, it d
 anything the September 2025 survey measured, and as of that session no repeat of that survey was
 recorded in raw.
 
-- They still finish some notes after clinic on most days, at "four or five notes on a full day";
-  in their account the evening work is now mostly reading and signing drafts they didn't get to
-  between visits, plus notes for visits where they chose not to use the scribe, where before the
-  scribe they recalled mostly writing notes from memory. This is not a measure of time saved
-  (2026-07-02, MEDIUM).
+- They still finish some notes after clinic on most days, at "four or five notes on a full day"; in
+  their account the evening work is now mostly reading and signing drafts they didn't get to between
+  visits, plus notes for visits where they chose not to use the scribe; before the scribe, they
+  recalled, the evening work was mostly writing notes from memory. This is not a measure of time
+  saved (2026-07-02, MEDIUM).
 - The drafts that wait until the evening are the ones that need more than a quick read: long
   visits with several problems, and drafts where they expect to move or rewrite lines. When the
   clinic runs late, more drafts wait (2026-07-02, MEDIUM).

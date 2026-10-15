@@ -1,6 +1,6 @@
 ---
 title: Ambient AI Scribe
-date: 2026-01-13
+date: 2026-10-08
 type: synthesis
 status: synthesized
 researcher: Priya Patel
@@ -52,25 +52,28 @@ substance-use encounters — see [scope-boundaries-and-workflow-fit.md](scope-bo
 ## Since GA: 2026 Physician, NP and PA Interviews
 This section adds 2026 interview accounts and does not revise the findings above; where an account
 differs from them, it is labelled. Nine 1:1 interviews between March and October 2026 asked
-physicians, NPs and PAs who use the scribe about their own practice: seven new participants (P146
-to P149 and P151 to P153) and two returning ones, P118 (Nurse Practitioner) and P09 (Physician,
-Internal Medicine), both returning from 2026-01-13-usability-test-ambient-scribe-ga-release-candidate. All nine are ambulatory; there are no inpatient, ED or
-behavioral health sessions, and those settings remain a gap. Nothing was shown or observed, and
-every figure below is an informal participant estimate, not a count.
+physicians, NPs and PAs who use the scribe about their own practice: seven new participants (P146 to
+P149 and P151 to P153) and two returning ones, P118 (Nurse Practitioner) and P09 (Physician,
+Internal Medicine), both returning from
+2026-01-13-usability-test-ambient-scribe-ga-release-candidate. All nine are ambulatory; there are no
+inpatient, ED or behavioral health sessions, and those settings remain a gap. Nothing was shown or
+observed. Every figure the participants gave below is an informal estimate, not a count; the "4 of
+6" is the January round's own recorded count
+(2026-01-13-usability-test-ambient-scribe-ga-release-candidate/session-notes.md:30).
 
 - **What gets edited.** One Physician (Internal Medicine) removes things said in the room that they
-  would not have written themselves (small talk, a patient's remarks about a relative's health, a family member's
-  comments, their own asides) at "most visits, a line or two" (2026-03-19, HIGH). One Physician
-  (Family Medicine) moves or adds plan items when a decision talked through over several minutes
-  lands partly outside the plan, "a couple of times on a full clinic day" (2026-03-24, HIGH). P09
-  said most of their edits now are not misheard words but the order of events in the history, at
-  "a few notes most weeks" (2026-09-22, HIGH).
-- **Errors the underline doesn't point to (differs from the Overview).** The Overview reads the
-  confidence underline as the lever that changes reviewing. In four of these accounts the lines
-  that need fixing are usually not underlined, because each word was heard clearly: incidental
-  content (2026-03-19), dose schedules (2026-06-30), the side of an exam finding (2026-07-28) and
-  the order of events (2026-09-22). The underline marks where the scribe was unsure what it heard
-  (2026-03-19, MEDIUM).
+  would not have written themselves (small talk, a patient's remarks about a relative's health, a
+  family member's comments, their own asides) at "most visits, a line or two" (2026-03-19, HIGH).
+  One Physician (Family Medicine) moves or adds plan items when a decision talked through over
+  several minutes lands partly outside the plan, "a couple of times on a full clinic day"
+  (2026-03-24, HIGH). P09 said most of their edits now are not misheard words but the order of
+  events in the history, at "a few notes most weeks" (2026-09-22, HIGH).
+- **Errors the underline doesn't point to (differs from the Overview).** The Overview calls *visible
+  uncertainty*, shown by per-line confidence highlighting, "the lever that changes reviewing
+  behavior". In four of these accounts the lines that need fixing are usually not underlined,
+  because each word was heard clearly: incidental content (2026-03-19), dose schedules (2026-06-30),
+  the side of an exam finding (2026-07-28) and the order of events (2026-09-22). The underline marks
+  where the scribe was unsure what it heard (2026-03-19, MEDIUM).
 - **What is read in full or skimmed.** P118 reads the assessment and plan in full on every draft
   and skims history sections where nothing is underlined, at "a minute or two a note"
   (2026-05-26, MEDIUM). P09 still skims history sections with nothing underlined on routine
@@ -80,22 +83,22 @@ every figure below is an informal participant estimate, not a count.
   draft to catch incidental content (2026-03-19, MEDIUM), and one Physician Assistant (orthopedics
   clinic) checks the side, then every exam number, then the assessment and plan, reading history
   sections more quickly (2026-07-28, MEDIUM).
-- **Returning participants describe their own practice, not a measured change.** P09's account
-  can't be compared directly with their earlier sessions, which were moderated tests (2026-09-22).
-  P118's skimming can't be compared with January either, because the January round recorded 4 of 6
-  participants skimming without saying who (2026-05-26). Asked whether they trust the scribe more than in January, P09 said it
-  depends on the section and did not describe their trust as having grown overall (2026-09-22,
-  MEDIUM).
+- **Returning participants describe their own practice, not a measured change.** P09's account can't
+  be compared directly with their earlier sessions, which were moderated tests (2026-09-22). P118's
+  skimming can't be compared with January either, because in the January round 4 of 6 participants
+  said the underline let them skim, without saying who (2026-05-26). Asked whether they trust the
+  scribe more than in January, P09 said it depends on the section and did not describe their trust
+  as having grown overall (2026-09-22, MEDIUM).
 - **Medication lines.** One Physician (Family Medicine) checks every medication change in the plan
   against the order they placed, underlined or not, and rewrites changes worded as discussed rather
   than decided (2026-03-24, HIGH); they recalled one sound-alike name since GA, glyburide written
-  where glipizide had been said, which was underlined, one recollection and not a rate
-  (2026-03-24, MEDIUM). One Physician (Rheumatology) reads the whole medication section of long
-  lists to find the one or two lines that changed (2026-06-30, HIGH), rewrites multi-step dose
-  schedules the draft writes incompletely, such as a prednisone taper or methotrexate without
-  "weekly", at "a few times a month" (2026-06-30, HIGH), and checks whether each dose is the
-  patient's report or their own decision (2026-06-30, MEDIUM). The distinct medication flag has
-  not shipped; both accounts describe drafts with the confidence underline only.
+  where glipizide had been said, which was underlined, one recollection and not a rate (2026-03-24,
+  MEDIUM). One Physician (Rheumatology) reads the whole medication section of long lists to find the
+  one or two lines that changed (2026-06-30, HIGH), rewrites dose schedules the draft writes
+  incompletely, such as a prednisone taper that keeps only its first step, which they put at "a few
+  times a month", or a methotrexate dose without "weekly" (2026-06-30, HIGH), and checks whether
+  each dose is the patient's report or their own decision (2026-06-30, MEDIUM). The distinct
+  medication flag has not shipped; both accounts describe drafts with the confidence underline only.
 - **Exam findings.** One Physician Assistant (orthopedics clinic) said the draft sometimes leaves
   the side out of an exam line, or gives every line the side of the main complaint, at "maybe one
   note in ten", and sometimes attaches a number to the wrong movement or drops a minus; they check
@@ -117,9 +120,9 @@ every figure below is an informal participant estimate, not a count.
 - **Opting in.** One Physician (Internal Medicine resident) did not opt in at GA: writing their own
   notes was how they worked out their assessment while learning, and they did not describe doubt
   about the draft's accuracy as a reason (2026-10-08, MEDIUM). They opted in "about three months
-  into clinic" and still write the assessment themselves for a new problem (2026-10-08, MEDIUM).
-  One resident's account can't explain the attending/resident adoption gap in the 2026-01-27
-  dashboard review.
+  into clinic" and for a new problem write the assessment themselves, or rewrite the draft's
+  assessment before signing (2026-10-08, MEDIUM). One resident's account can't explain the
+  attending/resident adoption gap in the 2026-01-27 dashboard review.
 - **NPs and PAs.** P118, the Physician Assistant (orthopedics clinic) and the Physician Assistant
   (primary care) did not describe anything that works differently for them as an NP or PA
   (2026-05-26, 2026-07-28, 2026-08-25, LOW).
