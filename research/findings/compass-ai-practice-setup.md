@@ -20,6 +20,8 @@ related_findings:
   - governance-and-phi.md
 related_analytics:
   - compass-ai-practice-setup-funnel
+related_plan: research-plans/compass-ai-practice-setup-study-q1.md
+related_guide: facilitation-guides/compass-ai-practice-setup-usability-guide.md
 ---
 
 # Compass AI Practice Setup
