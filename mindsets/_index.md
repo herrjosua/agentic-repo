@@ -6,3 +6,4 @@ Maintained by `research/scripts/build_index.py`. Flat table of files in `mindset
 |---|---|---|---|---|---|
 | [The Skeptical Verifier](skeptical-verifier.md) | final | ambient-scribe, coding, him, prior-auth, project-cross-cutting, trust-in-ai | native | 2025-12-01 | ../research/findings/him-coding-and-billing.md, ../research/findings/prior-authorization.md, ../research/findings/ambient-scribe-post-ga-refinements.md |
 | [Time-Pressed First-Time Admin](example-mindset.md) | final | mindset, onboarding, project-onboarding | native | 2026-02-13 | — |
+| [Wants to Know What a Step Commits Them To](wants-to-know-what-a-step-commits.md) | final | mindset, onboarding, project-onboarding | native | 2026-03-03 | ../research/findings/compass-ai-practice-setup.md |
