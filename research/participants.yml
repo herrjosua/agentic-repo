@@ -14,7 +14,7 @@
 # build_index.py (and --check) validates this file against raw/. IDs that were never quoted in a
 # raw session aren't recorded; next_id is the next one to allocate and is never reused.
 
-next_id: P152
+next_id: P154
 
 # IDs first used in a session dated after this baseline must be first_id or higher (warn-only).
 sequence_baseline:
@@ -83,6 +83,10 @@ participants:
       - session: 2026-01-13-usability-test-ambient-scribe-ga-release-candidate
         role: Physician, Internal Medicine
         returning: true
+      - session: 2026-09-22-interview-returning-internal-medicine-physician-edits-and-trust-over-time
+        role: Physician, Internal Medicine
+        returning: true
+        reserved: true
   P11:
     role_class: physician
     appearances:
@@ -486,4 +490,16 @@ participants:
     appearances:
       - session: 2026-07-28-interview-orthopedics-physician-assistant-exam-findings-in-scribe-drafts
         role: Physician Assistant (orthopedics clinic)
+        reserved: true
+  P152:
+    role_class: app
+    appearances:
+      - session: 2026-08-25-interview-primary-care-physician-assistant-coder-and-cdi-queries
+        role: Physician Assistant (primary care)
+        reserved: true
+  P153:
+    role_class: physician
+    appearances:
+      - session: 2026-10-08-interview-internal-medicine-resident-opting-in-to-the-scribe
+        role: Physician (Internal Medicine resident)
         reserved: true
