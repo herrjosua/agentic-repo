@@ -4,7 +4,8 @@
 represented. Generated as sample content for the agentic UX research repo, matching the structure
 and frontmatter schema in [`agentic-ux-research-repo-plan.md`](agentic-ux-research-repo-plan.md).
 Decisions behind that structure are in [`decisions.md`](decisions.md); setup is in
-[`SETUP.md`](SETUP.md).
+[`SETUP.md`](SETUP.md). The release-tag convention is in the root README, under
+[Versions and tags](../README.md#versions-and-tags).
 
 ## Docs in this folder
 

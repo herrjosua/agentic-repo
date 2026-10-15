@@ -199,3 +199,5 @@ Python if `python3` on `PATH` isn't the right interpreter) — and it resets a c
 ## Git discipline
 Every synthesis is its own commit; say what raw evidence triggered the change. Never rewrite
 `raw/` or `analytics/raw/` file history.
+Claude Code never creates, moves or pushes tags (or merges, or pushes) unless Josh says. See
+README.md → "Versions and tags" for the tag convention.

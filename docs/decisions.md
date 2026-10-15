@@ -310,3 +310,19 @@ decision log, whose decisions and rationales are copied here in their recorded w
   govern the tools rather than sign notes with them. Whether the scribe is used in inpatient or ED
   settings isn't recorded, so sessions there would have to invent it; they stay gaps rather than
   being sampled.
+
+## 20. Release tags go on merge commits and are pushed alone
+
+- **Date:** 2026-10-15
+- **Status:** Active
+- **Decision:** Version labels (vX.Y.Z) are ticket labels on the project board, and a release tag
+  is an annotated tag on the merge commit that completes the work or phase, with the ticket key
+  and a one-line summary. Each tag is created and pushed alone (`git push origin
+  refs/tags/vX.Y.Z`, never `--tags`), only when Josh says, with no backfill of earlier versions
+  and no CHANGELOG. The first tag is `v0.5.44`, on `1f41a67`. See
+  [Versions and tags](../README.md#versions-and-tags).
+- **Why:** The convention was recorded only outside the repo, and decision 15 puts it here. Tag
+  side effects were verified before the first tag was pushed: `ci.yml` does not run on a tag push,
+  because its push trigger is limited to `main`; `sync-demo.yml` has no push or release trigger
+  and does not read tags. The `demo-baseline` tag it moves lives in `research-repo-demo` and is
+  unrelated.

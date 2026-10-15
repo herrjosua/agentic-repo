@@ -72,6 +72,22 @@ A public demo of the CRUD UI runs on this repo's content at https://ux-research.
 Visitors can edit it, but an hourly reset discards their edits — see [`docs/demo-deploy.md`](docs/demo-deploy.md) for how it's kept
 in sync and reset.
 
+## Versions and tags
+
+- Version labels (vX.Y.Z) are ticket labels in the project board. Several tickets can sit between
+  two tags.
+- A tag goes on the merge commit that completes the work or phase.
+- Tags are annotated (`git tag -a vX.Y.Z -m "..."`), with the ticket key and a one-line summary.
+- A tag is created and pushed alone (`git push origin refs/tags/vX.Y.Z`, never `--tags`), and only
+  when Josh says.
+- No backfill of earlier versions. No CHANGELOG.
+- On the board, "Released in" is the tag once the merge is tagged, else the merge short hash.
+- Pushing a tag does not trigger `ci.yml` (push to `main` and `pull_request` only) and
+  `sync-demo.yml` does not read tags.
+
+The first tag is `v0.5.44`, on merge commit `1f41a67`. The decision is
+[decision 20 in `docs/decisions.md`](docs/decisions.md#20-release-tags-go-on-merge-commits-and-are-pushed-alone).
+
 ## AI-Assisted Development
 
 This project was built by Joshua Bock with AI assistance from Claude — used both as the AI agent this tooling is designed to work with, and as a development collaborator throughout the build (planning, implementation, testing, and code review), under direct human review and direction at every step.
