@@ -1,6 +1,6 @@
 # Participant IDs
 
-Every research participant has one participant ID (`P01`, `P02`, ... `P153`). IDs come from one
+Every research participant has one participant ID (`P01`, `P02`, ... `P160`). IDs come from one
 global sequence across every raw session. They are **not** session-scoped, and an ID is never
 reused for a different person. A participant who takes part in a later session keeps their ID.
 
@@ -73,9 +73,9 @@ coarse ("Chief Privacy Officer" and "Chief Information Officer" are both `execut
 | `behavioral-health` | Behavioral Health Clinician |
 | `patient` | Patient; Patient portal user |
 | `executive` | Chief Information / Medical Information / Privacy Officer; VP Clinical Informatics; Director of Clinical Training & Education |
-| `it` | IT Security Engineer; IT Security; IT Admin |
+| `it` | IT Security Engineer; IT Security; IT Admin; IT Administrator |
 | `accessibility` | Accessibility Specialist |
-| `admin-staff` | ED Registration Clerk; non-clinical/administrative staff |
+| `admin-staff` | ED Registration Clerk; Practice Administrator; non-clinical/administrative staff |
 | `clinician` | Clinician, role not specified |
 | `mixed-staff` | Survey buckets spanning several roles ("Clinical staff (various)") |
 
