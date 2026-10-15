@@ -29,7 +29,7 @@ The machine-readable source is [`research/projects.yml`](../research/projects.ym
 | `project-cross-cutting` | Cross-cutting (no single project) | 31 |
 | | **Total** | **131** |
 
-Counts are as of 2026-10-14, from `export_records.py` output. To recount:
+Counts are as of 2026-10-15, from `export_records.py` output. To recount:
 
 ```
 python research/scripts/export_records.py --summary | python -c "import json,sys,collections; \

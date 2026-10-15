@@ -66,7 +66,7 @@ coarse ("Chief Privacy Officer" and "Chief Information Officer" are both `execut
 | Class | Covers (labels in use) |
 |---|---|
 | `physician` | Physician; Physician, Internal Medicine; Physician, Family Medicine; Physician (Internal Medicine); Physician (Family Medicine) |
-| `app` | Advanced practice providers (nurse practitioners, physician assistants): Nurse Practitioner (± primary care) |
+| `app` | Advanced practice providers (nurse practitioners, physician assistants): Nurse Practitioner (± primary care); Physician Assistant |
 | `nurse` | Registered Nurse (± primary care clinic; ± ICU; ± medical-surgical; ± infusion clinic; ± telemetry); ED Intake Nurse; Charge Nurse (emergency department); Nurse Manager (medical-surgical); Utilization Review Nurse (± supervisor); Behavioral Health Unit Charge Nurse |
 | `care-coordinator` | Care Coordinator (± float pool; ± transitions of care; ± complex care); Care Coordinator Supervisor |
 | `him-coder` | HIM Specialist (± Release of Information); HIM Supervisor; Medical Coder (± certified; ± senior); Coding Auditor; Clinical Documentation Integrity Specialist; Revenue Cycle Analyst (Billing) |
@@ -105,8 +105,9 @@ inpatient, ED and behavioral health settings stay gaps. See decision 19 in
 [`decisions.md`](decisions.md).
 
 Physician labels from before the registry use a comma (`Physician, Internal Medicine`).
-`new_research_session.py --participants` doesn't accept commas, so new labels use parentheses
-(`Physician (Internal Medicine)`). A returning participant keeps the label from their latest
+New labels use parentheses (`Physician (Internal Medicine)`). Never pass a comma in a
+`new_research_session.py --participants` label: the script splits at the comma and allocates each
+part as a separate new participant. A returning participant keeps the label from their latest
 appearance: pass the bare ID (`--participants "P09"`) and the script copies it from the registry.
 Writing a returning participant's quote with a different label is a registry error.
 

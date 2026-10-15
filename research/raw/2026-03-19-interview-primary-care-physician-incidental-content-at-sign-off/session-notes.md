@@ -19,7 +19,7 @@ related_findings:
 # Interview — Primary Care Physician on Incidental Content in Scribe Drafts
 
 ## Objective
-Earlier ambient-scribe research looked at what the scribe gets wrong: medication dosages and sound-alike drug names, and whether clinicians trust the draft enough to skim it. It did not look at what the scribe writes down correctly but that doesn't belong in a visit note: small talk, a patient's remarks about other people, side conversations with a family member in the room. This session asked a primary care physician, two months after the January 2026 GA, what of that kind ends up in their drafts and what they remove before they sign.
+Earlier ambient-scribe research looked at what the scribe gets wrong: medication dosages and sound-alike drug names, and whether clinicians trust the draft enough to skim it. Two sessions touched on what the scribe takes in more broadly. A behavioral health clinician raised consent concerns about AI listening to behavioral health sessions, which kept that population out of the near-term rollout (2025-10-07-contextual-inquiry-behavioral-health-sensitive-notes/session-notes.md:28). A care coordinator who reads signed visit notes found scribe-drafted notes longer and more conversational than typed ones (2026-03-03-interview-care-coordinator-chart-review-scribe-notes/session-notes.md:31). Neither asked the person signing a draft about content the scribe writes down correctly but that doesn't belong in a visit note: small talk, a patient's remarks about other people, side conversations with a family member in the room. This session asked a primary care physician, two months after the January 2026 GA, what of that kind ends up in their drafts and what they remove before they sign.
 
 ## Method
 - **Method:** 1:1 interview, 45 min
@@ -50,5 +50,5 @@ Earlier ambient-scribe research looked at what the scribe gets wrong: medication
 - What happens to text a clinician removes before signing is not recorded in the corpus and was not discussed in this session.
 
 ## Related
-- Earlier sessions: [2025-09-23 v0.2 usability test](../2025-09-23-usability-test-ambient-scribe-v02/session-notes.md) (in-place line correction), [2026-01-13 GA release candidate](../2026-01-13-usability-test-ambient-scribe-ga-release-candidate/session-notes.md) (confidence underline)
+- Earlier sessions: [2025-09-23 v0.2 usability test](../2025-09-23-usability-test-ambient-scribe-v02/session-notes.md) (in-place line correction), [2025-10-07 behavioral health contextual inquiry](../2025-10-07-contextual-inquiry-behavioral-health-sensitive-notes/session-notes.md), [2026-01-13 GA release candidate](../2026-01-13-usability-test-ambient-scribe-ga-release-candidate/session-notes.md) (confidence underline), [2026-03-03 care coordinator interview](../2026-03-03-interview-care-coordinator-chart-review-scribe-notes/session-notes.md)
 - Synthesized into: [ambient-scribe.md](../../findings/ambient-scribe.md)
