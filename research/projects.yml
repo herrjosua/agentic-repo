@@ -107,6 +107,9 @@ raw:
   2026-06-30-interview-rheumatologist-medication-lines-in-scribe-drafts: project-ambient-scribe
   2026-07-02-interview-family-physician-after-hours-charting-since-ga: project-cross-cutting
   2026-07-28-interview-orthopedics-physician-assistant-exam-findings-in-scribe-drafts: project-ambient-scribe
+  2026-08-25-interview-primary-care-physician-assistant-coder-and-cdi-queries: project-ambient-scribe
+  2026-09-22-interview-returning-internal-medicine-physician-edits-and-trust-over-time: project-ambient-scribe
+  2026-10-08-interview-internal-medicine-resident-opting-in-to-the-scribe: project-ambient-scribe
 
 components:
   admin-console-grid: project-cross-cutting
