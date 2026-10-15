@@ -62,7 +62,8 @@ research; only the 2026 evidence added to that boundary postdates the retro.
   forced re-auth interrupts it mid-visit. This was flagged as an unhandled edge case for the
   ambient scribe team (see [ambient-scribe.md](ambient-scribe.md)) rather than something to solve
   in this session. The 15-minute figure was a *planned* policy that was still disputed as of May
-  2025. By Feb 2026, IT Security described a 10-minute idle timeout as fixed policy (see
+  2025. By Feb 2026, IT Security confirmed the 10-minute idle timeout is not adjustable per feature
+  (2026-02-17-session-lock-during-dictation/session-notes.md:49-50; see
   [ambient-scribe-post-ga-refinements.md](ambient-scribe-post-ga-refinements.md)). The raw notes
   don't say whether that settles this dispute or is a separate idle-lock setting.
 - **Behavioral health (contextual inquiry, Oct 2025):** reiterated, independently, the same "no
@@ -91,6 +92,7 @@ document and a cross-cutting findings section.
 - **2025-05-20** — [Interview — IT Security on SSO/MFA Modernization Impact](../raw/2025-05-20-interview-it-security-sso-mfa-modernization/session-notes.md) *(`interview`)*
 - **2025-10-07** — [Contextual Inquiry — Behavioral Health Unit, Sensitive Note Handling](../raw/2025-10-07-contextual-inquiry-behavioral-health-sensitive-notes/session-notes.md) *(`contextual-inquiry`)*
 - **2025-12-16** — [Executive Steering Committee — Year-End Retro & 2026 Roadmap Input](../raw/2025-12-16-stakeholder-interview-executive-steering-committee-retro/session-notes.md) *(`interview`)* — cited for the scope-discipline praise only
+- **2026-02-17** — [Contextual Inquiry — Session Lock During Active Ambient Scribe Dictation](../raw/2026-02-17-session-lock-during-dictation/session-notes.md) *(`contextual-inquiry`)* — cited for the 10-minute idle timeout not being adjustable per feature (session-notes.md:49-50) only
 - **2026-03-31** — [Interview — HIM Supervisor on ROI Volume and Part 2 Handling](../raw/2026-03-31-interview-him-supervisor-roi-volume-and-part-2/session-notes.md) *(`interview`)*
 - **2026-04-14** — [Interview — Returning ED Intake Nurse on Interruptions and Downtime](../raw/2026-04-14-interview-ed-intake-nurse-interruptions-and-downtime/session-notes.md) *(`interview`)*
 - **2026-05-19** — [Interview — ED Charge Nurse on Shift Oversight](../raw/2026-05-19-interview-ed-charge-nurse-shift-oversight/session-notes.md) *(`interview`)*

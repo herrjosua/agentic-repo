@@ -66,11 +66,11 @@ has to release staff for that training.
   noted but flagged as not a clean apples-to-apples comparison (different question wording). The
   survey recommends re-running the exact February instrument if a clean trend is needed.
 
-Recommendation: use the unit-champion training model for the ambient scribe GA rollout (avoiding
-flu-season timing), and run a dedicated non-clinical-staff communications push before the
-scheduling chatbot goes live. One nurse manager's account suggests that, for any later rollout that
-reaches nurses, champion practice time and backfill should be agreed with unit managers before
-their schedule is built (2026-08-18).
+Recommendation (from the October and December 2025 sessions): use the unit-champion training
+model for the ambient scribe GA rollout (avoiding flu-season timing), and run a dedicated
+non-clinical-staff communications push before the scheduling chatbot goes live. One nurse
+manager's account suggests that, for any later rollout that reaches nurses, champion practice time
+and backfill should be agreed with unit managers before their schedule is built (2026-08-18).
 
 ## Evidence Trail
 - **2025-10-21** — [Interview — Training & Education Dept on Rollout/Change Management Planning](../raw/2025-10-21-interview-training-department-rollout-change-management/session-notes.md) *(`interview`)*
