@@ -36,7 +36,7 @@ Earlier ambient-scribe sessions tested medication accuracy in drafts: dosage err
 > "Fifteen medications and one of them changed today. The draft doesn't tell me which one, so I read all fifteen."
 > — Physician (Rheumatology), P149
 
-> "It heard the first dose perfectly. It just didn't hear the rest of the taper."
+> "It got the first dose right. The rest of the taper just isn't there."
 > — Physician (Rheumatology), P149
 
 ## Recommendations
