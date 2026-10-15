@@ -1,6 +1,6 @@
 # Participant IDs
 
-Every research participant has one participant ID (`P01`, `P02`, ... `P145`). IDs come from one
+Every research participant has one participant ID (`P01`, `P02`, ... `P148`). IDs come from one
 global sequence across every raw session. They are **not** session-scoped, and an ID is never
 reused for a different person. A participant who takes part in a later session keeps their ID.
 
@@ -65,8 +65,8 @@ coarse ("Chief Privacy Officer" and "Chief Information Officer" are both `execut
 
 | Class | Covers (labels in use) |
 |---|---|
-| `physician` | Physician; Physician, Internal Medicine; Physician, Family Medicine |
-| `app` | Advanced practice providers: Nurse Practitioner, Physician Assistant |
+| `physician` | Physician; Physician, Internal Medicine; Physician, Family Medicine; Physician (Internal Medicine); Physician (Family Medicine) |
+| `app` | Advanced practice providers (nurse practitioners, physician assistants): Nurse Practitioner (± primary care) |
 | `nurse` | Registered Nurse (± primary care clinic; ± ICU; ± medical-surgical; ± infusion clinic; ± telemetry); ED Intake Nurse; Charge Nurse (emergency department); Nurse Manager (medical-surgical); Utilization Review Nurse (± supervisor); Behavioral Health Unit Charge Nurse |
 | `care-coordinator` | Care Coordinator (± float pool; ± transitions of care; ± complex care); Care Coordinator Supervisor |
 | `him-coder` | HIM Specialist (± Release of Information); HIM Supervisor; Medical Coder (± certified; ± senior); Coding Auditor; Clinical Documentation Integrity Specialist; Revenue Cycle Analyst (Billing) |
@@ -92,6 +92,23 @@ nursing leadership of that care (charge nurse, nurse manager), or nurse-specific
 and social workers (their work is coordination, and they were excluded from the Phase 2 care
 coordinator interviews too); nurse practitioners and physician assistants (`app`, Phase 4); LPNs
 and LVNs; and nurse informatics. See decision 18 in [`decisions.md`](decisions.md).
+
+`physician` and `app`, for the RR-124 physician, NP and PA interviews (Phase 4), mean a licensed
+physician (`physician`) or nurse practitioner or physician assistant (`app`) in direct patient care
+who signs their own notes, each labelled by their own role. Residents and fellows count, labelled as
+such; hospitalists and ED physicians are in the class. An RN training as an NP, or an NP working in
+an RN job, is classed by the job they do (`nurse`). Excluded: locum clinicians; medical directors,
+CMIOs, CMOs and physician informaticists (stakeholders, `executive`); pharmacists; human medical
+scribes; behavioral health clinicians, including psychiatrists (behavioral health is excluded from
+the ambient scribe rollout); and CRNAs and nurse-midwives. Phase 4's sessions are ambulatory only;
+inpatient, ED and behavioral health settings stay gaps. See decision 19 in
+[`decisions.md`](decisions.md).
+
+Physician labels from before the registry use a comma (`Physician, Internal Medicine`).
+`new_research_session.py --participants` doesn't accept commas, so new labels use parentheses
+(`Physician (Internal Medicine)`). A returning participant keeps the label from their latest
+appearance: pass the bare ID (`--participants "P09"`) and the script copies it from the registry.
+Writing a returning participant's quote with a different label is a registry error.
 
 The class belongs to the participant, never to the session. A session with several roles needs
 nothing extra: its classes are just the classes of the people in it.

@@ -33,6 +33,7 @@ decision log, whose decisions and rationales are copied here in their recorded w
 | 16 | [Participant IDs live in one central registry](#16-participant-ids-live-in-one-central-registry) | 2026-10-13 | Active |
 | 17 | [Participant IDs follow allocation order, not session date](#17-participant-ids-follow-allocation-order-not-session-date) | 2026-10-14 | Active |
 | 18 | [Who counts as a nurse in the RR-124 interviews](#18-who-counts-as-a-nurse-in-the-rr-124-interviews) | 2026-10-14 | Active |
+| 19 | [Who counts as a physician, NP or PA in the RR-124 interviews](#19-who-counts-as-a-physician-np-or-pa-in-the-rr-124-interviews) | 2026-10-15 | Active |
 
 ---
 
@@ -284,3 +285,28 @@ decision log, whose decisions and rationales are copied here in their recorded w
   RR-124 ticket, not in this repo. The `nursing` tag means the registered nurse population
   specifically, which rules out LPNs and LVNs. Nurse informatics staff configure the tools rather
   than use them in patient care, which makes them stakeholders rather than end users.
+
+## 19. Who counts as a physician, NP or PA in the RR-124 interviews
+
+- **Date:** 2026-10-15
+- **Status:** Active
+- **Decision:** A participant in the RR-124 physician, NP and PA interviews (Phase 4) is a licensed
+  physician, nurse practitioner or physician assistant in direct patient care who signs their own
+  notes. Physicians are role class `physician`; NPs and PAs are `app`, and each is labelled by their
+  own role. Residents and fellows count, labelled as residents or fellows. Hospitalists and ED
+  physicians are in the class too. An RN who is training as an NP, or an NP working in an RN job,
+  is classed by the job they do: `nurse`, under decision 18. Excluded: locum clinicians; medical
+  directors, CMIOs, CMOs and physician informaticists, who are stakeholders (`executive`, covered
+  in `governance-and-phi.md`); pharmacists; human medical scribes; behavioral health clinicians,
+  including psychiatrists, because behavioral health is excluded from the ambient scribe rollout
+  (`scope-boundaries-and-workflow-fit.md`); and CRNAs and nurse-midwives. Separately, Phase 4's
+  sampling is ambulatory only: there are no inpatient, ED or behavioral health sessions, and those
+  settings stay honest gaps. See [`participants.md`](participants.md#role-classes).
+- **Why:** The phases interview one user type at a time, so the line has to be drawn once and
+  written down, as decision 18 did for nurses. The ambient scribe drafts visit notes for physicians,
+  NPs and PAs, so the people who review and sign those drafts are the users this phase is about.
+  The 2026-01-27 dashboard review found residents opting in less than attendings and asked for a
+  qualitative follow-up, so residents can't be left out. Directors and informaticists configure or
+  govern the tools rather than sign notes with them. Whether the scribe is used in inpatient or ED
+  settings isn't recorded, so sessions there would have to invent it; they stay gaps rather than
+  being sampled.
