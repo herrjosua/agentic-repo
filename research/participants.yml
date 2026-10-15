@@ -14,7 +14,7 @@
 # build_index.py (and --check) validates this file against raw/. IDs that were never quoted in a
 # raw session aren't recorded; next_id is the next one to allocate and is never reused.
 
-next_id: P154
+next_id: P161
 
 # IDs first used in a session dated after this baseline must be first_id or higher (warn-only).
 sequence_baseline:
@@ -502,4 +502,46 @@ participants:
     appearances:
       - session: 2026-10-08-interview-internal-medicine-resident-opting-in-to-the-scribe
         role: Physician (Internal Medicine resident)
+        reserved: true
+  P154:
+    role_class: admin-staff
+    appearances:
+      - session: 2026-02-03-usability-test-compass-ai-practice-setup-flow
+        role: Practice Administrator
+        reserved: true
+  P155:
+    role_class: admin-staff
+    appearances:
+      - session: 2026-02-03-usability-test-compass-ai-practice-setup-flow
+        role: Practice Administrator
+        reserved: true
+  P156:
+    role_class: admin-staff
+    appearances:
+      - session: 2026-02-03-usability-test-compass-ai-practice-setup-flow
+        role: Practice Administrator
+        reserved: true
+  P157:
+    role_class: admin-staff
+    appearances:
+      - session: 2026-02-03-usability-test-compass-ai-practice-setup-flow
+        role: Practice Administrator
+        reserved: true
+  P158:
+    role_class: it
+    appearances:
+      - session: 2026-02-03-usability-test-compass-ai-practice-setup-flow
+        role: IT Administrator
+        reserved: true
+  P159:
+    role_class: it
+    appearances:
+      - session: 2026-02-03-usability-test-compass-ai-practice-setup-flow
+        role: IT Administrator
+        reserved: true
+  P160:
+    role_class: it
+    appearances:
+      - session: 2026-02-24-interview-it-administrator-schedule-access-and-staff-invites
+        role: IT Administrator
         reserved: true

@@ -110,6 +110,9 @@ raw:
   2026-08-25-interview-primary-care-physician-assistant-coder-and-cdi-queries: project-ambient-scribe
   2026-09-22-interview-returning-internal-medicine-physician-edits-and-trust-over-time: project-ambient-scribe
   2026-10-08-interview-internal-medicine-resident-opting-in-to-the-scribe: project-ambient-scribe
+  2026-01-20-dashboard-review-compass-ai-practice-setup-completion: project-onboarding
+  2026-02-03-usability-test-compass-ai-practice-setup-flow: project-onboarding
+  2026-02-24-interview-it-administrator-schedule-access-and-staff-invites: project-onboarding
 
 components:
   admin-console-grid: project-cross-cutting
