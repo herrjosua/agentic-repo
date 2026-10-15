@@ -236,7 +236,11 @@ which haven't been audited yet: `mindsets/skeptical-verifier.md`,
 `mockups/confidence-highlighted-draft-review.md`,
 `prototypes/ambient-scribe-ga-candidate-clickthrough.md`,
 `service-topology/prior-auth-drafting-v2.md` and
-`design-system/v4-1-status-indicator-component.md`.
+`design-system/v4-1-status-indicator-component.md`. **Audited 2026-10-15
+(RR-165):** all ten are now claim-checked (see "RR-165 (v0.5.46)" below).
+The thumbnails, mockup, prototype and v4-1 records now have Evidence basis
+lines. The other six have suggested labels, recorded for their owner and
+not applied.
 
 ### Noted, out of scope
 
@@ -246,6 +250,306 @@ which haven't been audited yet: `mindsets/skeptical-verifier.md`,
   append-only correction file. Not created here. **Made 2026-10-13:**
   `raw/2026-02-17-session-lock-during-dictation/correction-2026-10-13.md`
   gives that physician the ID P119.
+
+## RR-165 (v0.5.46): claim check of the ten remaining Meridian design deliverables
+
+### Scope and method
+
+The ten records listed under Phase 3b's "Deferred". As in Method, every
+factual claim was checked against the raw session lines it depends on. The
+verdicts are the ones defined in Method, with one narrower meaning: STALE
+here means the claim was qualified by later evidence, not that its author
+got it wrong. So the fix for a STALE claim is an added "as of" note, not a
+rewrite.
+
+The audit ran at `main` `28098e4` and was applied in RR-165 parts 1–4.
+Line numbers are the records' lines as at `28098e4`. The four records
+changed in part 4 have since shifted. `raw/<date>…:<line>` means that
+date's session folder, `session-notes.md`, unless another file is named.
+Raw files haven't changed since `28098e4`; part 1 only added correction
+files.
+
+### Totals
+
+| Record | Claims | Supported | Overreach | Unsupported | Stale | Labeled inference |
+|---|---|---|---|---|---|---|
+| `mindsets/skeptical-verifier.md` | 8 | 2 | 1 | 1 | 2 | 2 |
+| `journey-maps/longitudinal-physician-ambient-scribe.md` | 10 | 7 | 3 | 0 | 0 | 0 |
+| `thumbnails/medication-flag-placement-explorations.md` | 4 | 2 | 1 | 1 | 0 | 0 |
+| `wireframes/ambient-scribe-medication-flag.md` | 6 | 4 | 2 | 0 | 0 | 0 |
+| `wireflows/alert-triage-override-reason-capture.md` | 8 | 5 | 0 | 0 | 3 | 0 |
+| `storyboards/ed-intake-peak-hour-interruption.md` | 9 | 4 | 1 | 2 | 0 | 2 |
+| `mockups/confidence-highlighted-draft-review.md` | 6 | 3 | 1 | 1 | 1 | 0 |
+| `prototypes/ambient-scribe-ga-candidate-clickthrough.md` | 1 | 0 | 0 | 1 | 0 | 0 |
+| `service-topology/prior-auth-drafting-v2.md` | 7 | 2 | 1 | 3 | 1 | 0 |
+| `design-system/v4-1-status-indicator-component.md` | 3 | 1 | 1 | 1 | 0 | 0 |
+| **Total** | **62** | **30** | **11** | **10** | **7** | **4** |
+
+32 claims are not SUPPORTED. 8 have been applied (part 4) and 24 are
+pending for their owners.
+
+### Claim ledger
+
+R1–R62. Status is blank where no fix is needed.
+
+**`mindsets/skeptical-verifier.md`**
+
+| # | Line | Claim | Verdict | Raw evidence | Status |
+|---|---|---|---|---|---|
+| R1 | :13 | A segment that recurs across physicians, nurses and HIM coders | LABELED INFERENCE | `raw/2025-02-25…:31` — "4 of 5 participants read every line"; `raw/2025-04-08…:34` — "Show me where it got that info."; `raw/2025-07-29…:37` — "If you can't, I don't trust it." Three sessions; the cross-role segment is the designer's synthesis. | pending |
+| R2 | :13-14 | "regardless of department or identity" | OVERREACH | No session compares departments or identities; "regardless" was never tested. | pending |
+| R3 | :14-15 | "first named explicitly as a pattern in `him-coding-and-billing.md`" | UNSUPPORTED | Raised earlier, in prior-auth v1: `raw/2025-04-08…:31` — "'show your work' was mentioned unprompted by 3 of 4". | pending |
+| R4 | :18-20 | Wants citations or a human-decision boundary for prior-auth and coding drafts | SUPPORTED | `raw/2025-04-08…:31`; `raw/2025-07-29…:28` | |
+| R5 | :19-20 | Wants "confidence signals" | LABELED INFERENCE | `raw/2025-09-23…:43` is a recommendation — "explore an explicit confidence indicator per line"; `raw/2026-01-13…:36` — "it showed me exactly where to look instead." | pending |
+| R6 | :18-20 | "Doesn't want AI output … auto-applied" | STALE | `raw/2026-06-23…:31` — "the suggested code would probably be accepted as shown unless something jumped out", tied "to the quota, not to trust in the tool"; `:33` — the citation is opened "only when a suggestion looks off". | pending |
+| R7 | :20-21 | Default to visible, checkable provenance rather than accuracy alone | STALE | Later interviews describe errors the confidence underline doesn't mark: `raw/2026-03-19…:32` — incidental content "is not underlined"; `raw/2026-06-30…:31` and `raw/2026-07-28…:29` — "usually not underlined"; `raw/2026-09-22…:31` — "Those lines are usually not underlined". | pending |
+| R8 | :21-23 | Accuracy improvements alone didn't change reading behavior | SUPPORTED | `raw/2025-09-23…:32` | |
+
+**`journey-maps/longitudinal-physician-ambient-scribe.md`**
+
+| # | Line | Claim | Verdict | Raw evidence | Status |
+|---|---|---|---|---|---|
+| R9 | :14-15 | Modeled on P09 in the three test rounds | SUPPORTED | `raw/2025-02-25…:37`, `raw/2025-09-23…:37`, `raw/2026-01-13…:37` | |
+| R10 | :15-16 | Post-GA stage "inferred from other participants" in 2026-02-10 | OVERREACH (minor) | `raw/2026-02-10…/participants.md:27` — "Drawn from the existing GA-candidate cohort (2026-01-13) plus 2 new participants". P09 was in that cohort; whether P09 took part isn't recorded (data gap 8), so "other" is not established. | pending |
+| R11 | :19-20 | v0.1: reads every line; P09's quote | SUPPORTED | `raw/2025-02-25…:36` | |
+| R12 | :20-21 | Dosages missed or garbled in 3 of 5, disqualifying | SUPPORTED | `raw/2025-02-25…:30` | |
+| R13 | :22-24 | v0.2: errors drop, still reads every line; P09's quote | SUPPORTED | `raw/2025-09-23…:31-32,:36` | |
+| R14 | :25-26 | GA candidate: begins skimming high-confidence lines | SUPPORTED | `raw/2026-01-13…:36` | |
+| R15 | :26-27 | Sound-alike names "a known, monitored gap" | OVERREACH | `raw/2026-01-13…:48` — "Set up post-GA monitoring dashboard" (a follow-up); `raw/2026-02-10…:71-72` — "once the post-GA monitoring dashboard (recommended 2026-01-13) has real error-rate data". Monitoring was recommended, not recorded as running. | pending |
+| R16 | :28-29 | The medication flag "reads as more actionable" than generic highlighting | OVERREACH | `raw/2026-02-10…:36-39` — 5 of 6 identified it as "different from the usual low-confidence thing". Recognition, not actionability, was tested. | pending |
+| R17 | :29-30 | Only if unflagged lines aren't over-trusted | SUPPORTED | `raw/2026-02-10…:40-42` | |
+| R18 | :30-32 | Session lock: clinicians assumed the draft was lost | SUPPORTED | `raw/2026-02-17…:38-41,:54`; `correction-2026-09-27.md:41-43`; `correction-2026-10-13.md:33` | |
+
+**`thumbnails/medication-flag-placement-explorations.md`**
+
+| # | Line | Claim | Verdict | Raw evidence | Status |
+|---|---|---|---|---|---|
+| R19 | :18-19 | Inline pill won 5:1; participants didn't want to look away | SUPPORTED | `raw/2026-02-10…:44-45` | |
+| R20 | :20 | Margin badge tested and lost | SUPPORTED | `raw/2026-02-10…:43-44` | |
+| R21 | :20-21 | The margin badge "required a separate glance that broke reading flow" | OVERREACH (minor) | `raw/2026-02-10…:44-45` — "participants didn't want to look away from the text to check a flag". A stated preference, not an observed break in reading. | applied, PR #39 |
+| R22 | :22-23 | A modal interrupt was "dropped before testing" | UNSUPPORTED | No file in `raw/2026-02-10…/` mentions a modal. | applied, PR #39 |
+
+**`wireframes/ambient-scribe-medication-flag.md`**
+
+| # | Line | Claim | Verdict | Raw evidence | Status |
+|---|---|---|---|---|---|
+| R23 | :21-22 | The flag was "validated in the 2026-02-10 concept test" | OVERREACH | `raw/2026-02-10…:70` — "Needs a larger-N validation pass before this moves from concept test to build-ready spec." | pending |
+| R24 | :24 | Reads as "check this drug name" | SUPPORTED | `raw/2026-02-10…:51-52` | |
+| R25 | :27-28 | Inline placement, 5:1 | SUPPORTED | `raw/2026-02-10…:44` | |
+| R26 | :29-30 | Amber pill badge, distinct from the underline | SUPPORTED | `raw/2026-02-10…:37` | |
+| R27 | :33-35 | Tip countering over-trust of unflagged lines (2 of 6) | SUPPORTED | `raw/2026-02-10…:62-64` | |
+| R28 | :36-38 | False-positive testing suggests the threshold "can run looser than strict-precision defaults" | OVERREACH | `raw/2026-02-10…:46-48` — "One deliberately-seeded false positive … was accepted by all 6 participants"; "suggests some over-flagging is tolerable if the badge is visually light". | pending |
+
+**`wireflows/alert-triage-override-reason-capture.md`**
+
+| # | Line | Claim | Verdict | Raw evidence | Status |
+|---|---|---|---|---|---|
+| R29 | :13-14 | Overrides lose the "why" | SUPPORTED | `raw/2025-08-26…:29` | |
+| R30 | :14-16 | The study recommended capture for the model and for agency | SUPPORTED | `raw/2025-08-26…:41` | |
+| R31 | :16-17 | Supervisor's rubber-stamping concern | SUPPORTED | `raw/2025-08-26…:31` | |
+| R32 | :21-22 | Patient-history risk and recency as reasons | SUPPORTED | `raw/2025-08-26…:37,:28` | |
+| R33 | :24-26 | Skip-reason branch | SUPPORTED | `raw/2026-07-07…:31` — expected "they would skip the modal rather than type". | |
+| R34 | :21-22 | The reason list as complete | STALE | `raw/2026-07-07…:30` — the most common reason, what the patient or family said on the phone, "isn't in the list"; `raw/2026-04-16…:32` — for discharge alerts, "time since discharge *is* the clinical risk". | pending |
+| R35 | :22 | "other + free text" | STALE | `raw/2026-07-07…:31` — "They would not type free text on every override". | pending |
+| R36 | :23 | Reasons logged for model tuning, "not surfaced to other coordinators" | STALE | `raw/2026-05-05…:31` — a supervisor "would also use override reasons for coaching" and the design "doesn't say whether supervisors see them"; `raw/2026-07-07…:32` — without seeing an effect "they would stop giving them". | pending |
+
+**`storyboards/ed-intake-peak-hour-interruption.md`**
+
+| # | Line | Claim | Verdict | Raw evidence | Status |
+|---|---|---|---|---|---|
+| R37 | :13 | Peak-hour ED shift | SUPPORTED | `raw/2025-04-22…:24` | |
+| R38 | :13-14 | Interruptions every 2–4 minutes | SUPPORTED | `raw/2025-04-22…:29` | |
+| R39 | :14 | Call lights, ambulance radio, a physician question | UNSUPPORTED | `raw/2025-04-22…:29` records "paged, walked up to, or called over". | pending |
+| R40 | :17 | Panel 1: interrupted by a bedside alarm two questions in | LABELED INFERENCE | An invented scene; no session records it. | pending |
+| R41 | :18-19 | Panel 2: "has lost track of where she was" | LABELED INFERENCE | An invented scene; no pronoun is recorded ("she" at :18). | pending |
+| R42 | :20-21 | Panel 3: card photo, "pre-fill happens instantly" | UNSUPPORTED | `raw/2026-04-14…:49` — "Whether the insurance-card photo pre-fill … has been piloted is not recorded". | pending |
+| R43 | :22-23 | Panel 4: the interruption rate, not AI quality | SUPPORTED | `raw/2025-04-22…:35` | |
+| R44 | :24-25 | Carve out insurance-card pre-fill | SUPPORTED | `raw/2025-04-22…:47` | |
+| R45 | :25 | "leave ED intake nursing out of near-term rollout" | OVERREACH | `raw/2025-04-22…:42` — "Deprioritize any AI feature aimed at ED intake nurses specifically during peak hours"; `raw/2026-05-19…:30` — the boundary "covers intake during peak, not the ED at every hour". | pending |
+
+**`mockups/confidence-highlighted-draft-review.md`**
+
+| # | Line | Claim | Verdict | Raw evidence | Status |
+|---|---|---|---|---|---|
+| R46 | :14-15 | Built for the Jan 2026 GA-candidate round | SUPPORTED | `raw/2026-01-13…:22` | |
+| R47 | :15-17 | "the program's clearest trust-calibration result to date (visible uncertainty, not raw accuracy, changed reviewing behavior)" | OVERREACH | `raw/2026-01-13…:30` — "4 of 6 participants said it let them skim"; `:43` — the concept "appears to be the trust-building lever". | applied, PR #39 |
+| R48 | :15-16 | The same result, read as current | STALE | `raw/2026-03-19…:32`, `raw/2026-06-30…:31`, `raw/2026-07-28…:29`, `raw/2026-09-22…:31` — errors that are "usually not underlined". | applied, PR #39 |
+| R49 | :20-21 | High-confidence lines unmarked; low-confidence underlined | SUPPORTED | `raw/2026-01-13…:30` | |
+| R50 | :21-22 | "an on-hover explanation"; "no separate medium-confidence tier" | UNSUPPORTED | `raw/2026-01-13…/` records neither a hover explanation nor tiers; `:30` describes only "a subtle underline". | applied, PR #39 |
+| R51 | :23-24 | Avoids colour-only signaling | SUPPORTED | `raw/2025-03-10…:31` | |
+
+**`prototypes/ambient-scribe-ga-candidate-clickthrough.md`**
+
+| # | Line | Claim | Verdict | Raw evidence | Status |
+|---|---|---|---|---|---|
+| R52 | :17 | "Used for the Jan 13, 2026 usability round" | UNSUPPORTED | `raw/2026-01-13…:25` — "Moderated usability test, simulated + 2 real (consented) low-acuity encounters"; no prototype or build is named. | applied, PR #39 |
+
+**`service-topology/prior-auth-drafting-v2.md`**
+
+| # | Line | Claim | Verdict | Raw evidence | Status |
+|---|---|---|---|---|---|
+| R53 | :14-16 | v2 showed citations used, not ignored as friction | SUPPORTED | `raw/2025-11-04…:30` | |
+| R54 | :19-22 | The backend chain (Chart-Data Service … Submission Service) | UNSUPPORTED | No raw session describes the backend. | pending |
+| R55 | :20-22 | Payer-Rules Lookup "the fix that closed the v1 data-freshness bug" | UNSUPPORTED | `raw/2025-04-08…:46` — "confirm whether the outdated-code issue is a data-freshness bug or a model retrieval issue"; `raw/2025-11-04…:29` — the issue "did not recur". No session records the cause or the fix. | pending |
+| R56 | :23-24 | Span-level citations are "why nurses could meaningfully check" one | OVERREACH | `raw/2025-11-04…:30` — "3 of 4 participants clicked into at least one citation"; no cause recorded. | pending |
+| R57 | :22-24 | Nurse accepts/edits/rejects; checks a citation before accepting | STALE | `raw/2026-06-16…:30` — partway through a case "they stop using the draft and finish the case by hand"; `raw/2026-09-17…:30` — the v2 measure "records that a citation was opened, not what the nurse checked". | pending |
+| R58 | :26-27 | Supports the pilot-expansion recommendation | SUPPORTED | `raw/2025-11-04…:39` | |
+| R59 | :27-28 | The data-freshness fix "is now a tracked backend dependency" | UNSUPPORTED | Not in raw. | pending |
+
+**`design-system/v4-1-status-indicator-component.md`**
+
+| # | Line | Claim | Verdict | Raw evidence | Status |
+|---|---|---|---|---|---|
+| R60 | :16-17 | Replaces colour-only dots in `care-gap-badge` and `alert-triage-queue` | SUPPORTED | `accessibility-screenings/status-indicator-remediation-screening.md:22`; `raw/2025-11-18…:32` | |
+| R61 | :18-19 | "the shared root behind the color-only pattern found in all three 2025 accessibility audits" | OVERREACH | The screening (`:22`, `:25`) covers two components. `raw/2025-11-18…:44` — "now found in 3 separate audits"; `:47` — "Confirm whether the color-only status issue has a single shared root component". `raw/2025-07-01…:29-32` records no colour-only finding. | applied, PR #39 |
+| R62 | :24-25 | "satisfying 1.4.1" | UNSUPPORTED | No re-screen is recorded. | applied, PR #39 |
+
+### What RR-165 changed
+
+- **Part 1** — PR #36, merge `54ba503`. Three `correction-2026-10-15.md`
+  files withdraw false "Synthesized into" lines: 2026-03-17 (P138) `:51`
+  and 2026-09-15 (P143) `:51`, both for
+  `ambient-scribe-post-ga-refinements.md`, and 2026-10-06 (P129) `:53` for
+  `prior-authorization.md`. Also the count in `docs/README.md`.
+- **Part 2** — PR #37, merge `131d882`. `--participants` became
+  quote-aware; `docs/participants.md` wording and a label note; the
+  Evidence basis definition and label definitions in
+  `docs/deliverable-types.md`.
+- **Part 3** — PR #38, merge `cbad3c7`. A 2026-02-10 Evidence Trail row in
+  `ambient-scribe.md`; `rollout-and-change-management.md:69` dated to its
+  October and December 2025 sources; in
+  `scope-boundaries-and-workflow-fit.md`, the IT Security timeout now
+  cites `raw/2026-02-17…:49-50` directly, plus a 2026-02-17 row.
+- **Part 4** — PR #39, merge `c334cf6`. Thumbnails, mockup, prototype and
+  v4-1: 8 claims fixed (R21, R22, R47, R48, R50, R52, R61, R62), and an
+  Evidence basis line in each, all Mixed.
+
+### Pending for owners
+
+24 claims, not edited. The six records are do-not-edit or in review, so
+the fixes below are suggestions for their designer, Sam Okafor, who
+designed all six. Jordan Lee is the owner for
+`ambient-scribe-post-ga-refinements.md`. Suggested Evidence basis labels
+use only the four defined labels.
+
+- **Mindset** (R1–R3, R5–R7). Suggested label: Inferred.
+  - R1: label the cross-role segment as the designer's synthesis of three sessions.
+  - R2: drop "regardless of department or identity"; name the roles seen.
+  - R3: say the pattern was first raised in prior-auth v1 (`raw/2025-04-08…:31`).
+  - R5: label confidence signals as inferred from the 2025-09-23 recommendation and the 2026-01-13 result.
+  - R6: add an "as of" note on quota-driven acceptance (`raw/2026-06-23…:31,:33`).
+  - R7: add an "as of" note that later interviews report errors the underline doesn't mark.
+- **Journey map** (R10, R15, R16). Suggested label: Mixed.
+  - R10: say P09's attendance at 2026-02-10 isn't recorded, rather than "other participants".
+  - R15: "monitoring was recommended" instead of "monitored".
+  - R16: "recognized as different from generic highlighting (5 of 6)" instead of "more actionable".
+- **Wireframe** (R23, R28). Suggested label: Mixed.
+  - R23: "tested in a 6-person concept test"; note the raw's call for a larger-N pass.
+  - R28: state the single seeded false positive accepted by all 6, not a threshold conclusion.
+- **Wireflow** (R34–R36). Suggested label: Mixed.
+  - R34: "as of" note on the missing phone/family reason and on discharge alerts.
+  - R35: "as of" note that free text may be skipped on busy days.
+  - R36: "as of" note on supervisor visibility and coordinator feedback, both unsettled.
+- **Storyboard** (R39–R42, R45). Suggested label: Mixed, with the scenario panels Illustrative.
+  - R39: use the raw's "paged, walked up to, or called over".
+  - R40, R41: label panels 1–2 as illustrative; "she" to "they".
+  - R42: label panel 3 as illustrative; the pre-fill isn't recorded as piloted.
+  - R45: "deprioritize during peak hours", per `raw/2025-04-22…:42`.
+- **Topology** (R54–R57, R59). Suggested label: Mixed, with the backend chain Illustrative.
+  - R54: label the backend chain as the designer's illustration.
+  - R55: drop "the fix that closed"; the cause isn't recorded.
+  - R56: state the v2 observation without "which is why".
+  - R57: "as of" note on mid-case switches to manual and on what citation-opening measures.
+  - R59: drop "now a tracked backend dependency", or source it.
+
+### Decisions and known inconsistencies
+
+- **Frontmatter `date` wasn't bumped by these edits.** This follows
+  earlier audit edits: the persona, mental model and session-lock flow
+  were revised 2026-10-08 to 2026-10-14 without a date change. Mismatches
+  that remain:
+  - Mindset: dated 2025-12-01, but `related_findings` links the post-GA finding dated 2026-02-17.
+  - Thumbnails: dated 2026-02-08, reports the 2026-02-10 test.
+  - Mockup: dated 2026-01-05, refers to the 2026-01-13 round.
+  - Prototype: dated 2025-12-10, refers to the Jan 13 round.
+  - v4-1: dated 2026-01-22, but `:28` describes `style-guide/foundations-v3.md`, dated 2026-02-28.
+- **v4-1 `:27-29` untouched.** `docs/deliverable-types.md` classes
+  `style-guide/foundations-v3.md` as Fernway, so `:28` becomes false if
+  RR-161 removes it. It's plain text, so `build_index.py --check` wouldn't
+  catch it.
+- **Existing Evidence basis lines to revisit with their owners.**
+  `user-flows/ambient-scribe-session-lock-recovery.md:23` is labelled
+  Observed but says "The flow itself is a design response and hasn't been
+  tested" (it could be Mixed). `personas/physician-longitudinal-scribe-user.md:25`
+  is mixed in practice but opens with "Observed".
+- **The screening's "three".**
+  `accessibility-screenings/status-indicator-remediation-screening.md:25`
+  says "one shared root cause, not three independent bugs", though the
+  screening covers two components. And `raw/2025-11-18…:44` counts the
+  pattern in three audits, while `raw/2025-07-01…:29-32` records no
+  colour-only finding. This may need a raw correction; the corpus can't say
+  which is wrong.
+
+### Newer evidence not reflected in the pending six
+
+- **Mindset.** `raw/2026-06-23…:31,:33,:36` (P125) partly contradicts it:
+  "The quota wins. It always wins." `raw/2026-10-06…:32-33,:40` (P129),
+  `raw/2026-09-17…:30,:34` (P144) and `raw/2026-10-13…:30,:37` (P145)
+  support it. `raw/2026-05-28…:30,:37` (P140) qualifies it: acceptance from
+  fatigue ("At hour twelve, if it hands me a paragraph, I'm going to sign
+  it."). `raw/2026-03-17…:32` (P138) is a counter-pattern for readers of
+  the note, who "assume the provider read it all".
+  `raw/2026-03-24…:32-33` (P147) checks every medication change in the
+  plan. `raw/2026-09-22…:34` (P09) trusts the scribe by section. Together
+  these suggest a separate "reader" stance; the owner decides.
+- **Journey map.** `raw/2026-09-22…:31-34` (P09's own post-GA account);
+  `raw/2026-05-26…:32-33`; `raw/2026-04-28…:31-32`.
+- **Wireframe.** `raw/2026-03-24…:32,:50`; `raw/2026-06-30…:31,:33,:50`.
+  Whether the flag stays visible after signing is undecided and rests only
+  on 2026-09-15 (P143), which is raw-only. Word it as an open design
+  question and cite nothing new.
+- **Wireflow.** `raw/2026-07-07…`, `raw/2026-05-05…`,
+  `raw/2026-04-16…:32`, `raw/2026-08-04…:30`, `raw/2026-04-07…:33`,
+  `raw/2026-09-01…:31`, `raw/2026-08-20…:32`.
+- **Storyboard.** `raw/2026-04-14…:31-33`; `raw/2026-05-19…:30-31`.
+- **Topology.** `raw/2026-06-16…:30-32,:43`;
+  `raw/2026-09-17…:30-31,:43,:47`; `raw/2026-10-06…:45`.
+
+### Impact on published answers (for RR-152)
+
+Parts 1–4 changed no text that `answers.json` cites:
+`capture-static-answers.js verify` reports the same 9 of 23 sources not
+matching before and after. When the pending fixes land:
+
+- **Journey map** (`all-scribe-draft-trust [1]`, checked span `:19-27`,
+  stages 1–3; already a MISS). R15 at `:26-27` falls inside the span. R16
+  at `:28-29` is stage 4, just after it.
+- **Widget Notes `:31`** (`scribe-draft-retention [3]`,
+  `component:ambient-scribe-widget#5`, currently matching). Changing
+  "showed" to "suggested" would turn it into a MISS. The widget text is
+  do-not-edit; the owner decides.
+- **Mindset, wireframe, wireflow, storyboard, topology.** No answer cites
+  `deliverable:mindsets/skeptical-verifier`,
+  `deliverable:wireframes/ambient-scribe-medication-flag`,
+  `deliverable:wireflows/alert-triage-override-reason-capture`,
+  `deliverable:storyboards/ed-intake-peak-hour-interruption` or
+  `deliverable:service-topology/prior-auth-drafting-v2`. No impact.
+
+### Not in RR-165, still open
+
+- Missing Evidence Trail rows for 2026-03-17 and 2026-09-15 in
+  `ambient-scribe-post-ga-refinements.md` (do-not-edit; Jordan Lee).
+- No 2026-02-17 rows in `ambient-scribe.md` or `governance-and-phi.md`,
+  because no body claim comes from that session.
+- Widget Notes `:31`: "showed" should read "suggested"
+  (`raw/2025-09-23…:32` — "suggesting trust doesn't shift from accuracy
+  improvements alone").
+- `design-tokens/components/coding-suggestion-panel.md:21` is a generated
+  line; fix it at the source, outside RR-165.
+- Research deliverables (toplines, readouts, the heuristic evaluation, the
+  accessibility screening) have no Evidence basis lines, by decision:
+  RR-165 covers design deliverables only, and the GA adoption topline is
+  do-not-edit.
 
 ## Not a corpus problem
 
