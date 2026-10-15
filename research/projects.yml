@@ -104,6 +104,9 @@ raw:
   2026-03-24-interview-family-physician-plan-and-medication-changes-at-sign-off: project-ambient-scribe
   2026-04-28-interview-nurse-practitioner-session-lock-shared-workstations: project-ambient-scribe
   2026-05-26-interview-returning-nurse-practitioner-training-and-review-habits: project-ambient-scribe
+  2026-06-30-interview-rheumatologist-medication-lines-in-scribe-drafts: project-ambient-scribe
+  2026-07-02-interview-family-physician-after-hours-charting-since-ga: project-cross-cutting
+  2026-07-28-interview-orthopedics-physician-assistant-exam-findings-in-scribe-drafts: project-ambient-scribe
 
 components:
   admin-console-grid: project-cross-cutting
