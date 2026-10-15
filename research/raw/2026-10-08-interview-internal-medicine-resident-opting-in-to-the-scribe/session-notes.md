@@ -18,7 +18,7 @@ related_findings:
 # Interview — Internal Medicine Resident on Opting In to the Scribe
 
 ## Objective
-The 2026-01-27 review of the ambient scribe usage dashboard, covering the first four weeks of GA-candidate rollout, found attending physicians opting in at a noticeably higher rate than residents in the same departments (2026-01-27-dashboard-review-ambient-scribe-ga-adoption/session-notes.md:37-39). It recommended a short follow-up interview round on the physician/resident adoption gap (same file, :44) and asked whether the gap is explained by workflow differences, trust, or something else, which dashboard data alone can't answer (same file, :47-48). No other raw session dated on or before this one mentions residents (the only matches are that file's :38, :44 and :47), and no earlier session interviewed a resident. This session asked one internal medicine resident, about nine months after the January 2026 GA, when and why they opted in to the ambient scribe. It is one resident's account and can't explain the gap the dashboard showed. Phase 4 has no inpatient, ED or behavioral health sessions, so whether and how residents use the scribe in those settings stays an open gap.
+The 2026-01-27 review of the internal analytics dashboard covering the first 4 weeks of GA-candidate rollout (2026-01-27-dashboard-review-ambient-scribe-ga-adoption/session-notes.md:26-27) found attending physicians opting in at a noticeably higher rate than residents in the same departments (same file, :37-39). It recommended a short follow-up interview round on the physician/resident adoption gap (same file, :44) and asked whether the gap is explained by workflow differences, trust, or something else, which dashboard data alone can't answer (same file, :47-48). No other raw session dated on or before this one mentions residents (the only matches are that file's :38, :44 and :47), and no earlier session interviewed a resident. This session asked one internal medicine resident, about nine months after the January 2026 GA, when and why they opted in to the ambient scribe. It is one resident's account and can't explain the gap the dashboard showed. Phase 4 has no inpatient, ED or behavioral health sessions, so whether and how residents use the scribe in those settings stays an open gap.
 
 ## Method
 - **Method:** 1:1 interview, 45 min
@@ -40,14 +40,14 @@ The 2026-01-27 review of the ambient scribe usage dashboard, covering the first 
 > — Physician (Internal Medicine resident), P153
 
 ## Recommendations
-1. When resident adoption is next looked at, ask about note writing as part of training alongside workflow and trust; this resident's reason for waiting was learning to write notes, not doubt about the draft's accuracy.
+1. When resident adoption is next looked at, ask about note writing as part of training alongside workflow and trust; this resident's reason for waiting was learning to write notes, and they did not describe doubt about the draft's accuracy as a reason.
 2. Interview more residents, including in other departments, before drawing conclusions about the adoption gap; this is one resident.
-3. Record how residents are offered the scribe and any training for them; the corpus has nothing on it.
+3. Record how residents are offered the scribe and any training for them; no raw session dated on or before this one records it.
 
 ## Follow-ups / Open Questions
-- Why residents opted in less often in the first four weeks is still not known; one resident's account can't explain it.
+- Why residents opted in at a lower rate than attendings in the first 4 weeks of GA-candidate rollout, as the dashboard review recorded (2026-01-27-dashboard-review-ambient-scribe-ga-adoption/session-notes.md:27, :37-39), is still not known; one resident's account can't explain it.
 - Whether residents use the scribe in inpatient, ED or behavioral health settings is not known; Phase 4 has no sessions in those settings, and the gap stays open.
-- How attendings review scribe-drafted resident notes was not discussed and is not recorded in the corpus.
+- How attendings review scribe-drafted resident notes was not discussed, and no raw session dated on or before this one records it.
 
 ## Related
 - Earlier session: [2026-01-27 GA adoption dashboard review](../2026-01-27-dashboard-review-ambient-scribe-ga-adoption/session-notes.md)
