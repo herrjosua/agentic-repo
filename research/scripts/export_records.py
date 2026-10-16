@@ -21,7 +21,7 @@ Usage:
     python export_records.py                  # prints all records as a JSON array
     python export_records.py --kind raw        # filter to one kind: raw | finding | component |
                                                 # analytics | deliverable
-    python export_records.py --id raw:2026-01-19-onboarding-usability-test
+    python export_records.py --id raw:2026-02-03-usability-test-compass-ai-practice-setup-flow
                                                 # print a single record by its id field (with its
                                                 # full raw markdown content included, for editing),
                                                 # or nothing (exit 1) if no record matches

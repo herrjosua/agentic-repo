@@ -168,6 +168,7 @@ research/scripts/new_research_session.py --type personas --title "Frontline Nurs
   `--check-tags-only` support.
 - Doesn't auto-run `build_index.py` — run it yourself afterward to refresh the folder's
   `_index.md` (and to catch a dangling cross-link field, e.g. `persona_ref`, `related_plan`).
+- Do not create sample or placeholder records to fill an empty deliverable folder, and do not re-create the retired Fernway onboarding thread (docs/decisions.md section 21; enforced by tests/test_retired_names.py).
 
 ## Demo repo sync
 The public CRUD UI demo never runs against this (real) repo — it runs against a separate,

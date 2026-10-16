@@ -32,11 +32,11 @@ Docs not re-checked show their last-commit date instead.
 
 | Kind | Count | Where |
 |---|---|---|
-| Raw research sessions | 70 (140 `session-notes.md` / `participants.md` files, plus 6 correction files) | `research/raw/` |
+| Raw research sessions | 72 (144 `session-notes.md` / `participants.md` files, plus 6 correction files) | `research/raw/` |
 | Findings | 12 (plus the `tags.md` glossary) | `research/findings/` |
 | Analytics summaries | 1 | `analytics/summaries/` |
 | Components | 18 | `design-tokens/components/` |
-| Deliverables | 49, across 20 folders | the top-level deliverable folders (see [`deliverable-types.md`](deliverable-types.md)) |
+| Deliverables | 29, across 20 folders | the top-level deliverable folders (see [`deliverable-types.md`](deliverable-types.md)) |
 
 ## Structure
 
@@ -118,7 +118,7 @@ session.
 - `him-coding-and-billing.md`
 - `scope-boundaries-and-workflow-fit.md` — deliberate "don't build this yet" findings
 - `rollout-and-change-management.md`
-- `onboarding.md` — setup-step confusion, backed by `analytics/summaries/onboarding-funnel-dropoff.md`
+- `compass-ai-practice-setup.md` — Compass AI practice setup by new admins, backed by `analytics/summaries/compass-ai-practice-setup-funnel.md`
 
 Each `findings/*.md` has an **Evidence Trail** section linking back to every `raw/` session that
 backs it, and a **Related Findings** section cross-linking to thematically connected topics — e.g.
@@ -142,9 +142,10 @@ that changes or an alternate token source (Style Dictionary, Tokens Studio) is w
 sync; their hand-written `## Notes` sections survive a re-sync and are fine to edit, and only the
 generated parts are overwritten.
 
-`analytics/summaries/` now has one fictional sample (`onboarding-funnel-dropoff.md`, cross-linked
-from `research/findings/onboarding.md`), but `analytics/raw/` still has no content — no
-analytics-platform export has been written for this dataset yet. There's also no
+`analytics/summaries/` now has one summary (`compass-ai-practice-setup-funnel.md`, where Compass AI
+practice setups stop, cross-linked from `research/findings/compass-ai-practice-setup.md`), but its
+figures come from a manually-reviewed dashboard session under `research/raw/`, and `analytics/raw/`
+still has no content — no analytics-platform export has been written for this dataset yet. There's also no
 `analytics/scripts/pull_analytics.py` — that's expected until a real analytics platform is
 actually in the picture; there's nothing to pull from yet. (A `type: analytics` sample *does*
 exist under `research/raw/` — see the note above — but that's a manually-reviewed dashboard
