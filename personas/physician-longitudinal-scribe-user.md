@@ -45,11 +45,11 @@ first-time impression.
 - **v0.2 → GA candidate:** The first behavior change came from *visible uncertainty* (per-line
   confidence highlighting), not from further accuracy gains — this persona began skimming
   high-confidence lines for the first time.
-- **Post-GA (Feb 2026, inferred from other participants):** The next trust lever is specificity,
-  not just visibility — a distinct medication-safety flag reads as more actionable than generic low
-  confidence, but risks over-trusting anything left unflagged if that distinction isn't actively
-  managed in the UI. This is not P09's observed experience: it comes from P22 and P24 in the
-  2026-02-10 concept test.
+- **Post-GA (Feb 2026, inferred from participants):** The next trust lever is specificity, not
+  just visibility — a distinct medication-safety flag was recognized as different from generic
+  low-confidence highlighting (5 of 6), but risks over-trusting anything left unflagged if that
+  distinction isn't actively managed in the UI. This isn't recorded as P09's experience: it comes
+  from P22, P24 and the other participants in the 2026-02-10 concept test.
 
 ## Frustrations
 - Generic "low confidence" signals don't tell this persona *what kind* of thing to double-check.
