@@ -34,6 +34,8 @@ decision log, whose decisions and rationales are copied here in their recorded w
 | 17 | [Participant IDs follow allocation order, not session date](#17-participant-ids-follow-allocation-order-not-session-date) | 2026-10-14 | Active |
 | 18 | [Who counts as a nurse in the RR-124 interviews](#18-who-counts-as-a-nurse-in-the-rr-124-interviews) | 2026-10-14 | Active |
 | 19 | [Who counts as a physician, NP or PA in the RR-124 interviews](#19-who-counts-as-a-physician-np-or-pa-in-the-rr-124-interviews) | 2026-10-15 | Active |
+| 20 | [Release tags go on merge commits and are pushed alone](#20-release-tags-go-on-merge-commits-and-are-pushed-alone) | 2026-10-15 | Active |
+| 21 | [The Fernway onboarding sample thread is retired](#21-the-fernway-onboarding-sample-thread-is-retired) | 2026-10-16 | Active |
 
 ---
 
@@ -326,3 +328,32 @@ decision log, whose decisions and rationales are copied here in their recorded w
   because its push trigger is limited to `main`; `sync-demo.yml` has no push or release trigger
   and does not read tags. The `demo-baseline` tag it moves lives in `research-repo-demo` and is
   unrelated.
+
+## 21. The Fernway onboarding sample thread is retired
+
+- **Date:** 2026-10-16
+- **Status:** Active
+- **Decision:** The Fernway onboarding sample thread (23 records in 24 files: the `onboarding`
+  finding, the `onboarding-funnel-dropoff` analytics summary, the raw session
+  `2026-01-19-onboarding-usability-test`, and 20 deliverables including the persona
+  `dana-overwhelmed-new-admin`, the `foundations-v3` style guide and the `example-*` files) is
+  removed in RR-195 and must not be re-created. No deliverable folder is required to hold a
+  record, and no sample, placeholder or invented-product record is created to fill one (see
+  [`deliverable-types.md`](deliverable-types.md)). This is an exception to the append-only rule
+  for `research/raw/`, covering only the Fernway raw session
+  `research/raw/2026-01-19-onboarding-usability-test/`, approved by Josh on 2026-10-13: it was
+  sample content added with the deliverable scaffolding, never research, so deleting it is not an
+  edit to evidence. Every other raw folder stays append-only. Decision 8 stays in force: its
+  name-collision grep still runs before new names are used. `tests/test_retired_names.py` fails
+  if a retired name or path comes back.
+- **Why:** RR-190 found that an earlier removal was undone. On 2026-09-13, `c6e6352` ("Code
+  cleanup. Removing files that Claude mistakenly created.") deleted the first onboarding finding
+  and analytics summary, and `0582525` (`05825257155ed845594139db12bcdad71ca3d5a8`, "Remove
+  contamination: orphaned onboarding/ambient-scribe dummy data") removed the references left
+  behind. On 2026-09-14, `2e29d87` (`2e29d87d8511eeda36b8d5546088788f1eabc04e`, "Add feature-002
+  deliverable folder scaffolding, tooling, and sample content") added the thread back, because a
+  spec said every deliverable folder needs a sample. The thread was about a different product,
+  yet search, Ask and the gold set treated it as Meridian research. The Meridian onboarding study
+  (RR-191 to RR-194) now covers every deliverable type it demonstrated. The spec text is
+  rewritten in RR-195 and the guard test stops a repeat. The removal and the audit items it
+  retires are recorded in [`synthesis-audit-2026-09-29.md`](synthesis-audit-2026-09-29.md).

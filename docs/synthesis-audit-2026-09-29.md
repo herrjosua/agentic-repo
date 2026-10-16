@@ -566,3 +566,101 @@ matching before and after. When the pending fixes land:
     Ask all show the uncorrected "4 of 5 clinicians".
   - The finding's link to the correction is a plain relative href in both
     UIs.
+
+## RR-195 (v0.5.47): Fernway audit items retired
+
+### What was removed
+
+RR-195 deletes the Fernway onboarding sample thread: 23 records in 24
+files (the raw session is one record in two files). It was sample content
+for a different product, added on 2026-09-14 in `2e29d87` ("Add
+feature-002 deliverable folder scaffolding, tooling, and sample content"),
+and never research. See `decisions.md` section 21 for the decision and
+the `research/raw/` exception.
+
+The 23 removed record IDs:
+
+- `finding:onboarding`
+- `analytics:onboarding-funnel-dropoff`
+- `raw:2026-01-19-onboarding-usability-test`
+- `deliverable:research-plans/onboarding-usability-study-q1`
+- `deliverable:facilitation-guides/onboarding-usability-guide`
+- `deliverable:topline-summaries/example-topline-summary`
+- `deliverable:research-readouts/onboarding-flow-q1-readout`
+- `deliverable:heuristic-evaluations/example-heuristic-evaluation`
+- `deliverable:accessibility-screenings/example-accessibility-screening`
+- `deliverable:service-topology/example-service-topology`
+- `deliverable:personas/dana-overwhelmed-new-admin`
+- `deliverable:mental-models/example-mental-model`
+- `deliverable:mindsets/example-mindset`
+- `deliverable:journey-maps/example-journey-map`
+- `deliverable:thumbnails/example-thumbnail`
+- `deliverable:wireframes/workspace-setup-step4-invite-team`
+- `deliverable:user-flows/onboarding-flow`
+- `deliverable:wireflows/example-wireflow`
+- `deliverable:storyboards/example-storyboard`
+- `deliverable:mockups/example-mockups`
+- `deliverable:prototypes/example-prototype`
+- `deliverable:style-guide/foundations-v3`
+- `deliverable:design-system/example-design-system`
+
+### Items retired
+
+Every item below points at one of the removed files, so it is closed by
+the removal, not fixed. Line numbers are the ones quoted earlier in this
+file.
+
+| Items | Count | Section | Points at |
+|---|---|---|---|
+| A7–A9 | 3 | Fixed, cited | `topline-summaries/example-topline-summary.md` |
+| A10–A11 | 2 | Fixed, cited | `research/findings/onboarding.md` |
+| A12–A13 | 2 | Fixed, cited | `research-readouts/onboarding-flow-q1-readout.md` (A13 also names `analytics/summaries/onboarding-funnel-dropoff.md`) |
+| B1–B2 | 2 | Fixed, not cited | `research/findings/onboarding.md` |
+| B3–B5 | 3 | Fixed, not cited | `research-readouts/onboarding-flow-q1-readout.md` |
+| Link fix for the example topline | 1 | Link fixes | `topline-summaries/example-topline-summary.md` |
+| Data gaps 1–5 | 5 | Data gaps | the removed raw session, topline, readout and funnel summary (gap 4 is the funnel export the removed summary described) |
+| Data gap 6 | 1 | Data gaps | `facilitation-guides/onboarding-usability-guide.md` |
+| Data gap 7 | 1 | Data gaps | `personas/dana-overwhelmed-new-admin.md` |
+| Audit items P24–P29 | 6 | Phase 3b, Skipped | `journey-maps/example-journey-map.md` |
+| Audit items P30–P34 | 5 | Phase 3b, Skipped | `storyboards/example-storyboard.md` |
+| Audit items P35–P38 | 4 | Phase 3b, Skipped | `personas/dana-overwhelmed-new-admin.md` |
+| Audit items P39–P40 | 2 | Phase 3b, Skipped | `mental-models/example-mental-model.md` |
+
+Totals: A7–A13 (7), B1–B5 (5), data gaps 1–7 (7), audit items P24–P40
+(17) and the one link-fix row. Audit items P24–P40 are this file's Phase
+3b claim IDs. They are unrelated to participants P24 and P33 in
+`research/participants.yml`, which stay registered.
+
+B2, B4, B5 and the link-fix row were not in RR-195's list. They point at
+removed records too, so they are retired here.
+
+"Logged, not changed", Design deliverables:
+
+- "Onboarding journey map" and "Onboarding storyboard" point only at
+  removed records (they became P24–P29 and P30–P34). Retired.
+- "Both mental models" and "Both personas" are mixed. The Fernway half of
+  each (P39–P40, P35–P38) is retired. The Meridian half
+  (`mental-models/care-coordinator-alert-ranking.md`, P19–P23, and
+  `personas/physician-longitudinal-scribe-user.md`, P12–P18) was handled
+  in Phase 3b and is unaffected.
+
+The RR-165 note that `design-system/v4-1-status-indicator-component.md`
+`:28` described `style-guide/foundations-v3.md` was resolved before this
+removal: RR-194 part 3 rewrote that note and pointed `related_style_guide`
+at `style-guide/meridian-token-basics.md`.
+
+### What remains
+
+The Meridian onboarding study (RR-191 to RR-194) covers every deliverable
+type the removed records demonstrated. The chain the removed records were
+the only example of is now:
+
+- research plan: `research-plans/compass-ai-practice-setup-study-q1.md`
+- facilitation guide:
+  `facilitation-guides/compass-ai-practice-setup-usability-guide.md`
+- readout: `research-readouts/compass-ai-practice-setup-q1-readout.md`
+- style guide: `style-guide/meridian-token-basics.md`
+- analytics summary: `analytics/summaries/compass-ai-practice-setup-funnel.md`
+
+These were written from their own raw sessions and are not rewrites of
+the removed records, so none of the retired items carries over to them.
