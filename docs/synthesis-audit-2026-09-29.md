@@ -239,8 +239,8 @@ which haven't been audited yet: `mindsets/skeptical-verifier.md`,
 `design-system/v4-1-status-indicator-component.md`. **Audited 2026-10-15
 (RR-165):** all ten are now claim-checked (see "RR-165 (v0.5.46)" below).
 The thumbnails, mockup, prototype and v4-1 records now have Evidence basis
-lines. The other six have suggested labels, recorded for their owner and
-not applied.
+lines. The fixes and Evidence basis lines for the other six were applied
+2026-10-16 (RR-198, PR #48).
 
 ### Noted, out of scope
 
@@ -531,7 +531,8 @@ matching before and after. When the pending fixes land:
 - **Widget Notes `:31`** (`scribe-draft-retention [3]`,
   `component:ambient-scribe-widget#5`, currently matching). Changing
   "showed" to "suggested" would turn it into a MISS. The widget text is
-  do-not-edit; the owner decides.
+  do-not-edit; the owner decides. **Applied 2026-10-16 (RR-198, PR #48):**
+  it is now a MISS.
 - **Mindset, wireframe, wireflow, storyboard, topology.** No answer cites
   `deliverable:mindsets/skeptical-verifier`,
   `deliverable:wireframes/ambient-scribe-medication-flag`,
@@ -547,7 +548,7 @@ matching before and after. When the pending fixes land:
   because no body claim comes from that session.
 - Widget Notes `:31`: "showed" should read "suggested"
   (`raw/2025-09-23…:32` — "suggesting trust doesn't shift from accuracy
-  improvements alone").
+  improvements alone"). **Applied 2026-10-16 (RR-198, PR #48).**
 - `design-tokens/components/coding-suggestion-panel.md:21` is a generated
   line; fix it at the source, outside RR-165.
 - Research deliverables (toplines, readouts, the heuristic evaluation, the
