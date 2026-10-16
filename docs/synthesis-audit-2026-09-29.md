@@ -651,9 +651,12 @@ at `style-guide/meridian-token-basics.md`.
 
 ### What remains
 
-The Meridian onboarding study (RR-191 to RR-194) covers every deliverable
-type the removed records demonstrated. The chain the removed records were
-the only example of is now:
+The Meridian corpus still has at least one record of every deliverable
+type the removed records demonstrated. The onboarding study (RR-191 to
+RR-194) covers 12 of the 20 types; other Meridian projects cover the other
+8: heuristic evaluations, accessibility screenings, service topology,
+thumbnails, mockups, prototypes, design system and style guide. The chain
+the removed records were the only example of is now:
 
 - research plan: `research-plans/compass-ai-practice-setup-study-q1.md`
 - facilitation guide:

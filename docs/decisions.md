@@ -353,7 +353,10 @@ decision log, whose decisions and rationales are copied here in their recorded w
   behind. On 2026-09-14, `2e29d87` (`2e29d87d8511eeda36b8d5546088788f1eabc04e`, "Add feature-002
   deliverable folder scaffolding, tooling, and sample content") added the thread back, because a
   spec said every deliverable folder needs a sample. The thread was about a different product,
-  yet search, Ask and the gold set treated it as Meridian research. The Meridian onboarding study
-  (RR-191 to RR-194) now covers every deliverable type it demonstrated. The spec text is
+  yet search, Ask and the gold set treated it as Meridian research. The Meridian corpus still has
+  at least one record of every deliverable type the thread demonstrated: the onboarding study
+  (RR-191 to RR-194) covers 12 of the 20 types, and other Meridian projects cover the other 8
+  (heuristic evaluations, accessibility screenings, service topology, thumbnails, mockups,
+  prototypes, design system and style guide). The spec text is
   rewritten in RR-195 and the guard test stops a repeat. The removal and the audit items it
   retires are recorded in [`synthesis-audit-2026-09-29.md`](synthesis-audit-2026-09-29.md).
