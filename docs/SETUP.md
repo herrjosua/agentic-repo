@@ -117,11 +117,11 @@ Open a Claude Code session in the repo root and ask questions in plain English; 
 
 ```bash
 python research/scripts/new_research_session.py \
-  --title "Onboarding flow usability test" \
+  --title "Compass AI practice setup usability test" \
   --type usability-test \
-  --topic-slug onboarding-flow-usability-test \
+  --topic-slug compass-ai-practice-setup-usability-test \
   --tags onboarding,usability \
-  --related-findings onboarding.md \
+  --related-findings compass-ai-practice-setup.md \
   --researcher "Your Name"
 ```
 

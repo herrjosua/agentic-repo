@@ -155,35 +155,24 @@ file, and use `--check` to catch drift or a dangling cross-link (a
 `persona_ref`, `flow_ref`, `related_plan`, etc. that points at a file that
 doesn't exist) in CI.
 
-Every folder holds at least one filled-in sample file. 13 folders have an
-`example-*.md`; the other 7 (`research-plans/`, `facilitation-guides/`,
-`research-readouts/`, `personas/`, `wireframes/`, `user-flows/`,
-`style-guide/`) have none, and their samples use descriptive names instead
-(e.g. `personas/dana-overwhelmed-new-admin.md`, which other files link to by
-that name). These are meant to be replaced by real content over time, not
-kept as permanent fixtures, but they show what a fully-specified file in each
-folder looks like rather than an empty shell.
+No folder is required to hold a record. An empty deliverable folder is fine:
+do not create sample, placeholder or invented-product records to fill one.
+Every record in these folders is real corpus content and is read by search,
+the CRUD UI and Ask the same way as any other record.
 
-### Two fictional frames
+### The fictional frame
 
-The sample corpus uses two separate fictional frames. They are not one story,
-and nothing here should be read as connecting them:
+The whole corpus uses one fictional frame:
 
-- **Fernway** — a fictional workspace product. Its Q1 onboarding-flow
-  redesign, centered on the persona Dana (a first-time workspace admin), runs
-  through the deliverables tagged `project-onboarding` (most of the
-  `example-*.md` files, plus files such as
-  `research-plans/onboarding-usability-study-q1.md` and
-  `personas/dana-overwhelmed-new-admin.md`), the onboarding v2 design-system
-  snapshot and style guide (`design-system/example-design-system.md`,
-  `style-guide/foundations-v3.md`), and the participant notes of
-  `research/raw/2026-01-19-onboarding-usability-test/`.
 - **Meridian Health Network / Compass AI** — a fictional healthcare
   organization and its AI modernization program. The README describes the
   dataset under this frame, and it covers the ambient scribe, prior
-  authorization, care coordination, HIM, governance and rollout work,
-  including deliverables such as `personas/physician-longitudinal-scribe-user.md`
-  and `design-system/v4-1-status-indicator-component.md`.
+  authorization, care coordination, HIM, the patient scheduling chatbot, the
+  clinician dashboard, Compass AI practice setup (onboarding), the design
+  system, and governance and rollout work, including deliverables such as
+  `personas/physician-longitudinal-scribe-user.md`,
+  `personas/practice-administrator-compass-ai-setup.md` and
+  `design-system/v4-1-status-indicator-component.md`.
 
 `research/projects.yml` and each file's `project-*` tag show which project a
 record belongs to.

@@ -44,11 +44,11 @@ agentic-repo/
 ├── docs/                        # AGENTS.md-adjacent guidance, frontmatter schema, this plan
 ├── research/
 │   ├── raw/
-│   │   └── 2026-09-11-onboarding-flow-usability-test/
+│   │   └── 2026-02-03-usability-test-compass-ai-practice-setup-flow/
 │   │       ├── session-notes.md
 │   │       └── participants.md
 │   ├── findings/
-│   │   ├── onboarding.md        # synthesized, living doc per topic
+│   │   ├── compass-ai-practice-setup.md  # synthesized, living doc per topic
 │   │   ├── search-and-filter.md
 │   │   └── tags.md              # tag glossary — canonical list + what each tag means
 │   ├── _index.md                # Research index: topic -> finding -> raw sources -> tags
@@ -64,10 +64,10 @@ agentic-repo/
 │       └── sync_figma_tokens.py # pulls via the Figma REST API, writes tokens.tokens.json + design.md
 ├── analytics/
 │   ├── raw/
-│   │   └── 2026-09-11-onboarding-funnel-export/
+│   │   └── 2026-01-20-compass-ai-practice-setup-export/
 │   │       └── snapshot.csv     # untouched export from whatever analytics tool is in use
 │   ├── summaries/
-│   │   └── onboarding-funnel-dropoff.md  # synthesized interpretation, human-written
+│   │   └── compass-ai-practice-setup-funnel.md  # synthesized interpretation, human-written
 │   ├── _index.md
 │   └── scripts/
 │       └── pull_analytics.py    # pulls from the analytics platform's API, once one exists
@@ -128,14 +128,14 @@ Since the side project runs on Claude Code and the work repo will likely need Cl
 
 ```yaml
 ---
-title: Onboarding flow usability test
-date: 2026-09-11
+title: Usability Test — Compass AI Practice Setup Flow
+date: 2026-02-03
 type: usability-test        # usability-test | interview | survey | contextual-inquiry | accessibility-audit | analytics | synthesis
 status: raw                 # raw | synthesized | superseded
-tags: [onboarding, first-run, mobile]
-related_components: [onboarding-carousel, cta-primary]
-related_findings: [onboarding.md]
-related_analytics: [onboarding-funnel-dropoff.md]
+tags: [onboarding, usability, scheduling]
+related_components: [sso-mfa-login]
+related_findings: [compass-ai-practice-setup.md]
+related_analytics: [compass-ai-practice-setup-funnel.md]
 ---
 ```
 

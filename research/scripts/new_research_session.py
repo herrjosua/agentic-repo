@@ -32,14 +32,14 @@ repeated.
 
 Usage (raw research session):
     python new_research_session.py \\
-        --title "Onboarding flow usability test" \\
+        --title "Compass AI practice setup usability test" \\
         --type usability-test \\
-        --topic-slug onboarding-flow-usability-test \\
-        --tags onboarding,usability,mobile \\
-        --related-findings onboarding.md \\
+        --topic-slug compass-ai-practice-setup-usability-test \\
+        --tags onboarding,usability \\
+        --related-findings compass-ai-practice-setup.md \\
         [--date 2026-09-12] \\
         [--researcher "J. Alvarez"] \\
-        [--related-components onboarding-carousel,cta-primary] \\
+        [--related-components sso-mfa-login,scheduling-widget] \\
         [--participants "Medical Coder=him-coder, Care Coordinator, P17"]
 
 --researcher writes a real researcher frontmatter field (as well as the existing
@@ -829,7 +829,7 @@ def main():
              "the 20 feature-002 deliverable folder names (research-plans, personas, mockups, ...) to switch "
              "into deliverable mode instead",
     )
-    parser.add_argument("--topic-slug", help="URL/filesystem-safe slug, e.g. onboarding-flow-usability-test (raw session mode)")
+    parser.add_argument("--topic-slug", help="URL/filesystem-safe slug, e.g. compass-ai-practice-setup-usability-test (raw session mode)")
     parser.add_argument("--date", default=datetime.date.today().isoformat(), help="YYYY-MM-DD, defaults to today")
     parser.add_argument("--tags", default="", help="Comma-separated tags")
     parser.add_argument("--related-components", default="", help="Comma-separated component slugs (raw session mode)")

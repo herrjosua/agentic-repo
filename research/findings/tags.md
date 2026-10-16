@@ -80,7 +80,7 @@ Canonical list of tags used across `raw/` and `findings/` frontmatter. `build_in
 - **`project-cross-cutting`** — Project tag: program-level work belonging to no single project.
 - **`project-design-system`** — Project tag: Design System (component library, style guide, and their audits).
 - **`project-him`** — Project tag: HIM Coding, Billing & Release of Information.
-- **`project-onboarding`** — Project tag: Onboarding (first-run workspace setup).
+- **`project-onboarding`** — Project tag: Onboarding (first-run Compass AI setup).
 - **`project-patient-chatbot`** — Project tag: Patient Scheduling Chatbot.
 - **`project-prior-auth`** — Project tag: AI-Assisted Prior Authorization.
 - **`prototype`** — Click-through or coded prototype deliverable (feature-002 `prototypes/`, stub-only).
