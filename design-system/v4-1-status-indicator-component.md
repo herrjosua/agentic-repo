@@ -7,7 +7,7 @@ tags: ["design-system", "accessibility", "wcag", "components", "project-design-s
 related_findings: ["../research/findings/accessibility-cross-cutting.md"]
 source_type: native
 version: "v4.1"
-related_style_guide: ""
+related_style_guide: "style-guide/meridian-token-basics.md"
 ---
 
 ## Overview
@@ -32,6 +32,7 @@ console isn't built on this component library. Icon+text pairing keeps the at-a-
 scannability color gave without relying on color alone; intended to satisfy 1.4.1; not yet
 re-screened.
 
-Note: no Compass-AI-specific style guide exists yet to link here as `related_style_guide` —
-`style-guide/` currently only holds the unrelated Fernway foundations doc — so that field is left
-blank pending one.
+Note: the style guide now exists and is linked as `related_style_guide`
+([`meridian-token-basics.md`](../style-guide/meridian-token-basics.md)). It records the design
+tokens and does not address the `status-indicator` component beyond quoting its colour-alone
+rule above.
