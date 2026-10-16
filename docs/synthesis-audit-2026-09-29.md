@@ -428,7 +428,9 @@ R1–R62. Status is blank where no fix is needed.
 
 **Applied 2026-10-16 (RR-198, PR #48):** all 24, with the suggested
 labels, and the widget Notes `:31` "showed" to "suggested". Frontmatter
-`date` and `status` unchanged.
+`date` and `status` unchanged. The persona's Post-GA bullet
+(`personas/physician-longitudinal-scribe-user.md:48-52`) carried the same
+R10/R16 wording and was corrected in a follow-up commit.
 
 24 claims, not edited. The six records are do-not-edit or in review, so
 the fixes below are suggestions for their designer, Sam Okafor, who
