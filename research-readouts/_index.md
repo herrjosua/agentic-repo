@@ -5,3 +5,4 @@ Maintained by `research/scripts/build_index.py`. Flat table of files in `researc
 | Title | Status | Tags | Source Type | Last Updated | Related Findings |
 |---|---|---|---|---|---|
 | [Onboarding Flow — Q1 Readout](onboarding-flow-q1-readout.md) | final | onboarding, project-onboarding, q1, readout | native | 2026-02-02 | ../research/findings/onboarding |
+| [Compass AI Practice Setup — Q1 Study Readout](compass-ai-practice-setup-q1-readout.md) | final | onboarding, project-onboarding, readout | native | 2026-03-10 | ../research/findings/compass-ai-practice-setup.md |

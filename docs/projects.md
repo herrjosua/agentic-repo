@@ -19,7 +19,7 @@ The machine-readable source is [`research/projects.yml`](../research/projects.ym
 | Tag | Label | Records |
 |---|---|---|
 | `project-ambient-scribe` | Ambient AI Scribe | 30 |
-| `project-onboarding` | Onboarding | 32 |
+| `project-onboarding` | Onboarding | 34 |
 | `project-care-coordination` | Care Coordination & Alert Triage | 18 |
 | `project-design-system` | Design System | 6 |
 | `project-prior-auth` | AI-Assisted Prior Authorization | 7 |
@@ -27,9 +27,9 @@ The machine-readable source is [`research/projects.yml`](../research/projects.ym
 | `project-patient-chatbot` | Patient Scheduling Chatbot | 5 |
 | `project-clinician-dashboard` | Clinician Dashboard | 3 |
 | `project-cross-cutting` | Cross-cutting (no single project) | 32 |
-| | **Total** | **148** |
+| | **Total** | **150** |
 
-Counts are as of 2026-10-15, from `export_records.py` output. To recount:
+Counts are as of 2026-10-16, from `export_records.py` output. To recount:
 
 ```
 python research/scripts/export_records.py --summary | python -c "import json,sys,collections; \
