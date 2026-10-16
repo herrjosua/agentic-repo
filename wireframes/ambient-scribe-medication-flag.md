@@ -18,8 +18,10 @@ flow_ref:
 # Ambient Scribe — Sound-Alike Medication Flag
 
 ## Description
-Lo-fi layout for the distinct sound-alike-medication flag validated in the 2026-02-10 concept
-test. Applies to the `ambient-scribe-widget` component's draft-review surface, inside the
+**Evidence basis:** Mixed. Observed (the 2026-02-10 concept-test results, from `raw/2026-02-10-ambient-scribe-medication-flag-concept/session-notes.md:36-48,51-52,62-64,70`); illustrative (the layout, the hover/tap copy and the tip's wording are the designer's spec, not recorded in the test).
+
+Lo-fi layout for the distinct sound-alike-medication flag tested in the 2026-02-10 concept
+test, which calls for a larger-N validation pass before a build-ready spec. Applies to the `ambient-scribe-widget` component's draft-review surface, inside the
 `encounter-view` screen. Separate from the existing generic `confidence-highlighted` variant —
 this flag reads specifically as "check this drug name," not "low confidence generally."
 
@@ -33,7 +35,7 @@ this flag reads specifically as "check this drug name," not "low confidence gene
 - **Adjacent messaging (new):** a one-time inline tip, shown the first time a clinician encounters
   the flag, stating that lines *without* this flag still warrant normal review — directly
   addressing the over-trust-on-unflagged-lines risk found in 2 of 6 concept-test participants.
-- **Open item:** false-positive tolerance testing (2026-02-10) suggests the underlying detection
-  threshold can run looser than strict-precision defaults without frustrating clinicians — final
+- **Open item:** in the 2026-02-10 test, one deliberately seeded false positive was accepted by
+  all 6 participants as "worth a second look, not annoying" — final
   threshold tuning is an engineering/detection decision, not a layout decision, and is out of
   scope for this wireframe.
