@@ -13,7 +13,7 @@ version: "v2"
 ## Overview
 **Evidence basis:** Mixed. Observed (the v2 results and recommendation, from `raw/2025-11-04-usability-test-prior-auth-ai-v2/session-notes.md:29-30,39`, and the as-of note, from `raw/2026-06-16-interview-utilization-review-nurse-case-scope/session-notes.md:30` and `raw/2026-09-17-interview-utilization-review-nurse-citation-checking/session-notes.md:30`); illustrative (the backend chain is the designer's illustration; no session describes the backend, and `raw/2025-04-08-usability-test-prior-auth-ai-v1/session-notes.md:46` left the cause of the v1 outdated-code issue open).
 
-Maps the `prior-auth-drafting-panel` front end against the backend it actually depends on, drawn
+Maps the `prior-auth-drafting-panel` front end against an illustrative backend chain, drawn
 up after v2 testing confirmed the citation feature is actively used rather than ignored as
 friction.
 
