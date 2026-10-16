@@ -285,8 +285,8 @@ files.
 | `design-system/v4-1-status-indicator-component.md` | 3 | 1 | 1 | 1 | 0 | 0 |
 | **Total** | **62** | **30** | **11** | **10** | **7** | **4** |
 
-32 claims are not SUPPORTED. 8 have been applied (part 4) and 24 are
-pending for their owners.
+32 claims are not SUPPORTED. 8 have been applied (part 4) and the other
+24 in RR-198 (PR #48).
 
 ### Claim ledger
 
@@ -296,13 +296,13 @@ R1–R62. Status is blank where no fix is needed.
 
 | # | Line | Claim | Verdict | Raw evidence | Status |
 |---|---|---|---|---|---|
-| R1 | :13 | A segment that recurs across physicians, nurses and HIM coders | LABELED INFERENCE | `raw/2025-02-25…:31` — "4 of 5 participants read every line"; `raw/2025-04-08…:34` — "Show me where it got that info."; `raw/2025-07-29…:37` — "If you can't, I don't trust it." Three sessions; the cross-role segment is the designer's synthesis. | pending |
-| R2 | :13-14 | "regardless of department or identity" | OVERREACH | No session compares departments or identities; "regardless" was never tested. | pending |
-| R3 | :14-15 | "first named explicitly as a pattern in `him-coding-and-billing.md`" | UNSUPPORTED | Raised earlier, in prior-auth v1: `raw/2025-04-08…:31` — "'show your work' was mentioned unprompted by 3 of 4". | pending |
+| R1 | :13 | A segment that recurs across physicians, nurses and HIM coders | LABELED INFERENCE | `raw/2025-02-25…:31` — "4 of 5 participants read every line"; `raw/2025-04-08…:34` — "Show me where it got that info."; `raw/2025-07-29…:37` — "If you can't, I don't trust it." Three sessions; the cross-role segment is the designer's synthesis. | applied, PR #48 |
+| R2 | :13-14 | "regardless of department or identity" | OVERREACH | No session compares departments or identities; "regardless" was never tested. | applied, PR #48 |
+| R3 | :14-15 | "first named explicitly as a pattern in `him-coding-and-billing.md`" | UNSUPPORTED | Raised earlier, in prior-auth v1: `raw/2025-04-08…:31` — "'show your work' was mentioned unprompted by 3 of 4". | applied, PR #48 |
 | R4 | :18-20 | Wants citations or a human-decision boundary for prior-auth and coding drafts | SUPPORTED | `raw/2025-04-08…:31`; `raw/2025-07-29…:28` | |
-| R5 | :19-20 | Wants "confidence signals" | LABELED INFERENCE | `raw/2025-09-23…:43` is a recommendation — "explore an explicit confidence indicator per line"; `raw/2026-01-13…:36` — "it showed me exactly where to look instead." | pending |
-| R6 | :18-20 | "Doesn't want AI output … auto-applied" | STALE | `raw/2026-06-23…:31` — "the suggested code would probably be accepted as shown unless something jumped out", tied "to the quota, not to trust in the tool"; `:33` — the citation is opened "only when a suggestion looks off". | pending |
-| R7 | :20-21 | Default to visible, checkable provenance rather than accuracy alone | STALE | Later interviews describe errors the confidence underline doesn't mark: `raw/2026-03-19…:32` — incidental content "is not underlined"; `raw/2026-06-30…:31` and `raw/2026-07-28…:29` — "usually not underlined"; `raw/2026-09-22…:31` — "Those lines are usually not underlined". | pending |
+| R5 | :19-20 | Wants "confidence signals" | LABELED INFERENCE | `raw/2025-09-23…:43` is a recommendation — "explore an explicit confidence indicator per line"; `raw/2026-01-13…:36` — "it showed me exactly where to look instead." | applied, PR #48 |
+| R6 | :18-20 | "Doesn't want AI output … auto-applied" | STALE | `raw/2026-06-23…:31` — "the suggested code would probably be accepted as shown unless something jumped out", tied "to the quota, not to trust in the tool"; `:33` — the citation is opened "only when a suggestion looks off". | applied, PR #48 |
+| R7 | :20-21 | Default to visible, checkable provenance rather than accuracy alone | STALE | Later interviews describe errors the confidence underline doesn't mark: `raw/2026-03-19…:32` — incidental content "is not underlined"; `raw/2026-06-30…:31` and `raw/2026-07-28…:29` — "usually not underlined"; `raw/2026-09-22…:31` — "Those lines are usually not underlined". | applied, PR #48 |
 | R8 | :21-23 | Accuracy improvements alone didn't change reading behavior | SUPPORTED | `raw/2025-09-23…:32` | |
 
 **`journey-maps/longitudinal-physician-ambient-scribe.md`**
@@ -310,13 +310,13 @@ R1–R62. Status is blank where no fix is needed.
 | # | Line | Claim | Verdict | Raw evidence | Status |
 |---|---|---|---|---|---|
 | R9 | :14-15 | Modeled on P09 in the three test rounds | SUPPORTED | `raw/2025-02-25…:37`, `raw/2025-09-23…:37`, `raw/2026-01-13…:37` | |
-| R10 | :15-16 | Post-GA stage "inferred from other participants" in 2026-02-10 | OVERREACH (minor) | `raw/2026-02-10…/participants.md:27` — "Drawn from the existing GA-candidate cohort (2026-01-13) plus 2 new participants". P09 was in that cohort; whether P09 took part isn't recorded (data gap 8), so "other" is not established. | pending |
+| R10 | :15-16 | Post-GA stage "inferred from other participants" in 2026-02-10 | OVERREACH (minor) | `raw/2026-02-10…/participants.md:27` — "Drawn from the existing GA-candidate cohort (2026-01-13) plus 2 new participants". P09 was in that cohort; whether P09 took part isn't recorded (data gap 8), so "other" is not established. | applied, PR #48 |
 | R11 | :19-20 | v0.1: reads every line; P09's quote | SUPPORTED | `raw/2025-02-25…:36` | |
 | R12 | :20-21 | Dosages missed or garbled in 3 of 5, disqualifying | SUPPORTED | `raw/2025-02-25…:30` | |
 | R13 | :22-24 | v0.2: errors drop, still reads every line; P09's quote | SUPPORTED | `raw/2025-09-23…:31-32,:36` | |
 | R14 | :25-26 | GA candidate: begins skimming high-confidence lines | SUPPORTED | `raw/2026-01-13…:36` | |
-| R15 | :26-27 | Sound-alike names "a known, monitored gap" | OVERREACH | `raw/2026-01-13…:48` — "Set up post-GA monitoring dashboard" (a follow-up); `raw/2026-02-10…:71-72` — "once the post-GA monitoring dashboard (recommended 2026-01-13) has real error-rate data". Monitoring was recommended, not recorded as running. | pending |
-| R16 | :28-29 | The medication flag "reads as more actionable" than generic highlighting | OVERREACH | `raw/2026-02-10…:36-39` — 5 of 6 identified it as "different from the usual low-confidence thing". Recognition, not actionability, was tested. | pending |
+| R15 | :26-27 | Sound-alike names "a known, monitored gap" | OVERREACH | `raw/2026-01-13…:48` — "Set up post-GA monitoring dashboard" (a follow-up); `raw/2026-02-10…:71-72` — "once the post-GA monitoring dashboard (recommended 2026-01-13) has real error-rate data". Monitoring was recommended, not recorded as running. | applied, PR #48 |
+| R16 | :28-29 | The medication flag "reads as more actionable" than generic highlighting | OVERREACH | `raw/2026-02-10…:36-39` — 5 of 6 identified it as "different from the usual low-confidence thing". Recognition, not actionability, was tested. | applied, PR #48 |
 | R17 | :29-30 | Only if unflagged lines aren't over-trusted | SUPPORTED | `raw/2026-02-10…:40-42` | |
 | R18 | :30-32 | Session lock: clinicians assumed the draft was lost | SUPPORTED | `raw/2026-02-17…:38-41,:54`; `correction-2026-09-27.md:41-43`; `correction-2026-10-13.md:33` | |
 
@@ -333,12 +333,12 @@ R1–R62. Status is blank where no fix is needed.
 
 | # | Line | Claim | Verdict | Raw evidence | Status |
 |---|---|---|---|---|---|
-| R23 | :21-22 | The flag was "validated in the 2026-02-10 concept test" | OVERREACH | `raw/2026-02-10…:70` — "Needs a larger-N validation pass before this moves from concept test to build-ready spec." | pending |
+| R23 | :21-22 | The flag was "validated in the 2026-02-10 concept test" | OVERREACH | `raw/2026-02-10…:70` — "Needs a larger-N validation pass before this moves from concept test to build-ready spec." | applied, PR #48 |
 | R24 | :24 | Reads as "check this drug name" | SUPPORTED | `raw/2026-02-10…:51-52` | |
 | R25 | :27-28 | Inline placement, 5:1 | SUPPORTED | `raw/2026-02-10…:44` | |
 | R26 | :29-30 | Amber pill badge, distinct from the underline | SUPPORTED | `raw/2026-02-10…:37` | |
 | R27 | :33-35 | Tip countering over-trust of unflagged lines (2 of 6) | SUPPORTED | `raw/2026-02-10…:62-64` | |
-| R28 | :36-38 | False-positive testing suggests the threshold "can run looser than strict-precision defaults" | OVERREACH | `raw/2026-02-10…:46-48` — "One deliberately-seeded false positive … was accepted by all 6 participants"; "suggests some over-flagging is tolerable if the badge is visually light". | pending |
+| R28 | :36-38 | False-positive testing suggests the threshold "can run looser than strict-precision defaults" | OVERREACH | `raw/2026-02-10…:46-48` — "One deliberately-seeded false positive … was accepted by all 6 participants"; "suggests some over-flagging is tolerable if the badge is visually light". | applied, PR #48 |
 
 **`wireflows/alert-triage-override-reason-capture.md`**
 
@@ -349,9 +349,9 @@ R1–R62. Status is blank where no fix is needed.
 | R31 | :16-17 | Supervisor's rubber-stamping concern | SUPPORTED | `raw/2025-08-26…:31` | |
 | R32 | :21-22 | Patient-history risk and recency as reasons | SUPPORTED | `raw/2025-08-26…:37,:28` | |
 | R33 | :24-26 | Skip-reason branch | SUPPORTED | `raw/2026-07-07…:31` — expected "they would skip the modal rather than type". | |
-| R34 | :21-22 | The reason list as complete | STALE | `raw/2026-07-07…:30` — the most common reason, what the patient or family said on the phone, "isn't in the list"; `raw/2026-04-16…:32` — for discharge alerts, "time since discharge *is* the clinical risk". | pending |
-| R35 | :22 | "other + free text" | STALE | `raw/2026-07-07…:31` — "They would not type free text on every override". | pending |
-| R36 | :23 | Reasons logged for model tuning, "not surfaced to other coordinators" | STALE | `raw/2026-05-05…:31` — a supervisor "would also use override reasons for coaching" and the design "doesn't say whether supervisors see them"; `raw/2026-07-07…:32` — without seeing an effect "they would stop giving them". | pending |
+| R34 | :21-22 | The reason list as complete | STALE | `raw/2026-07-07…:30` — the most common reason, what the patient or family said on the phone, "isn't in the list"; `raw/2026-04-16…:32` — for discharge alerts, "time since discharge *is* the clinical risk". | applied, PR #48 |
+| R35 | :22 | "other + free text" | STALE | `raw/2026-07-07…:31` — "They would not type free text on every override". | applied, PR #48 |
+| R36 | :23 | Reasons logged for model tuning, "not surfaced to other coordinators" | STALE | `raw/2026-05-05…:31` — a supervisor "would also use override reasons for coaching" and the design "doesn't say whether supervisors see them"; `raw/2026-07-07…:32` — without seeing an effect "they would stop giving them". | applied, PR #48 |
 
 **`storyboards/ed-intake-peak-hour-interruption.md`**
 
@@ -359,13 +359,13 @@ R1–R62. Status is blank where no fix is needed.
 |---|---|---|---|---|---|
 | R37 | :13 | Peak-hour ED shift | SUPPORTED | `raw/2025-04-22…:24` | |
 | R38 | :13-14 | Interruptions every 2–4 minutes | SUPPORTED | `raw/2025-04-22…:29` | |
-| R39 | :14 | Call lights, ambulance radio, a physician question | UNSUPPORTED | `raw/2025-04-22…:29` records "paged, walked up to, or called over". | pending |
-| R40 | :17 | Panel 1: interrupted by a bedside alarm two questions in | LABELED INFERENCE | An invented scene; no session records it. | pending |
-| R41 | :18-19 | Panel 2: "has lost track of where she was" | LABELED INFERENCE | An invented scene; no pronoun is recorded ("she" at :18). | pending |
-| R42 | :20-21 | Panel 3: card photo, "pre-fill happens instantly" | UNSUPPORTED | `raw/2026-04-14…:49` — "Whether the insurance-card photo pre-fill … has been piloted is not recorded". | pending |
+| R39 | :14 | Call lights, ambulance radio, a physician question | UNSUPPORTED | `raw/2025-04-22…:29` records "paged, walked up to, or called over". | applied, PR #48 |
+| R40 | :17 | Panel 1: interrupted by a bedside alarm two questions in | LABELED INFERENCE | An invented scene; no session records it. | applied, PR #48 |
+| R41 | :18-19 | Panel 2: "has lost track of where she was" | LABELED INFERENCE | An invented scene; no pronoun is recorded ("she" at :18). | applied, PR #48 |
+| R42 | :20-21 | Panel 3: card photo, "pre-fill happens instantly" | UNSUPPORTED | `raw/2026-04-14…:49` — "Whether the insurance-card photo pre-fill … has been piloted is not recorded". | applied, PR #48 |
 | R43 | :22-23 | Panel 4: the interruption rate, not AI quality | SUPPORTED | `raw/2025-04-22…:35` | |
 | R44 | :24-25 | Carve out insurance-card pre-fill | SUPPORTED | `raw/2025-04-22…:47` | |
-| R45 | :25 | "leave ED intake nursing out of near-term rollout" | OVERREACH | `raw/2025-04-22…:42` — "Deprioritize any AI feature aimed at ED intake nurses specifically during peak hours"; `raw/2026-05-19…:30` — the boundary "covers intake during peak, not the ED at every hour". | pending |
+| R45 | :25 | "leave ED intake nursing out of near-term rollout" | OVERREACH | `raw/2025-04-22…:42` — "Deprioritize any AI feature aimed at ED intake nurses specifically during peak hours"; `raw/2026-05-19…:30` — the boundary "covers intake during peak, not the ED at every hour". | applied, PR #48 |
 
 **`mockups/confidence-highlighted-draft-review.md`**
 
@@ -389,12 +389,12 @@ R1–R62. Status is blank where no fix is needed.
 | # | Line | Claim | Verdict | Raw evidence | Status |
 |---|---|---|---|---|---|
 | R53 | :14-16 | v2 showed citations used, not ignored as friction | SUPPORTED | `raw/2025-11-04…:30` | |
-| R54 | :19-22 | The backend chain (Chart-Data Service … Submission Service) | UNSUPPORTED | No raw session describes the backend. | pending |
-| R55 | :20-22 | Payer-Rules Lookup "the fix that closed the v1 data-freshness bug" | UNSUPPORTED | `raw/2025-04-08…:46` — "confirm whether the outdated-code issue is a data-freshness bug or a model retrieval issue"; `raw/2025-11-04…:29` — the issue "did not recur". No session records the cause or the fix. | pending |
-| R56 | :23-24 | Span-level citations are "why nurses could meaningfully check" one | OVERREACH | `raw/2025-11-04…:30` — "3 of 4 participants clicked into at least one citation"; no cause recorded. | pending |
-| R57 | :22-24 | Nurse accepts/edits/rejects; checks a citation before accepting | STALE | `raw/2026-06-16…:30` — partway through a case "they stop using the draft and finish the case by hand"; `raw/2026-09-17…:30` — the v2 measure "records that a citation was opened, not what the nurse checked". | pending |
+| R54 | :19-22 | The backend chain (Chart-Data Service … Submission Service) | UNSUPPORTED | No raw session describes the backend. | applied, PR #48 |
+| R55 | :20-22 | Payer-Rules Lookup "the fix that closed the v1 data-freshness bug" | UNSUPPORTED | `raw/2025-04-08…:46` — "confirm whether the outdated-code issue is a data-freshness bug or a model retrieval issue"; `raw/2025-11-04…:29` — the issue "did not recur". No session records the cause or the fix. | applied, PR #48 |
+| R56 | :23-24 | Span-level citations are "why nurses could meaningfully check" one | OVERREACH | `raw/2025-11-04…:30` — "3 of 4 participants clicked into at least one citation"; no cause recorded. | applied, PR #48 |
+| R57 | :22-24 | Nurse accepts/edits/rejects; checks a citation before accepting | STALE | `raw/2026-06-16…:30` — partway through a case "they stop using the draft and finish the case by hand"; `raw/2026-09-17…:30` — the v2 measure "records that a citation was opened, not what the nurse checked". | applied, PR #48 |
 | R58 | :26-27 | Supports the pilot-expansion recommendation | SUPPORTED | `raw/2025-11-04…:39` | |
-| R59 | :27-28 | The data-freshness fix "is now a tracked backend dependency" | UNSUPPORTED | Not in raw. | pending |
+| R59 | :27-28 | The data-freshness fix "is now a tracked backend dependency" | UNSUPPORTED | Not in raw. | applied, PR #48 |
 
 **`design-system/v4-1-status-indicator-component.md`**
 
@@ -425,6 +425,10 @@ R1–R62. Status is blank where no fix is needed.
   Evidence basis line in each, all Mixed.
 
 ### Pending for owners
+
+**Applied 2026-10-16 (RR-198, PR #48):** all 24, with the suggested
+labels, and the widget Notes `:31` "showed" to "suggested". Frontmatter
+`date` and `status` unchanged.
 
 24 claims, not edited. The six records are do-not-edit or in review, so
 the fixes below are suggestions for their designer, Sam Okafor, who
