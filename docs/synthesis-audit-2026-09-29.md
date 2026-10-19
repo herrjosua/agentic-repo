@@ -546,6 +546,7 @@ matching before and after. When the pending fixes land:
 
 - Missing Evidence Trail rows for 2026-03-17 and 2026-09-15 in
   `ambient-scribe-post-ga-refinements.md` (do-not-edit; Jordan Lee).
+  **Applied 2026-10-19 (RR-165 follow-up, PR #49).**
 - No 2026-02-17 rows in `ambient-scribe.md` or `governance-and-phi.md`,
   because no body claim comes from that session.
 - Widget Notes `:31`: "showed" should read "suggested"
