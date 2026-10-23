@@ -7,8 +7,8 @@ baseline. The decision behind this setup is
 [decision 11 in `decisions.md`](decisions.md#11-demo-isolation-a-separate-repo-and-a-scoped-sync-workflow).
 
 The demo runs against `research-repo-demo`, a separate, private repo kept in sync with this repo's
-`research/`, `design-tokens/`, and `analytics/` content (plus the 20 deliverable folders and
-`requirements.txt`) — see AGENTS.md → "Demo repo sync" for the full sync mechanics.
+`research/`, `design-tokens/`, and `analytics/` content (plus `decisions/`, the 20 deliverable
+folders and `requirements.txt`) — see AGENTS.md → "Demo repo sync" for the full sync mechanics.
 
 - **Sync:** `.github/workflows/sync-demo.yml` runs on a schedule (every 6 hours) and on
   `workflow_dispatch`. On success it force-moves a fixed tag, `demo-baseline`, onto the synced

@@ -194,6 +194,25 @@ This is the part that makes the research side trustworthy rather than just "a ch
 - ~~Project decisions are tracked outside the repo.~~ **Superseded (2026-09-30):** decisions are now logged in [`docs/decisions.md`](decisions.md), because the repos are the source of truth and must hold enough to build the project.
 - **Retrieval is two paths over one source of truth** (2026-09-30): structured search over `findings/` and the index for an agent working in the repo, and Ask the Repo (local RAG) for researchers using the app. See §6.
 
+# 9a. Decision records and team shapes (RR-157)
+
+Decision records (`decisions/`, see
+[`deliverable-types.md`](deliverable-types.md#decision-records-decisions)) were designed for a
+mature UX team: research sessions and synthesis, an internal team review, then a readout to
+stakeholders and dev teams, with the decision recorded at or right after that review. That is a
+design hypothesis for a proof of concept, not a described team process. What changes for other
+team shapes, as hypotheses to confirm, not to build (from RR-139):
+
+- **Dev-driven team** (decisions come from a stakeholder ask, a mockup, a dev feasibility check and
+  a demo): the record starts at the feasibility check and demo, so the feasibility outcome and
+  constraint carry the most weight, and the external ticket link is the main durable artifact.
+- **Solo UX practitioner:** there is no internal review checkpoint, so recording the decision is a
+  manual habit. It should be a step in the workflow (for example at the demo), or it won't happen.
+- **Informal research** (an interview or stakeholder ask, not formal sessions): the requirement
+  source is an interview or stakeholder session, so check that the session types cover it. The
+  documented raw types don't include a stakeholder decision session or a dev feasibility review;
+  stakeholder sessions are typed `interview`.
+
 # 10. Still open
 
 - **Corrections and retrieval:** raw correction files aren't visible to retrieval, and some demo and Ask questions lack real raw evidence.

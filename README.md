@@ -7,8 +7,8 @@ evidence kept separate from — but cross-linked with — the qualitative findin
 
 - **For agents:** see `AGENTS.md` (Claude Code reads `CLAUDE.md`, which imports it).
 - **For humans:** start at `research/_index.md` for a scan of everything researched so far,
-  `analytics/_index.md` for synthesized quant evidence, or `design-tokens/design.md` for the
-  current token/component reference.
+  `analytics/_index.md` for synthesized quant evidence, `decisions/_index.md` for product decisions
+  and their evidence, or `design-tokens/design.md` for the current token/component reference.
 - **Setup:** [`docs/SETUP.md`](docs/SETUP.md) walks through a first install step by step.
 - **Project background & build plan:** [`docs/`](docs/README.md) — including the plan and the
   decision log, [`docs/decisions.md`](docs/decisions.md).

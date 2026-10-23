@@ -69,7 +69,7 @@ jobs:
             exit 1
           fi
 
-          sync_paths=(research design-tokens analytics requirements.txt "${deliverable_folders[@]}")
+          sync_paths=(research design-tokens analytics decisions requirements.txt "${deliverable_folders[@]}")
 
           for p in "${sync_paths[@]}"; do
             target="demo-repo/${p}"

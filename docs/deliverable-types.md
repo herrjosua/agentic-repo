@@ -356,3 +356,96 @@ Holds real content.
 A lightweight design system subset — colors, type, spacing basics.
 
 Holds real content.
+
+---
+
+## Decision records (`decisions/`)
+
+A decision record answers "why was this decided?" months later, with its evidence. It is its own
+record kind (`kind: decision`, id `decision:<slug>`), decided on 2026-10-04 (RR-153 decision 4)
+and built in RR-157. It is not a deliverable: `decisions/` is not one of the 20 folders above, has
+no `DELIVERABLE_SCHEMAS` entry and no `source_type` or `designer`.
+
+**Not the same as [`docs/decisions.md`](decisions.md).** `decisions/` holds decisions about the
+product the corpus studies (Compass AI), backed by research records. `docs/decisions.md` is the log
+of decisions about this repo and its tooling. Both use "not recorded" the same way.
+
+### Frontmatter
+
+```yaml
+title: ""                      # the decision, as a short name
+date: YYYY-MM-DD               # when this record was written or last meaningfully updated
+status: draft                  # the document's status: draft | in-review | final | superseded
+decision_status: proposed      # the decision's: proposed | accepted | shipped | reversed | superseded | not-decided
+decision_status_source:        # the lines that support decision_status, as path:lines
+  - research/raw/<session>/session-notes.md:27,31
+date_decided: not recorded     # YYYY-MM-DD, or exactly "not recorded"
+decided_by: not recorded       # a person, role or forum, or exactly "not recorded"
+superseded_by: ""              # decisions/<slug>.md; set if and only if decision_status is superseded
+evidence:                      # raw sessions and findings, with the lines relied on
+  - source: research/raw/<session>/session-notes.md
+    lines: "31,42"
+  - source: research/findings/<topic>.md
+    lines: "30-36"
+tags: []                       # glossary tags plus exactly one project-* tag
+related_findings: []           # findings/*.md filenames
+related_components: []         # design-tokens/components/*.md slugs
+```
+
+`status` stays the document status so the CRUD UI's edit validation, which only accepts the
+document statuses, keeps working. The decision's own state goes in `decision_status`:
+
+- **proposed:** recommended or designed; no record says it was adopted.
+- **accepted:** a record says it was adopted, but not that it is live.
+- **shipped:** a record says it is in use.
+- **reversed** and **superseded:** a record says so; `superseded_by` names the replacement.
+- **not-decided:** the question is on record, and no decision is.
+
+### Body
+
+Five `##` sections, in this order: `Decision`, `Alternatives considered`, `Rationale`,
+`Conditions to revisit`, `Not recorded`. A section the corpus can't fill says `not recorded`.
+`Rationale` starts with an [Evidence basis line](#the-evidence-basis-line). Write citations as
+`` `path/to/record.md:31,42` `` (repo-relative), or `` `:31,42` `` for the file cited in full just
+before it.
+
+Writing rules:
+- Every field and claim is sourced from a named record's lines, or written as `not recorded`. Never
+  invent an owner, a date, a decider or a status.
+- Write `not recorded` exactly: lower case, no "unknown", "N/A" or "TBD", so Ask can quote it.
+- Designers, evaluators and researchers named on a record are not deciders unless a record says
+  they decided.
+- Only write that an alternative was "rejected" if a record says so; otherwise write "recommended
+  against" and cite the line.
+- Where a raw session has a correction file, cite the correction and use its corrected figures.
+
+### Evidence, and how it reaches the CRUD UI
+
+`evidence:` must cite at least one raw session directly, not only findings. The CRUD UI's
+provenance links (`backend/ask/provenance.js`) are read from a record's html, never from its
+frontmatter, and don't follow a finding to its raw sessions.
+
+`build_search_ui.py` (and so `export_records.py` and `search.html`) opens each decision record's
+html with a generated block: the decision status, date decided and decided by, the status sources,
+and every evidence link with its method, n and date. Method and date come from the cited session's
+frontmatter, and n from `**Count:**` in its `participants.md`, so they are never typed by hand.
+Ask the Repo retrieves that block with the body. The same fields are in the exported record's
+`decision` key, which is `null` on every other kind.
+
+### Validation
+
+`build_index.py` (and `--check`) fails on:
+- a missing required field;
+- a `status` or `decision_status` outside its list;
+- a near-miss spelling of `not recorded`;
+- a `date_decided` that isn't a date;
+- a `superseded_by` that doesn't match `decision_status` or doesn't resolve;
+- an evidence entry, status source or body citation that points at a missing file or past its last
+  line;
+- evidence with no raw session;
+- a missing or empty section, or a `Rationale` without an Evidence basis line;
+- an unknown tag, a missing or extra `project-*` tag, or a dangling `related_findings` /
+  `related_components`.
+
+It also writes `decisions/_index.md`. There is no scaffolder: write the file by hand, then run
+`build_index.py`.

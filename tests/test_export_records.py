@@ -14,7 +14,7 @@ EXPECTED_KEYS = {
     "id", "kind", "title", "date", "type", "status", "tags", "related_components", "severity",
     "last_edited_by", "last_edited_at",
     "researcher", "designer", "evaluator", "reviewed_by",
-    "path", "corrections", "html", "searchText",
+    "path", "corrections", "decision", "html", "searchText",
 }
 
 EXPECTED_IDS = {

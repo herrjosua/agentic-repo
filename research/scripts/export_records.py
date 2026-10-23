@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
 export_records.py — print every research repo record (raw sessions, findings, components,
-analytics summaries, and feature-002 deliverables) as a single JSON array on stdout.
+analytics summaries, feature-002 deliverables, and RR-157 decision records) as a single JSON array
+on stdout.
 
 This is a thin wrapper, not a new data source: it imports the same loader functions
 build_search_ui.py already uses to build search.html's embedded dataset
 (build_raw_records, build_findings_records, build_component_records, build_analytics_records,
-build_deliverable_records) and prints their combined output as JSON instead of wrapping it in
+build_deliverable_records, build_decision_records) and prints their combined output as JSON instead of wrapping it in
 an HTML/JS template. No parsing logic is duplicated here — if the record shape ever changes,
 it changes in build_search_ui.py and this script picks it up automatically.
 
@@ -20,7 +21,7 @@ script imports from)
 Usage:
     python export_records.py                  # prints all records as a JSON array
     python export_records.py --kind raw        # filter to one kind: raw | finding | component |
-                                                # analytics | deliverable
+                                                # analytics | deliverable | decision
     python export_records.py --id raw:2026-02-03-usability-test-compass-ai-practice-setup-flow
                                                 # print a single record by its id field (with its
                                                 # full raw markdown content included, for editing),
@@ -34,6 +35,12 @@ raw/<session>/correction-*.md, oldest first, and [] for every other record. Each
 also appended to its session's html (and so searchText) under a "Correction (YYYY-MM-DD)"
 heading. It is never part of rawContent, which stays the body of session-notes.md alone because
 the CRUD UI edit form saves it back there, and it is never a record of its own.
+
+Every record also has a `decision` key (kept in --summary): null for every kind except decision,
+where it holds {decision_status, decision_status_source, date_decided, decided_by, superseded_by,
+evidence}, each evidence entry carrying the cited record's method, n and date. The same fields
+open the decision record's html as a generated block, which is the part Ask the Repo retrieves;
+rawContent stays the file's own body.
 """
 import argparse
 import json
@@ -50,13 +57,14 @@ from build_search_ui import (  # noqa: E402
     CorrectionError,
     build_analytics_records,
     build_component_records,
+    build_decision_records,
     build_deliverable_records,
     build_findings_records,
     build_raw_records,
     build_search_text,
 )
 
-VALID_KINDS = {"raw", "finding", "component", "analytics", "deliverable"}
+VALID_KINDS = {"raw", "finding", "component", "analytics", "deliverable", "decision"}
 
 
 def load_all_records():
@@ -66,6 +74,7 @@ def load_all_records():
         + build_component_records()
         + build_analytics_records()
         + build_deliverable_records()
+        + build_decision_records()
     )
     for r in records:
         r["searchText"] = build_search_text(r)

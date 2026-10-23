@@ -9,6 +9,10 @@ Where a date or a rationale was never written down, the entry says "not recorded
 reconstructing it. **(unconfirmed)** marks a date or rationale that was inferred or drafted after
 the fact and hasn't been confirmed by the project owner.
 
+This log is about the repo and its tooling. Decisions about the product the corpus studies live
+as decision records in [`../decisions/`](../decisions/_index.md) (see
+[Decision records](deliverable-types.md#decision-records-decisions)).
+
 Seeded on 2026-09-30 from §9 ("Decisions locked in") of
 [`agentic-ux-research-repo-plan.md`](agentic-ux-research-repo-plan.md) and the project's earlier
 decision log, whose decisions and rationales are copied here in their recorded wording.
@@ -36,6 +40,7 @@ decision log, whose decisions and rationales are copied here in their recorded w
 | 19 | [Who counts as a physician, NP or PA in the RR-124 interviews](#19-who-counts-as-a-physician-np-or-pa-in-the-rr-124-interviews) | 2026-10-15 | Active |
 | 20 | [Release tags go on merge commits and are pushed alone](#20-release-tags-go-on-merge-commits-and-are-pushed-alone) | 2026-10-15 | Active |
 | 21 | [The Fernway onboarding sample thread is retired](#21-the-fernway-onboarding-sample-thread-is-retired) | 2026-10-16 | Active |
+| 22 | [Product decisions are their own record kind](#22-product-decisions-are-their-own-record-kind) | 2026-10-04 | Active |
 
 ---
 
@@ -360,3 +365,21 @@ decision log, whose decisions and rationales are copied here in their recorded w
   prototypes, design system and style guide). The spec text is
   rewritten in RR-195 and the guard test stops a repeat. The removal and the audit items it
   retires are recorded in [`synthesis-audit-2026-09-29.md`](synthesis-audit-2026-09-29.md).
+
+## 22. Product decisions are their own record kind
+
+- **Date:** 2026-10-04; schema approved 2026-10-23 (RR-157)
+- **Status:** Active
+- **Decision:** Decisions about the product live as decision records in a top-level `decisions/`
+  folder, as their own record kind (`decision:<slug>`), not as a deliverable folder or a section
+  inside findings. Each record carries a document `status` and a separate `decision_status`
+  (proposed, accepted, shipped, reversed, superseded, not-decided). Every field is either sourced
+  from a named record's lines or written as "not recorded". Evidence cites raw sessions directly.
+  The schema and its checks are in
+  [Decision records](deliverable-types.md#decision-records-decisions). Not to be confused with this
+  log, which covers the repo itself.
+- **Why:** The RR-153 corpus audit traced 8 decisions and found none recorded an owner, a decision
+  date or a status, so Ask could give a rationale but never say what wasn't recorded. A record
+  kind with explicit "not recorded" fields lets it. RR-153 decision 4 chose a record kind over a
+  section inside findings. Raw evidence is linked directly because the CRUD UI's provenance links
+  are read from a record's html and don't follow a finding to its raw sessions.

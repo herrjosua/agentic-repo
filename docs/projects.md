@@ -47,6 +47,7 @@ placeholders. Only onboarding and design-system correspond to real content here,
 | Findings (`research/findings/`) | The file's own `tags:` frontmatter |
 | Analytics summaries (`analytics/summaries/`) | The file's own `tags:` frontmatter |
 | Deliverables (the 20 feature-002 folders) | The file's own `tags:` frontmatter |
+| Decision records (`decisions/`) | The file's own `tags:` frontmatter |
 | Raw sessions (`research/raw/`) | The `raw:` map in `research/projects.yml`, keyed by session folder |
 | Components (`design-tokens/components/`) | The `components:` map in `research/projects.yml`, keyed by component slug |
 
