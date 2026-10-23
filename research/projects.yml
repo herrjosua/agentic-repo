@@ -1,7 +1,8 @@
 # Canonical project list, plus the project assignment for the two record kinds whose own files
 # can't carry a project tag: raw sessions (research/raw/ is append-only) and components
 # (design-tokens/components/ is generated output). Every other record kind — findings,
-# analytics summaries, deliverables — carries its project-* tag in its own `tags:` frontmatter.
+# analytics summaries, deliverables, decision records — carries its project-* tag in its own
+# `tags:` frontmatter.
 #
 # build_search_ui.py / export_records.py append the mapped tag to raw and component records at
 # load time; an unmapped entry falls back to project-cross-cutting with a warning.

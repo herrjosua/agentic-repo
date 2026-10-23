@@ -20,7 +20,7 @@ Docs not re-checked show their last-commit date instead.
 | [`SETUP.md`](SETUP.md) | Step-by-step setup: clone, venv, dependencies, tests, first session, index, search UI, Figma access, Windows notes | checked against repo 2026-09-30 |
 | [`agentic-ux-research-repo-plan.md`](agentic-ux-research-repo-plan.md) | The design plan and its current status | checked against repo 2026-09-30 |
 | [`decisions.md`](decisions.md) | Decision log: one numbered entry per decision, with date, status and rationale | checked against repo 2026-09-30 |
-| [`deliverable-types.md`](deliverable-types.md) | The 20 deliverable folders, their frontmatter fields and the stub pattern | checked against repo 2026-09-30 |
+| [`deliverable-types.md`](deliverable-types.md) | The 20 deliverable folders, their frontmatter fields and the stub pattern, plus decision records | checked against repo 2026-09-30 |
 | [`how-to-query-the-repo.md`](how-to-query-the-repo.md) | Ways to query the corpus: an agent, `research/search.html`, and Ask the Repo | checked against repo 2026-09-30 |
 | [`projects.md`](projects.md) | `project-*` tags and `research/projects.yml` rules | not re-verified (last commit 2026-10-15) |
 | [`participants.md`](participants.md) | Participant IDs: the `research/participants.yml` registry, role classes, returning participants and the collision check | checked against repo 2026-10-13 |
@@ -37,6 +37,7 @@ Docs not re-checked show their last-commit date instead.
 | Analytics summaries | 1 | `analytics/summaries/` |
 | Components | 18 | `design-tokens/components/` |
 | Deliverables | 29, across 20 folders | the top-level deliverable folders (see [`deliverable-types.md`](deliverable-types.md)) |
+| Decision records | 8 | `decisions/` (see [`deliverable-types.md`](deliverable-types.md#decision-records-decisions)) |
 
 ## Structure
 

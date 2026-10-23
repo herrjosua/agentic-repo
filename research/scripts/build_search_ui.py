@@ -2,7 +2,7 @@
 """
 build_search_ui.py — generate research/search.html: a self-contained, offline-capable
 search-and-filter interface over research/raw/, research/findings/,
-design-tokens/components/, analytics/summaries/, and (feature-002) the 20 top-level
+design-tokens/components/, analytics/summaries/, decisions/ (RR-157), and (feature-002) the 20 top-level
 deliverable folders (research-plans/, personas/, wireframes/, ..., style-guide/ — see
 DELIVERABLE_FOLDERS, imported from build_index.py so the two scripts can't drift apart on
 which folders count as "the repo").
@@ -42,13 +42,19 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_index import (  # noqa: E402  (shared per-record loader)
     CORRECTION_GLOB,
     CROSS_CUTTING_PROJECT,
+    DECISIONS_ROOT,
     DELIVERABLE_FOLDERS,  # noqa: E402  (shared source of truth for the 20 folders)
+    CitationError,
     ProjectsError,
     RecordError,
+    check_citation,
     load_projects,
     load_record,
     project_tags,
+    resolve_citation,
     skip_record,
+    split_citation,
+    status_sources,
 )
 from md_render import render_markdown  # noqa: E402  (local helper, see md_render.py)
 
@@ -71,6 +77,7 @@ TYPE_LABELS = {
     "analytics": "Analytics",
     "analytics-summary": "Analytics summary",
     "synthesis": "Synthesis",
+    "decision": "Decision record",
     # feature-002 deliverable folders double as their record's `type` value (see
     # build_deliverable_records) so they're filterable the same way research-method types are.
     "research-plans": "Research plan",
@@ -281,6 +288,7 @@ def build_raw_records():
             **_attribution_fields(meta),
             path=rel_path,
             corrections=corrections,
+            decision=None,
             html=body_html,
         ))
     return records
@@ -311,6 +319,7 @@ def build_findings_records():
             **_attribution_fields(meta),
             path=rel_path,
             corrections=[],
+            decision=None,
             html=body_html,
         ))
     return records
@@ -342,6 +351,7 @@ def build_component_records():
             **_attribution_fields(meta),
             path=rel_path,
             corrections=[],
+            decision=None,
             html=body_html,
         ))
     return records
@@ -372,6 +382,7 @@ def build_analytics_records():
             **_attribution_fields(meta),
             path=rel_path,
             corrections=[],
+            decision=None,
             html=body_html,
         ))
     return records
@@ -411,8 +422,106 @@ def build_deliverable_records():
             **_attribution_fields(meta),
                 path=rel_path,
                 corrections=[],
+                decision=None,
                 html=body_html,
             ))
+    return records
+
+
+def _decision_value(value):
+    """A decision field for display: dates as YYYY-MM-DD, everything else as its string."""
+    if isinstance(value, dt.date):
+        return value.isoformat()[:10]
+    return _str(value)
+
+
+def _evidence_label(e):
+    """'usability-test, n=4, 2025-04-08' for a raw session; 'synthesis, 2026-09-17' for a finding."""
+    parts = [e["method"] or "method not recorded"]
+    if e["kind"] == "raw":
+        parts.append(f"n={e['n']}" if e["n"] else "n not recorded")
+    parts.append(e["date"] or "date not recorded")
+    return ", ".join(parts)
+
+
+def _decision_html(decision):
+    """The block a decision record's html opens with, generated from its frontmatter: the decision
+    status, date decided, decided by (or "not recorded"), and every evidence link with its method,
+    n and date read from the cited record itself. Each evidence link names the raw/<session> path,
+    so the CRUD UI's provenance links reach raw sessions directly (they're read from html, never
+    from frontmatter). Generated here rather than written in the body so the two can't drift."""
+    esc = html_lib.escape
+    rows = [("Decision status", decision["decision_status"].replace("-", " ")),
+            ("Date decided", decision["date_decided"]),
+            ("Decided by", decision["decided_by"])]
+    if decision["superseded_by"]:
+        rows.append(("Superseded by", decision["superseded_by"]))
+    out = ["<h2>Decision record</h2><ul>"]
+    out += [f"<li><strong>{label}:</strong> {esc(value)}.</li>" for label, value in rows]
+    sources = ", ".join(f"<code>{esc(s)}</code>" for s in decision["decision_status_source"])
+    out.append(f"<li><strong>Decision status source:</strong> {sources}.</li></ul>")
+    out.append("<h2>Evidence</h2><ul>")
+    for e in decision["evidence"]:
+        href = e["source"].removeprefix("research/")
+        out.append(f'<li><a href="{esc(href)}">{esc(e["title"])}</a> ({esc(_evidence_label(e))}): '
+                   f'<code>{esc(href)}</code>, lines {esc(e["lines"])}.</li>')
+    out.append("</ul>")
+    return "".join(out)
+
+
+def build_decision_records():
+    """RR-157: one record per decisions/*.md (excluding _index.md), kind 'decision'. Its fields
+    reach the CRUD UI two ways: as the `decision` key (the only record kind where it isn't null),
+    and as a generated block at the top of its html, which is what Ask the Repo retrieves."""
+    records = []
+    if not DECISIONS_ROOT.exists():
+        return records
+    for path in sorted(glob.glob(str(DECISIONS_ROOT / "*.md"))):
+        if Path(path).name == "_index.md":
+            continue
+        record_id = f"decision:{Path(path).stem}"
+        post = _load(path, record_id)
+        if post is None:
+            continue
+        meta = post.metadata
+        try:
+            evidence = [resolve_citation(e["source"], e["lines"]) for e in meta.get("evidence") or []]
+            for text in status_sources(meta):
+                check_citation(*split_citation(text))
+        except (CitationError, KeyError, TypeError) as e:
+            SKIPPED[record_id] = f"{skip_record(path, f'evidence: {e}')}: evidence: {e}"
+            continue
+        decision = dict(
+            decision_status=_str(meta.get("decision_status")),
+            decision_status_source=status_sources(meta),
+            date_decided=_decision_value(meta.get("date_decided")),
+            decided_by=_str(meta.get("decided_by")),
+            superseded_by=_str(meta.get("superseded_by")),
+            evidence=evidence,
+        )
+        body_html = render_markdown(post.content)
+        block = _decision_html(decision)
+        if "</h1>" in body_html:
+            body_html = body_html.replace("</h1>", "</h1>" + block, 1)
+        else:
+            body_html = block + body_html
+        records.append(dict(
+            id=record_id,
+            kind="decision",
+            title=meta.get("title") or Path(path).stem,
+            date=_str(meta.get("date", "")),
+            type="decision",
+            status=meta.get("status", ""),
+            tags=meta.get("tags", []) or [],
+            related_components=meta.get("related_components", []) or [],
+            severity={},
+            **_edit_fields(meta),
+            **_attribution_fields(meta),
+            path=f"../decisions/{Path(path).name}",
+            corrections=[],
+            decision=decision,
+            html=body_html,
+        ))
     return records
 
 
@@ -451,6 +560,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     --kind-component: #9A5E0D;
     --kind-analytics: #6B4FA0;
     --kind-deliverable: #2F7D4F;
+    --kind-decision: #A23B5A;
     --sev-critical: #C33A2E;
     --sev-high: #C77B12;
     --sev-medium: #2B6CE0;
@@ -607,19 +717,19 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 (function () {
   const records = JSON.parse(document.getElementById('research-data').textContent);
   const TYPE_LABELS = __TYPE_LABELS_JSON__;
-  const KIND_LABELS = { raw: 'Sessions', finding: 'Findings', component: 'Components', analytics: 'Analytics', deliverable: 'Deliverables' };
-  const KIND_COLORS = { raw: 'var(--kind-raw)', finding: 'var(--kind-finding)', component: 'var(--kind-component)', analytics: 'var(--kind-analytics)', deliverable: 'var(--kind-deliverable)' };
+  const KIND_LABELS = { raw: 'Sessions', finding: 'Findings', component: 'Components', analytics: 'Analytics', deliverable: 'Deliverables', decision: 'Decisions' };
+  const KIND_COLORS = { raw: 'var(--kind-raw)', finding: 'var(--kind-finding)', component: 'var(--kind-component)', analytics: 'var(--kind-analytics)', deliverable: 'var(--kind-deliverable)', decision: 'var(--kind-decision)' };
   const SEV_COLORS = { critical: 'var(--sev-critical)', high: 'var(--sev-high)', medium: 'var(--sev-medium)', low: 'var(--sev-low)' };
 
   const state = {
     query: '',
-    kinds: new Set(['raw', 'finding', 'component', 'analytics', 'deliverable']),
+    kinds: new Set(['raw', 'finding', 'component', 'analytics', 'deliverable', 'decision']),
     types: new Set(),
     tags: new Set(),
     openId: null,
   };
 
-  const allKinds = ['raw', 'finding', 'component', 'analytics', 'deliverable'];
+  const allKinds = ['raw', 'finding', 'component', 'analytics', 'deliverable', 'decision'];
   const allTypes = [...new Set(records.map(r => r.type).filter(Boolean))].sort();
   const allTags = [...new Set(records.flatMap(r => r.tags))].sort();
   state.types = new Set(allTypes);
@@ -789,6 +899,7 @@ def main():
                 + build_component_records()
                 + build_analytics_records()
                 + build_deliverable_records()
+                + build_decision_records()
         )
     except CorrectionError as e:
         sys.exit(f"❌ {e}")
@@ -816,7 +927,8 @@ def main():
           f"{sum(1 for r in records if r['kind']=='finding')} findings, "
           f"{sum(1 for r in records if r['kind']=='component')} components, "
           f"{sum(1 for r in records if r['kind']=='analytics')} analytics summaries, "
-          f"{sum(1 for r in records if r['kind']=='deliverable')} deliverables)")
+          f"{sum(1 for r in records if r['kind']=='deliverable')} deliverables, "
+          f"{sum(1 for r in records if r['kind']=='decision')} decisions)")
 
 
 if __name__ == "__main__":

@@ -26,6 +26,11 @@ research/findings/, validates the type-specific cross-link fields (related_guide
 persona_ref, flow_ref, related_wireframes, related_style_guide, based_on) against their target
 folder(s), and folds every deliverable file's tags into the repo-wide tag glossary check.
 
+RR-157: also regenerates decisions/_index.md and validates every decision record in decisions/
+(see validate_decisions): required fields, status vocabularies, "not recorded" spelled one way,
+evidence and status sources that resolve to real lines in raw sessions or findings, and the body
+sections. Decision records' tags and project tags are checked with everything else's.
+
 RR-155: also validates research/participants.yml, the participant ID registry (see
 docs/participants.md), against every quote attribution line ("> — <role>, P<nn>") in
 raw/*/session-notes.md, and fails when one ID is attributed to two different people. Corrections
@@ -40,8 +45,8 @@ search.
 Requires: pip install python-frontmatter
 
 Usage:
-    python build_index.py            # regenerate research/_index.md, analytics/_index.md, and
-                                      # every deliverable folder's _index.md
+    python build_index.py            # regenerate research/_index.md, analytics/_index.md,
+                                      # decisions/_index.md, and every deliverable folder's _index.md
     python build_index.py --check    # exit 1 if any index is out of date or any tag/link is
                                       # invalid, without writing anything (for CI / pre-commit)
 """
@@ -124,6 +129,28 @@ DELIVERABLE_CROSS_LINK_TARGETS = {
     "related_style_guide": ["style-guide"],
     "based_on": ["research-plans", "research/findings"],
 }
+
+# RR-157: decision records, their own record kind in the top-level decisions/ folder (not a
+# deliverable folder, and not docs/decisions.md, which logs decisions about this repo itself).
+# Every field is either sourced from a named record or written as NOT_RECORDED, so Ask can quote
+# what the corpus doesn't hold. See the "Decision records" section of docs/deliverable-types.md.
+DECISIONS_ROOT = REPO_ROOT / "decisions"
+DECISIONS_INDEX_FILE = DECISIONS_ROOT / "_index.md"
+NOT_RECORDED = "not recorded"
+# Spellings that mean "not recorded" but aren't the one Ask is told to quote.
+NOT_RECORDED_NEAR_MISSES = {"unknown", "n/a", "na", "tbd", "none", "not known", "not-recorded", "not recorded."}
+DECISION_DOCUMENT_STATUSES = ("draft", "in-review", "final", "superseded")
+DECISION_STATUSES = ("proposed", "accepted", "shipped", "reversed", "superseded", "not-decided")
+DECISION_REQUIRED_FIELDS = ("title", "date", "status", "decision_status", "decision_status_source",
+                            "date_decided", "decided_by", "evidence", "tags")
+DECISION_SECTIONS = ("Decision", "Alternatives considered", "Rationale", "Conditions to revisit", "Not recorded")
+EVIDENCE_BASIS_LABELS = ("Observed", "Inferred", "Illustrative", "Mixed")
+EVIDENCE_BASIS_RE = re.compile(r"^\*\*Evidence basis:\*\* (?P<label>[A-Za-z]+)\.")
+LINE_SPEC_RE = re.compile(r"^[0-9]+(-[0-9]+)?(,[0-9]+(-[0-9]+)?)*$")
+# A citation written in a decision record's body: `path/to/record.md:31,42` (repo-relative), or
+# `:31,42` for the file most recently cited in full before it ("same file").
+BODY_CITATION_RE = re.compile(r"`([A-Za-z0-9_./-]+\.md)?:([0-9][0-9,-]*)`")
+COUNT_RE = re.compile(r"^\*\*Count:\*\*\s*(?P<count>.+?)\s*$", re.MULTILINE)
 
 # Frontmatter fields every script treats as a list of strings (joined, sorted, iterated as paths).
 LIST_FIELDS = ("tags", "related_components", "related_findings", "related_analytics")
@@ -320,15 +347,292 @@ def load_deliverables():
     return deliverables
 
 
+def load_decisions():
+    """Return {stem: {meta, path, content}} for every decisions/*.md (excluding _index.md).
+    Returns {} if decisions/ doesn't exist in this checkout."""
+    decisions = {}
+    for p in sorted(glob.glob(str(DECISIONS_ROOT / "*.md"))):
+        if Path(p).name == "_index.md":
+            continue
+        post = try_load_record(p)
+        if post is None:
+            continue
+        decisions[Path(p).stem] = dict(meta=post.metadata, path=Path(p), content=post.content)
+    return decisions
+
+
+class CitationError(ValueError):
+    """A decision record's evidence entry or status source doesn't resolve."""
+
+
+def parse_line_spec(spec):
+    """'31,42' or '28-29' -> [(31, 31), (42, 42)] / [(28, 29)]. Raises CitationError."""
+    spec = str(spec).replace(" ", "")
+    if not LINE_SPEC_RE.fullmatch(spec):
+        raise CitationError(f"line spec {spec!r} isn't like '31', '28-29' or '31,42'")
+    ranges = []
+    for part in spec.split(","):
+        start, _, end = part.partition("-")
+        lo, hi = int(start), int(end or start)
+        if lo < 1 or hi < lo:
+            raise CitationError(f"line range {part!r} is empty or starts before line 1")
+        ranges.append((lo, hi))
+    return ranges
+
+
+def citation_kind(source):
+    """'raw', 'finding', 'deliverable', 'component' or 'analytics' for a repo-relative path to a
+    record file, else None."""
+    parts = Path(str(source)).parts
+    if not parts or not str(source).endswith(".md") or Path(str(source)).name == "_index.md":
+        return None
+    if len(parts) == 4 and parts[:2] == ("research", "raw"):
+        return "raw"
+    if len(parts) == 3 and parts[:2] == ("research", "findings") and parts[2] not in EXCLUDE_FROM_FINDINGS:
+        return "finding"
+    if len(parts) == 2 and parts[0] in DELIVERABLE_FOLDERS:
+        return "deliverable"
+    if len(parts) == 3 and parts[:2] == ("design-tokens", "components"):
+        return "component"
+    if len(parts) == 3 and parts[:2] == ("analytics", "summaries"):
+        return "analytics"
+    return None
+
+
+def check_citation(source, lines, kinds=("raw", "finding", "deliverable", "component", "analytics")):
+    """Check that `source` is a record file of one of `kinds` and every line in `lines` exists in
+    it. Returns the citation kind. Raises CitationError."""
+    kind = citation_kind(source)
+    if kind not in kinds:
+        raise CitationError(f"{source!r} isn't a {' / '.join(kinds)} record file")
+    path = REPO_ROOT / str(source)
+    if not path.is_file():
+        raise CitationError(f"{source!r} doesn't exist")
+    count = len(path.read_text(encoding="utf-8").splitlines())
+    for _lo, hi in parse_line_spec(lines):
+        if hi > count:
+            raise CitationError(f"{source}:{lines} cites past the end of the file ({count} lines)")
+    return kind
+
+
+def resolve_citation(source, lines):
+    """Check that `source` (a repo-relative path) is a raw session file or a finding and that
+    every line in `lines` exists in it. Returns a dict describing the evidence: the cited file,
+    its record (raw session folder or finding stem), and that record's method, n and date, read
+    from its own files so a decision record never restates them by hand. Raises CitationError."""
+    rel = Path(str(source))
+    path = REPO_ROOT / rel
+    kind = check_citation(source, lines, kinds=("raw", "finding"))
+
+    if kind == "finding":
+        meta = load_record(path).metadata
+        return dict(kind="finding", source=str(rel), lines=str(lines), record=f"finding:{rel.stem}",
+                    title=meta.get("title", rel.stem), method=meta.get("type", "synthesis"),
+                    n=None, date=date_sort_key(meta.get("date")))
+
+    folder = path.parent
+    notes = folder / "session-notes.md"
+    if not notes.is_file():
+        raise CitationError(f"{source!r} is in a raw folder with no session-notes.md")
+    meta = load_record(notes).metadata
+    n = None
+    participants = folder / "participants.md"
+    if participants.is_file():
+        m = COUNT_RE.search(load_record(participants).content)
+        n = m.group("count") if m else None
+    # A cited correction (or participants.md) is shown under its own title; method, n and date
+    # are always the session's.
+    title = meta.get("title", folder.name)
+    if path.name != "session-notes.md":
+        title = load_record(path).metadata.get("title", path.name)
+    return dict(kind="raw", source=str(rel), lines=str(lines), record=f"raw:{folder.name}",
+                title=title, method=meta.get("type", ""), n=n,
+                date=date_sort_key(meta.get("date")))
+
+
+def status_sources(meta):
+    """decision_status_source as a list of 'path:lines' strings (it may be one string or a list)."""
+    value = meta.get("decision_status_source")
+    if value in (None, ""):
+        return []
+    return [str(v) for v in value] if isinstance(value, list) else [str(value)]
+
+
+def split_citation(text):
+    """'research/raw/x/session-notes.md:27,31' -> ('research/raw/x/session-notes.md', '27,31')."""
+    source, sep, lines = str(text).rpartition(":")
+    if not sep or not source:
+        raise CitationError(f"{text!r} isn't 'path:lines'")
+    return source, lines
+
+
+def body_citations(content):
+    """Every (source, lines) citation in a decision record's body, in order, with each `:lines`
+    short form resolved to the last file cited in full before it. A short form with no earlier
+    full citation comes back with source None."""
+    citations, current = [], None
+    for source, lines in BODY_CITATION_RE.findall(content):
+        if source:
+            current = source
+        citations.append((current, lines))
+    return citations
+
+
+def _is_not_recorded_near_miss(value):
+    text = str(value).strip()
+    return text != NOT_RECORDED and text.lower() in NOT_RECORDED_NEAR_MISSES | {NOT_RECORDED}
+
+
+def body_sections(content):
+    """{heading: text} for every '## ' section in a Markdown body."""
+    sections, current = {}, None
+    for line in content.splitlines():
+        if line.startswith("## "):
+            current = line[3:].strip()
+            sections[current] = []
+        elif current is not None:
+            sections[current].append(line)
+    return {k: "\n".join(v).strip() for k, v in sections.items()}
+
+
+def validate_decisions(decisions, findings, components):
+    """Check every decisions/*.md against the decision record schema (docs/deliverable-types.md,
+    "Decision records"): required fields, the two status vocabularies, "not recorded" spelled one
+    way, evidence and status sources that resolve to real lines in raw sessions or findings (with
+    at least one raw session, so the CRUD UI's provenance links reach raw directly), superseded_by,
+    related_findings / related_components, and the five body sections with an Evidence basis line
+    under Rationale."""
+    problems = []
+    for stem, data in decisions.items():
+        meta, where = data["meta"], data["path"]
+
+        def problem(msg, where=where):
+            problems.append(f"{where}: {msg}")
+
+        for field in DECISION_REQUIRED_FIELDS:
+            if meta.get(field) in (None, "", []):
+                problem(f"missing required field {field!r}")
+
+        status = meta.get("status")
+        if status not in (None, "") and status not in DECISION_DOCUMENT_STATUSES:
+            problem(f"status {status!r} isn't one of {', '.join(DECISION_DOCUMENT_STATUSES)} "
+                    "(status is the document's; the decision's goes in decision_status)")
+        decision_status = meta.get("decision_status")
+        if decision_status not in (None, "") and decision_status not in DECISION_STATUSES:
+            problem(f"decision_status {decision_status!r} isn't one of {', '.join(DECISION_STATUSES)}")
+
+        date_decided = meta.get("date_decided")
+        if date_decided not in (None, ""):
+            if isinstance(date_decided, datetime.date):
+                pass
+            elif _is_not_recorded_near_miss(date_decided):
+                problem(f"date_decided {date_decided!r}: write exactly {NOT_RECORDED!r}")
+            elif str(date_decided) != NOT_RECORDED and not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", str(date_decided)):
+                problem(f"date_decided {date_decided!r} isn't YYYY-MM-DD or {NOT_RECORDED!r}")
+        decided_by = meta.get("decided_by")
+        if decided_by not in (None, "") and _is_not_recorded_near_miss(decided_by):
+            problem(f"decided_by {decided_by!r}: write exactly {NOT_RECORDED!r}")
+
+        superseded_by = meta.get("superseded_by") or ""
+        if decision_status == "superseded" and not superseded_by:
+            problem("decision_status is superseded but superseded_by is empty")
+        if superseded_by:
+            if decision_status != "superseded":
+                problem("superseded_by is set but decision_status isn't superseded")
+            target = Path(str(superseded_by)).stem
+            if target == stem or target not in decisions:
+                problem(f"superseded_by references missing decisions/{target}.md")
+
+        for text in status_sources(meta):
+            try:
+                check_citation(*split_citation(text))
+            except CitationError as e:
+                problem(f"decision_status_source: {e}")
+
+        evidence = meta.get("evidence") or []
+        if not isinstance(evidence, list):
+            problem("evidence must be a list of {source, lines}")
+            evidence = []
+        kinds = set()
+        for i, entry in enumerate(evidence):
+            if not isinstance(entry, dict) or set(entry) != {"source", "lines"}:
+                problem(f"evidence[{i}] must have exactly the keys source and lines")
+                continue
+            try:
+                kinds.add(resolve_citation(entry["source"], entry["lines"])["kind"])
+            except CitationError as e:
+                problem(f"evidence[{i}]: {e}")
+        if evidence and "raw" not in kinds:
+            problem("evidence must cite at least one raw session directly")
+
+        for rel in meta.get("related_findings", []) or []:
+            if Path(rel).stem not in findings:
+                problem(f"related_findings points at missing findings/{Path(rel).stem}.md")
+        if COMPONENTS_ROOT.exists():
+            for c in meta.get("related_components", []) or []:
+                if Path(c).stem not in components:
+                    problem(f"related_components references missing design-tokens/components/{Path(c).stem}.md")
+
+        for source, lines in body_citations(data["content"]):
+            try:
+                if source is None:
+                    raise CitationError(f"`:{lines}` has no earlier full `path:lines` citation to refer to")
+                check_citation(source, lines)
+            except CitationError as e:
+                problem(f"body citation: {e}")
+
+        sections = body_sections(data["content"])
+        for heading in DECISION_SECTIONS:
+            if heading not in sections:
+                problem(f"body is missing the '## {heading}' section")
+            elif not sections[heading]:
+                problem(f"'## {heading}' is empty (write {NOT_RECORDED!r} if the corpus doesn't hold it)")
+        rationale = sections.get("Rationale", "")
+        m = EVIDENCE_BASIS_RE.match(rationale)
+        if "Rationale" in sections and (m is None or m.group("label") not in EVIDENCE_BASIS_LABELS):
+            problem(f"'## Rationale' must start with '**Evidence basis:** <{' | '.join(EVIDENCE_BASIS_LABELS)}>.'")
+    return problems
+
+
+def build_decision_index_content(decisions):
+    rows = []
+    for stem, data in decisions.items():
+        meta = data["meta"]
+        rows.append(dict(
+            title=meta.get("title") or stem,
+            file=f"{stem}.md",
+            decision_status=meta.get("decision_status", "—"),
+            date_decided=date_sort_key(meta.get("date_decided")) or "—",
+            decided_by=meta.get("decided_by", "—"),
+            tags=", ".join(sorted(meta.get("tags", []) or [])) or "—",
+            updated=meta.get("date", ""),
+        ))
+    rows.sort(key=lambda r: (date_sort_key(r["updated"]), r["file"]))
+    lines = [
+        "# Decisions Index\n",
+        "Maintained by `research/scripts/build_index.py`. Flat table of decision records in "
+        "`decisions/` — what was decided about the product, its status, when and by whom (or "
+        f"\"{NOT_RECORDED}\"). Not to be confused with `docs/decisions.md`, the log of decisions "
+        "about this repo itself.\n",
+        "| Decision | Decision Status | Date Decided | Decided By | Tags | Last Updated |",
+        "|---|---|---|---|---|---|",
+    ]
+    for r in rows:
+        lines.append(f"| [{r['title']}]({r['file']}) | {r['decision_status']} | {r['date_decided']} | "
+                     f"{r['decided_by']} | {r['tags']} | {r['updated']} |")
+    return "\n".join(lines) + "\n"
+
+
 def validate_tags(glossary):
-    """Check every tag used in raw/, findings/, analytics/summaries/, and the feature-002
-    deliverable folders' frontmatter against the glossary. Returns a list of (file, tag)
-    problems."""
+    """Check every tag used in raw/, findings/, analytics/summaries/, decisions/, and the
+    feature-002 deliverable folders' frontmatter against the glossary. Returns a list of (file,
+    tag) problems."""
     problems = []
     all_files = (
             glob.glob(str(RAW_ROOT / "*" / "*.md"))
             + [str(p) for p in FINDINGS_ROOT.glob("*.md") if p.name not in EXCLUDE_FROM_FINDINGS]
             + glob.glob(str(ANALYTICS_SUMMARIES_ROOT / "*.md"))
+            + [str(p) for p in DECISIONS_ROOT.glob("*.md") if p.name != "_index.md"]
     )
     for folder in DELIVERABLE_FOLDERS:
         all_files += [str(p) for p in (REPO_ROOT / folder).glob("*.md") if p.name != "_index.md"] if (REPO_ROOT / folder).exists() else []
@@ -509,11 +813,11 @@ def validate_component_links(findings, sessions, components):
     return problems
 
 
-def validate_projects(projects, glossary, findings, summaries, components, deliverables):
+def validate_projects(projects, glossary, findings, summaries, components, deliverables, decisions=None):
     """Check project tagging (docs/projects.md) against research/projects.yml: every project id is
     a project-* tag defined in the glossary and project-cross-cutting exists; every raw session
     folder and component is mapped to a known project, with no stale entries; and every finding,
-    analytics summary, and deliverable carries exactly one known project-* tag.
+    analytics summary, deliverable, and decision record carries exactly one known project-* tag.
 
     Returns (problems, unmapped). `unmapped` lists raw sessions and components that exist but
     aren't in projects.yml — the loaders already fall back to project-cross-cutting for those, so
@@ -548,6 +852,7 @@ def validate_projects(projects, glossary, findings, summaries, components, deliv
     tagged = list(findings.values()) + list(summaries.values())
     for items in deliverables.values():
         tagged += items.values()
+    tagged += (decisions or {}).values()
     for data in tagged:
         tags = project_tags(data["meta"].get("tags", []) or [])
         if len(tags) != 1:
@@ -889,7 +1194,9 @@ def main():
     summaries = load_analytics_summaries()
     components = load_components()
     deliverables = load_deliverables()
+    decisions = load_decisions()
     analytics_exists = ANALYTICS_ROOT.exists()
+    decisions_exist = DECISIONS_ROOT.exists()
 
     tag_problems = validate_tags(glossary)
     unexpected_raw_files = find_unexpected_raw_files()
@@ -898,9 +1205,10 @@ def main():
     component_link_problems = validate_component_links(findings, sessions, components)
     deliverable_findings_problems = validate_deliverable_findings_links(deliverables, findings)
     deliverable_cross_link_problems = validate_deliverable_cross_links(deliverables, findings, summaries)
+    decision_problems = validate_decisions(decisions, findings, components)
     try:
         project_problems, unmapped_projects = validate_projects(
-            load_projects(), glossary, findings, summaries, components, deliverables)
+            load_projects(), glossary, findings, summaries, components, deliverables, decisions)
     except ProjectsError as e:
         project_problems, unmapped_projects = [str(e)], []
     try:
@@ -914,6 +1222,10 @@ def main():
 
     new_analytics_content = build_analytics_index_content(summaries) if analytics_exists else None
     old_analytics_content = ANALYTICS_INDEX_FILE.read_text(encoding="utf-8") if ANALYTICS_INDEX_FILE.exists() else None
+
+    new_decisions_content = build_decision_index_content(decisions) if decisions_exist else None
+    old_decisions_content = (DECISIONS_INDEX_FILE.read_text(encoding="utf-8")
+                             if DECISIONS_INDEX_FILE.exists() else None)
 
     new_deliverable_contents = {}
     old_deliverable_contents = {}
@@ -970,6 +1282,13 @@ def main():
             print(f"   {msg}", file=sys.stderr)
         exit_code = 1
 
+    if decision_problems:
+        print("⚠️  Decision record issues (see the Decision records section of "
+              "docs/deliverable-types.md):", file=sys.stderr)
+        for msg in decision_problems:
+            print(f"   {msg}", file=sys.stderr)
+        exit_code = 1
+
     if project_problems:
         print("⚠️  Project tagging issues (see docs/projects.md):", file=sys.stderr)
         for msg in project_problems:
@@ -1017,6 +1336,9 @@ def main():
         if analytics_exists and new_analytics_content != old_analytics_content:
             print("❌ analytics/_index.md is out of date. Run without --check to regenerate.", file=sys.stderr)
             exit_code = 1
+        if decisions_exist and new_decisions_content != old_decisions_content:
+            print("❌ decisions/_index.md is out of date. Run without --check to regenerate.", file=sys.stderr)
+            exit_code = 1
         for folder in new_deliverable_contents:
             if new_deliverable_contents[folder] != old_deliverable_contents[folder]:
                 print(f"❌ {folder}/_index.md is out of date. Run without --check to regenerate.", file=sys.stderr)
@@ -1037,6 +1359,13 @@ def main():
             print(f"✅ {ANALYTICS_INDEX_FILE} already up to date ({len(summaries)} summaries)")
     else:
         print("ℹ️  analytics/ doesn't exist in this checkout — skipping analytics/_index.md")
+
+    if decisions_exist:
+        if new_decisions_content != old_decisions_content:
+            DECISIONS_INDEX_FILE.write_text(new_decisions_content, encoding="utf-8")
+            print(f"✅ Wrote {DECISIONS_INDEX_FILE} ({len(decisions)} decisions)")
+        else:
+            print(f"✅ {DECISIONS_INDEX_FILE} already up to date ({len(decisions)} decisions)")
 
     for folder, new_content in new_deliverable_contents.items():
         index_path = REPO_ROOT / folder / "_index.md"

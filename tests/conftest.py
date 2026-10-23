@@ -11,7 +11,7 @@ or env var), so the isolation strategy is:
     sys.path) and monkeypatch their module-level *_ROOT constants at the synthetic corpus.
 
 A session-level guard snapshots every file under the real research/, design-tokens/,
-analytics/, and deliverable folders before the run and fails the run if anything changed —
+analytics/, decisions/, and deliverable folders before the run and fails the run if anything changed —
 research/raw/ is append-only per AGENTS.md, and no test may touch real data.
 """
 import os
@@ -33,7 +33,7 @@ PYTHON = str(_venv_python) if _venv_python.exists() else sys.executable
 
 from build_index import DELIVERABLE_FOLDERS  # noqa: E402
 
-GUARDED_DIRS = ["research", "design-tokens", "analytics", *DELIVERABLE_FOLDERS]
+GUARDED_DIRS = ["research", "design-tokens", "analytics", "decisions", *DELIVERABLE_FOLDERS]
 
 
 # ---------------------------------------------------------------------------------------------
